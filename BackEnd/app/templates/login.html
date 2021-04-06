@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Sign In</h1>
+    <!-- 'form' indicates that this template will look for a form to base fields off of -->
+    <form action="" method="post" novalidate>   <!-- action: browser will use current URL, method: HTTP request method, novalidate: browser does not validate fields -->
+        {{ form.hidden_tag() }}     <!-- generates a hidden field and token to protect against CSRF; requires SECRET_KEY to be set -->
+        <p>
+            {{ form.username.label }}<br>   <!-- label will appear above each respective field -->
+            {{ form.username(size=32) }}<br>
+            {% for error in form.username.errors %}     <!-- display error if left empty -->
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.password.label }}<br>
+            {{ form.password(size=32) }}<br>
+            {% for error in form.username.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+        <p>{{ form.submit() }}</p>
+    </form>
+{% endblock %}

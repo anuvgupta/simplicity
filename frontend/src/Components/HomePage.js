@@ -10,7 +10,7 @@ function HomePage(props) {
             </div>
             <div className="homepageOptions">
                 <Button href="/login"> Login</Button> {' '}
-                <Button href="login"> Sign Up </Button>
+                <Button href="/register"> Sign Up </Button>
             </div>
         </div>
     );

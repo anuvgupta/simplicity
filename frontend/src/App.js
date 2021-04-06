@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
+import HomePage from "./components/HomePage"
 
 function App() {
   const [getMessage, setGetMessage] = useState({})
@@ -27,6 +28,16 @@ function App() {
     <div className="App">
       <Router>
         <Switch>
+
+          <Route path="/">
+            <HomePage></HomePage>
+            {/* <div>{getMessage.status === 200 ?
+        <h3>{getMessage.data.username}</h3>
+        :
+        <h3>Not found</h3>}
+      </div> */}
+          </Route>
+
           <Route path="/login">
             {/* <AboutPhotos /> */}
           </Route>
@@ -34,18 +45,24 @@ function App() {
           <Route path="/register">
             {/* <Projects /> */}
           </Route>
-
-
-          <Route path="/">
-            
-            {/* <div>{getMessage.status === 200 ?
-        <h3>{getMessage.data.username}</h3>
-        :
-        <h3>Not found</h3>}
-      </div> */}
-
+          <Route path="/account">
+            {/* <Projects /> */}
           </Route>
-
+          <Route path="/createProject">
+            {/* <Projects /> */}
+          </Route>
+          <Route path="/project">
+            {/* <Projects /> */}
+          </Route>
+          <Route path="/editProject">
+            {/* <Projects /> */}
+          </Route>
+          <Route path="/hardware">
+            {/* <Projects /> */}
+          </Route>
+          <Route path="/datasets">
+            {/* <Projects /> */}
+          </Route>
         </Switch>
 
       </Router>

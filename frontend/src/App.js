@@ -2,6 +2,12 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Navbar, Nav, NavDropdown } from 'react-bootstrap';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 
@@ -19,18 +25,31 @@ function App() {
   }, [])
   return (
     <div className="App">
-      <div className="centerTitle">
-        <h1> Welcome to [NAME TBD] </h1>
-      </div>
-      <div className="homepageOptions">
-        <Button href="login"> Login</Button> {' '}
-        <Button href="login"> Sign Up </Button>
-      </div>
-      <div>{getMessage.status === 200 ?
+      <Router>
+        <Switch>
+          <Route path="/login">
+            {/* <AboutPhotos /> */}
+          </Route>
+
+          <Route path="/register">
+            {/* <Projects /> */}
+          </Route>
+
+
+          <Route path="/">
+            
+            {/* <div>{getMessage.status === 200 ?
         <h3>{getMessage.data.username}</h3>
         :
         <h3>Not found</h3>}
-      </div>
+      </div> */}
+
+          </Route>
+
+        </Switch>
+
+      </Router>
+
     </div>
   );
 }

@@ -19,7 +19,7 @@ function HomePage(props) {
                 </Row>
                 <div className="homepageOptions">
                     <NavLink to="/login"> Sign In </NavLink>
-                    <NavLink to="/register"> Sign In </NavLink>
+                    <NavLink to="/register"> Sign Up </NavLink>
                 </div>
 
 

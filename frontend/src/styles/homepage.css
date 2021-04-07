@@ -2,22 +2,22 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height:100vh;  
+    height: 100vh;
     color: #131417;
     font-size: 2.25rem;
     flex-direction: column;
 }
-.title{
-    font-size: 6.5rem;
+.title {
+    font-size: 5.5rem;
     font-family: 'Rubik', sans-serif;
     font-weight: 300;
 }
-.homepageOptions{
+.homepageOptions {
     display: flex;
-    padding:6px;
+    padding: 6px;
     flex-direction: column;
-    font-family: "Roboto", sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
-a{
+a {
     margin-top: 9px;
 }

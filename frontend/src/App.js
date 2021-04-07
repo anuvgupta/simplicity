@@ -11,6 +11,8 @@ import {
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 import HomePage from "./components/HomePage"
+import LoginPage from "./components/LoginPage"
+import RegisterPage from "./components/RegisterPage"
 
 function App() {
   const [getMessage, setGetMessage] = useState({})
@@ -29,22 +31,14 @@ function App() {
       <Router>
         <Switch>
 
-          <Route path="/">
-            <HomePage></HomePage>
-            {/* <div>{getMessage.status === 200 ?
-        <h3>{getMessage.data.username}</h3>
-        :
-        <h3>Not found</h3>}
-      </div> */}
-          </Route>
-
           <Route path="/login">
-            {/* <AboutPhotos /> */}
+            <LoginPage></LoginPage>
           </Route>
 
           <Route path="/register">
-            {/* <Projects /> */}
+            <RegisterPage></RegisterPage>
           </Route>
+
           <Route path="/account">
             {/* <Projects /> */}
           </Route>
@@ -62,6 +56,15 @@ function App() {
           </Route>
           <Route path="/datasets">
             {/* <Projects /> */}
+          </Route>
+
+          <Route path="/">
+            <HomePage></HomePage>
+            {/* <div>{getMessage.status === 200 ?
+              <h3>{getMessage.data.username}</h3>
+              :
+              <h3>Not found</h3>}
+            </div> */}
           </Route>
         </Switch>
 

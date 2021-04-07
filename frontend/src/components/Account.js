@@ -2,6 +2,7 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button } from 'react-bootstrap';
 import Dock from 'react-dock'
+import '../styles/account.css';
 
 export default class Account extends React.Component {
     constructor(props) {
@@ -17,11 +18,14 @@ export default class Account extends React.Component {
     render() {
         return (
             <div>
-                <Dock position='left' isVisible={this.state.isVisible} fluid={this.state.fluid}>
-                    {/* you can pass a function as a child here */}
-                    {/* <div onClick={() => this.setState({ isVisible: !this.state.isVisible })}>X</div> */}
-                </Dock>
-                <h1> hello world </h1>
+                <div class="sidenav">
+                    <a href="#"><img class="profileImg"></img> Username</a>
+                    <a href="#"> My Projects</a>
+                    <a href="#"> My HW</a>
+                    <a href="#"> My Datasets </a>
+                </div>
+                <div class="main">
+                </div>
             </div>
 
         );

@@ -11,12 +11,10 @@ import {
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 import HomePage from "./components/HomePage"
-<<<<<<< HEAD
 import Account from "./components/Account"
-=======
 import LoginPage from "./components/LoginPage"
 import RegisterPage from "./components/RegisterPage"
->>>>>>> db4ee1859ce3ffa2546ff077faf70b6979260e84
+
 
 function App() {
   const [getMessage, setGetMessage] = useState({})

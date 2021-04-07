@@ -59,8 +59,34 @@ def login():
     return render_template('login.html', title='Sign In', form=form)
 
 
-@app.route('/projects', methods=['GET', 'POST'])
-def projects():
+@app.route('/account', methods=['GET', 'POST'])
+def account():
+    pass
+
+
+
+@app.route('/createProject', methods=['GET', 'POST'])
+def createProject():
+    pass
+
+
+@app.route('/project', methods=['GET', 'POST'])
+def project():
+    pass
+
+
+@app.route('/editProject', methods=['GET', 'POST'])
+def editProject():
+    pass
+
+
+@app.route('/hardware', methods=['GET', 'POST'])
+def hardware():
+    pass
+
+
+@app.route('/datasets', methods=['GET', 'POST'])
+def datasets():
     pass
 
 

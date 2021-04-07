@@ -5,9 +5,9 @@ This file will contain decorators and their functions
 """
 
 from flask import flash, redirect, render_template, url_for, request
-from app import app, db
-from app.forms import LoginForm, RegistrationForm
-from app.models import Hardware, Project, User, create_user
+from api import app, db
+from api.forms import LoginForm, RegistrationForm
+from api.models import Hardware, Project, User, create_user
 from flask import jsonify
 from flask_login import current_user, login_user, logout_user, login_required
 

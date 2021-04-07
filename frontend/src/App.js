@@ -14,6 +14,7 @@ import HomePage from "./components/HomePage"
 import Account from "./components/Account"
 import LoginPage from "./components/LoginPage"
 import RegisterPage from "./components/RegisterPage"
+import ProjectForm from "./components/ProjectForm"
 
 
 function App() {
@@ -45,7 +46,7 @@ function App() {
             <Account></Account>
           </Route>
           <Route path="/createProject">
-            {/* <Projects /> */}
+            <ProjectForm></ProjectForm>
           </Route>
           <Route path="/project">
             {/* <Projects /> */}

@@ -4,12 +4,13 @@ FILE: app/routes.py
 This file will contain decorators and their functions
 """
 
-from flask import flash, redirect, render_template, url_for, request
+from flask import flash, jsonify, redirect, render_template, url_for, request
+from flask_cors import CORS
 from .__init__ import app, db
 from .forms import LoginForm, RegistrationForm
-from .models import Hardware, Project, User, create_user
-from flask import jsonify
+from .models import *
 from flask_login import current_user, login_user, logout_user, login_required
+from werkzeug.exceptions import BadRequest
 
 
 # hello
@@ -32,14 +33,26 @@ def register():
     # TODO: Implement OAuth
     """ Fair warning: Internal Server Error will occur if you try to submit a registration form """
     if current_user.is_authenticated:
-        return redirect(url_for('home'))        # redirect logged-in users for now --> this can change to a user portal later
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        create_user(form.username.data, form.email.data, form.password.data)
-        flash('Congratulations, you are now a registered user!')
-        return redirect(url_for('login'))
+        return redirect(url_for('account'))        # redirect logged-in users to their account page
+
+    while True:
+        try:
+            register_json = request.get_json()      # if parsing fails, BadRequest exception is raised
+        except BadRequest:
+            register_json = request.get_json()
+        else:
+            new_username = register_json.get('username')
+            new_password = register_json.get('password')
+
+            while does_user_exist(new_username):
+                return jsonify({'msg': 'Username already exists. Please choose a different one.'})
+
+            if not does_user_exist(new_username):
+                create_user(new_username, new_password)
+                break
     
-    return render_template('register.html', title='Register', form=form)
+    return redirect(url_for('login'))
+
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -47,16 +60,22 @@ def login():
     # TODO: Render login page
     # TODO: Implement OAuth 
     if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    # Mock login page below
-    form = LoginForm()      # instantiate object from LoginForm class
+        return redirect(url_for('account'))
+    
+    while True:
+        try:
+            login_json = request.get_json()
+        except BadRequest:
+            login_json = request.get_json()
+        else:
+            username = login_json.get('username')
+            password = login_json.get('password')
 
-    if form.validate_on_submit():       # process form; if nothing is submitted, a blank login page will render
-        flash('Login requested for user {}, remember_me={}'.format(
-            form.username.data, form.remember_me.data))
-        return redirect(url_for('home'))
-
-    return render_template('login.html', title='Sign In', form=form)
+            if not verify_login(username, password):
+                return jsonify({'msg': 'The username or password is incorrect. Please try again.'})
+            
+            
+    
 
 
 @app.route('/account', methods=['GET', 'POST'])

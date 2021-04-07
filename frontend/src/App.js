@@ -16,6 +16,7 @@ import LoginPage from "./components/LoginPage"
 import RegisterPage from "./components/RegisterPage"
 import ProjectForm from "./components/ProjectForm"
 import HardwareForm from './components/HardwareForm';
+import Projects from './components/Projects';
 
 
 function App() {
@@ -54,6 +55,7 @@ function App() {
             {/* <Projects /> */}
             <Account></Account>
             Projects
+            <Projects></Projects>
           </Route>
           <Route path="/editProject">
             <Account></Account>
@@ -71,6 +73,7 @@ function App() {
           <Route path="/datasets">
             {/* <Projects /> */}
             <Account></Account>
+            Datasets
           </Route>
 
           <Route path="/">

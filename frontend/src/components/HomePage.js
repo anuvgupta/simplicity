@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button } from 'react-bootstrap';
 
 function HomePage(props) {
+    
     return (
         <div>
             <div className="centerTitle">

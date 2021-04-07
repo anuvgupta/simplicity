@@ -43,7 +43,7 @@ class RegisterPage extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="center">
                 <div className="centerTitle">
                     <h1>Register</h1>
                 </div>

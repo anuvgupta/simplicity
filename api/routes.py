@@ -17,7 +17,8 @@ from flask_jwt_extended import create_access_token
 # hello
 
 @app.route('/')
-@app.route('/home')
+@app.route('/api')
+@app.route('/api/home')
 def home():
     # TODO: Render homepage
 
@@ -28,7 +29,7 @@ def home():
     
 
 
-@app.route('/register', methods=['GET', 'POST'])
+@app.route('/api/register', methods=['GET', 'POST'])
 def register():
     # TODO: Render registration page
     # TODO: Implement OAuth
@@ -56,7 +57,7 @@ def register():
 
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/api/login', methods=['GET', 'POST'])
 def login():
     # TODO: Render login page
     # TODO: Implement OAuth 
@@ -83,33 +84,33 @@ def login():
 
 
 
-@app.route('/account', methods=['GET', 'POST'])
+@app.route('/api/account', methods=['GET', 'POST'])
 def account():
     pass
 
 
 
-@app.route('/createProject', methods=['GET', 'POST'])
+@app.route('/api/createProject', methods=['GET', 'POST'])
 def createProject():
     pass
 
 
-@app.route('/project', methods=['GET', 'POST'])
+@app.route('/api/project', methods=['GET', 'POST'])
 def project():
     pass
 
 
-@app.route('/editProject', methods=['GET', 'POST'])
+@app.route('/api/editProject', methods=['GET', 'POST'])
 def editProject():
     pass
 
 
-@app.route('/hardware', methods=['GET', 'POST'])
+@app.route('/api/hardware', methods=['GET', 'POST'])
 def hardware():
     pass
 
 
-@app.route('/datasets', methods=['GET', 'POST'])
+@app.route('/api/datasets', methods=['GET', 'POST'])
 def datasets():
     pass
 

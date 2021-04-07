@@ -7,14 +7,11 @@ This file will contain decorators and their functions
 from flask import flash, jsonify, redirect, render_template, url_for, request
 from flask_cors import CORS
 from .__init__ import app, db
-from .forms import LoginForm, RegistrationForm
 from .models import *
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.exceptions import BadRequest
 from flask_jwt_extended import create_access_token
 
-
-# hello
 
 @app.route('/')
 @app.route('/home')
@@ -77,16 +74,17 @@ def login():
             
             elif verify_login(username, password):
                 access_token = create_access_token(identity=username)
+                this_user = get_user_obj(username)
+                login_user(this_user)
                 break
     
-    return jsonify({'access_token': access_token})
+    return jsonify({'access_token': access_token})      # after the access token has been sent out, front end should redirect to '/account'
 
 
 
 @app.route('/account', methods=['GET', 'POST'])
 def account():
     pass
-
 
 
 @app.route('/createProject', methods=['GET', 'POST'])

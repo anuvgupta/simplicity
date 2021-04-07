@@ -92,9 +92,14 @@ def verify_login(user, pwd) -> bool:
 
 
 # get current user and return as json object
-def get_user(input):
+def get_user_json(input):
     user = User.objects(user__exact=input)
     return jsonify(user)
+
+
+def get_user_obj(user):
+    current_user = User.objects(username__exact=user)
+    return current_user
 
 
 

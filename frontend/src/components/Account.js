@@ -19,10 +19,10 @@ export default class Account extends React.Component {
         return (
             <div>
                 <div class="sidenav">
-                    <a href="#"><img class="profileImg"></img> Username</a>
-                    <a href="#"> My Projects</a>
-                    <a href="#"> My HW</a>
-                    <a href="#"> My Datasets </a>
+                    <a href="/Account"><img class="profileImg"></img> Overview</a>
+                    <a href="/project"> My Projects</a>
+                    <a href="/hardware"> My HW</a>
+                    <a href="/datasets"> My Datasets </a>
                 </div>
                 <div class="main">
                 </div>

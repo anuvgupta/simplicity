@@ -53,6 +53,7 @@ function App() {
           <Route path="/project">
             {/* <Projects /> */}
             <Account></Account>
+            Projects
           </Route>
           <Route path="/editProject">
             <Account></Account>
@@ -61,12 +62,15 @@ function App() {
           <Route path="/checkHardware">
             <Account></Account>
             <HardwareForm></HardwareForm>
+
           </Route>
           <Route path="/hardware">
             <Account></Account>
+            Hardware
           </Route>
           <Route path="/datasets">
             {/* <Projects /> */}
+            <Account></Account>
           </Route>
 
           <Route path="/">

@@ -3,9 +3,8 @@ FILE: app/models.py
 
 Define elements of the database
 TESTER LOGIN:
-username: sylviavu
-email: sylviavu@utexas.edu
-password: yoyo1234
+username: admin
+password: admin
 """
 from .__init__ import login, db
 from flask import jsonify
@@ -27,14 +26,22 @@ class Hardware(me.Document):
     capacity = me.IntField(min_value=0)
     available = me.IntField(min_value=0, max_value=capacity)
 
+    def __init__(self, name, capacity, available):
+        self.name = name
+        self.capacity = capacity
+        self.available = capacity
+
 
 # defines fields for individual projects
 # TODO: might change this to an EmbeddedDocument when I figure out how to connect projects to users
 class Project(me.Document):
+    name = me.StringField(max_length=50, required=True, unique=True)
     project_id = me.StringField(max_length=20, required=True, unique=True, validation=_not_empty)
     hw_sets = me.DictField()        # will map hardware-set names to the quantity checked out for this project
+    description = me.StringField(max_length=200)
 
-    def __init__(self, id):
+    def __init__(self, name, id):
+        self.name = name
         self.project_id = id
         self.hw_sets = dict()
 
@@ -42,13 +49,13 @@ class Project(me.Document):
 # defines fields for user accounts
 class User(UserMixin, me.Document):
     username = me.StringField(max_length=50, required=True, unique=True, validation=_not_empty)
-    email = me.StringField(max_length=50, required=True, unique=True, validation=_not_empty)
+    # email = me.StringField(max_length=50, required=True, unique=True, validation=_not_empty)    # we'll add this back in later
     password = me.StringField(max_length=50, required=True, validation=_not_empty)
     #password_hash = me.StringField() ==> hash passwords later
 
     def __init__(self, user, email, pwd):
         self.username = user
-        self.email = email
+        #self.email = email     # TODO: add email back in later
         self.password = pwd
 
 
@@ -61,23 +68,32 @@ def load_user(id):
 """ TO BE QUITE HONEST I DON'T KNOW IF MONGOENGINE WILL LET ME ADD FUNCTIONS INTO THE CLASSES SO HERE THEY ARE INSTEAD"""
 """ USER-RELATED FUNCTIONS """
 # function to create and save a new user to the database
-def create_user(username, email, pwd):
-    new_user = User(username, email, pwd)
+def create_user(username, pwd):
+    new_user = User(username, pwd)
     new_user.save(force_insert=True)    # creates a new document, doesn't allow for updates if this document already exists
     return
 
 
 # check if the username already exists in the database 
-def does_user_exist(input):
+def does_user_exist(input) -> bool:
     retrieve = User.objects(username__exists=input)
-
     return retrieve
 
 
-# get current user and return as json object
-def query_user(input):
-    user = User.objects(user__exact=input)
+# find document with exact username (they all should be unique so only one should be found if it exists)
+# see if password is correct
+def verify_login(user, pwd) -> bool:
+    current_user = User.objects(username__exact=user)
+    if not current_user:
+        return False
+    else:
+        if current_user.password == pwd:
+            return True
 
+
+# get current user and return as json object
+def get_user(input):
+    user = User.objects(user__exact=input)
     return jsonify(user)
 
 
@@ -111,5 +127,17 @@ def does_project_exist(input):
 
 
 """ HARDWARE SET RELATED FUNCTIONS """
-def checkin(hw_set, checkin_quantity):
+def check_in(hw_set, checkin_quantity):
     pass
+
+
+def check_out(hw_set, checkout_quantity):
+    pass
+
+
+def get_capacity(hw_set):
+    return jsonify(hw_set.capacity)
+
+
+def get_available(hw_set):
+    return jsonify(hw_set.available)

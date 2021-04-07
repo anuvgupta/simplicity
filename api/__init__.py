@@ -12,7 +12,7 @@ from config import Config
 from flask_login import LoginManager
 from flask_cors import CORS #comment this on deployment
 from flask_mongoengine import MongoEngine
-from flask_pymongo import PyMongo
+# from flask_pymongo import PyMongo
 
 
 app = Flask(__name__)
@@ -34,5 +34,5 @@ login.login_view = 'login'
 CORS(app)
 
 
-from api import routes
+from routes import *
 

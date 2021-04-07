@@ -33,11 +33,8 @@ def home():
     
 
 
-@app.route('/api/register', methods=['GET', 'POST'])
+@app.route('/api/register', methods=['POST'])
 def register():
-    # TODO: Render registration page
-    # TODO: Implement OAuth
-    """ Fair warning: Internal Server Error will occur if you try to submit a registration form """
     if current_user.is_authenticated:
         pass
         # redirect logged-in users to their account page
@@ -62,11 +59,8 @@ def register():
 
 
 
-@app.route('/api/login', methods=['GET', 'POST'])
+@app.route('/api/login', methods=['POST'])
 def login():
-    # GET request = get login page
-    # TODO: Render login page
-    # TODO: Implement OAuth 
     if current_user.is_authenticated:
         return redirect(url_for('account'))
     

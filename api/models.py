@@ -7,7 +7,7 @@ username: sylviavu
 email: sylviavu@utexas.edu
 password: yoyo1234
 """
-from api import login, db
+from .__init__ import login, db
 from flask import jsonify
 from flask_login import UserMixin
 import mongoengine as me

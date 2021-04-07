@@ -1,5 +1,28 @@
+
+# flask
 __pycache__
 api/__pycache__
-frontend/node_modules
+*.pyc
+# venv
 api/venv
 venv
+
+# react
+frontend/node_modules
+frontend/.pnp
+.pnp.js
+# testing
+frontend/coverage
+# production
+frontend/build
+# misc
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# misc
+.DS_Store

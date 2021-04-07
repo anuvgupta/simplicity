@@ -54,7 +54,6 @@ function App() {
           <Route path="/project">
             {/* <Projects /> */}
             <Account></Account>
-            Projects
             <Projects></Projects>
           </Route>
           <Route path="/editProject">

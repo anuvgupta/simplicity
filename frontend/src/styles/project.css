@@ -4,10 +4,15 @@
     padding: 100px;
 }
 .test{
-    background-color: black;
+    /* background-color: black; */
     height: 100px;
 }
 .rightSide{
     width: 85% !important;
     margin-left: 15vw;
+}
+.card{
+    max-width: 330px !important;
+    min-width: 300px;
+    margin-top: 30px;
 }

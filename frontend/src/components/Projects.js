@@ -1,9 +1,23 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Form, Container } from 'react-bootstrap';
+import { Button, Form, Container, CardDeck, Card } from 'react-bootstrap';
 import axios from 'axios'
 import '../styles/project.css'
 
+
+const MyCard = ({ name, id, desc }) => (
+    <Card>
+        <Card.Body>
+            <Card.Title>{name}</Card.Title>
+            <Card.Text>
+                {desc}
+            </Card.Text>
+        </Card.Body>
+        <Card.Footer>
+            <small className="text-muted">{id}</small>
+        </Card.Footer>
+    </Card>
+);
 
 class Projects extends React.Component {
 
@@ -11,9 +25,44 @@ class Projects extends React.Component {
         super(props);
         this.state = {
             username: "",
-            password: ""
+            password: "",
+            isLoaded: true,
+            posts: [
+                { 
+                    projectName: "test1",
+                    projectId: "1",
+                    desc: " Lorem impsum ldeokdeosjdoisejdis"
+                },
+                { 
+                    projectName: "test2",
+                    projectId: "2",
+                    desc: " Lorem impsum ldeokdeosjdoisejdis"
+                },
+                { 
+                    projectName: "test1",
+                    projectId: "1",
+                    desc: " Lorem impsum ldeokdeosjdoisejdis"
+                },
+                { 
+                    projectName: "test2",
+                    projectId: "2",
+                    desc: " Lorem impsum ldeokdeosjdoisejdis"
+                },
+                { 
+                    projectName: "test1",
+                    projectId: "1",
+                    desc: " Lorem impsum ldeokdeosjdoisejdis"
+                },
+                { 
+                    projectName: "test2",
+                    projectId: "2",
+                    desc: " Lorem impsum ldeokdeosjdoisejdis"
+                },
+
+            ],
         };
     }
+
 
     componentDidMount() {
 
@@ -43,20 +92,35 @@ class Projects extends React.Component {
     }
 
     render() {
-        return (
-            <div className="">
+        const { error, isLoaded, posts } = this.state;
 
-                <div className="centerTitle">
-                    <h1> My Projects </h1>
+        if (error) {
+            return <div>Error in loading</div>
+        } else if (!isLoaded) {
+            return <div>Loading ...</div>
+        } else {
+            console.log(this.state.posts);
+            return (
+                <div className="">
+
+                    <div className="centerTitle">
+                        <h1> My Projects </h1>
+                    </div>
+                    {/* An area where users can create new project, by providing project name, description, and projectID. */}
+                    <Container fluid className="rightSide test">
+                        <CardDeck>
+                            {this.state.posts.map((info) => (
+                                <MyCard name={info.projectName}
+                                    desc={info.desc}
+                                    id={info.projectId} />
+                            ))}
+                        </CardDeck>
+                    </Container>
+
+
                 </div>
-                {/* An area where users can create new project, by providing project name, description, and projectID. */}
-                <Container fluid className="rightSide test"> 
-
-                </Container>
-
-
-            </div>
-        );
+            );
+        }
     }
 }
 

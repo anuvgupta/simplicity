@@ -11,6 +11,7 @@ from .forms import LoginForm, RegistrationForm
 from .models import *
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.exceptions import BadRequest
+from flask_jwt_extended import create_access_token
 
 
 # hello
@@ -74,8 +75,12 @@ def login():
             if not verify_login(username, password):
                 return jsonify({'msg': 'The username or password is incorrect. Please try again.'})
             
-            
+            elif verify_login(username, password):
+                access_token = create_access_token(identity=username)
+                break
     
+    return jsonify({'access_token': access_token})
+
 
 
 @app.route('/account', methods=['GET', 'POST'])

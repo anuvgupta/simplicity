@@ -14,7 +14,14 @@ from flask_jwt_extended import create_access_token
 
 
 @app.route('/')
+def slash():
+    return redirect(url_for('api'))
+    
+
 @app.route('/api')
+def api():
+    return "Simplicity API"
+
 @app.route('/api/home')
 def home():
     # TODO: Render homepage
@@ -26,13 +33,11 @@ def home():
     
 
 
-@app.route('/api/register', methods=['GET', 'POST'])
+@app.route('/api/register', methods=['POST'])
 def register():
-    # TODO: Render registration page
-    # TODO: Implement OAuth
-    """ Fair warning: Internal Server Error will occur if you try to submit a registration form """
     if current_user.is_authenticated:
-        return redirect(url_for('account'))        # redirect logged-in users to their account page
+        pass
+        # redirect logged-in users to their account page
 
     while True:
         try:
@@ -54,10 +59,8 @@ def register():
 
 
 
-@app.route('/api/login', methods=['GET', 'POST'])
+@app.route('/api/login', methods=['POST'])
 def login():
-    # TODO: Render login page
-    # TODO: Implement OAuth 
     if current_user.is_authenticated:
         return redirect(url_for('account'))
     

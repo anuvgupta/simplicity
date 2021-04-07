@@ -1,6 +1,8 @@
+import '../global.js'
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Button } from 'react-bootstrap';
+import { NavLink } from "react-router-dom";
 import '../styles/homepage.css';
 
 function HomePage(props) {
@@ -16,9 +18,8 @@ function HomePage(props) {
                     </Col>
                 </Row>
                 <div className="homepageOptions">
-                    <a href="/login"> Login</a> {' '}
-                    <a href="/register"> Sign Up </a> {' '}
-                    
+                    <NavLink to="/login"> Sign In </NavLink>
+                    <NavLink to="/register"> Sign In </NavLink>
                 </div>
 
 

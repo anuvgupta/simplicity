@@ -104,6 +104,11 @@ def editProject():
     pass
 
 
+@app.route('/api/checkHardware', methods=['GET', 'POST'])
+def checkHardware():
+    pass
+
+
 @app.route('/api/hardware', methods=['GET', 'POST'])
 def hardware():
     pass

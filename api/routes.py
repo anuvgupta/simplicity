@@ -25,7 +25,7 @@ def api():
 @app.route('/api/home')
 def home():
     # TODO: Render homepage
-
+    # TODO: Check for user authenticated, log into account page or show plain homepage
     # Mock homepage below
     user = {'username': 'Sylvia'}
 

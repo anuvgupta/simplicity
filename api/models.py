@@ -123,7 +123,12 @@ def check_in(hw_set, checkin_quantity):
 
 
 def check_out(hw_set, checkout_quantity):
-    this_set = Hardware.objects(name__exact=hw_set)
+    query = Hardware.objects(name__exact=hw_set)
+    if len(query) <= 1:
+        return jsonify({'msg': "Hw set doesn't exist"})
+    this_set = query.first()
+    if not this_set:
+        return jsonify({'msg': "Error I think"})
     # check if requested quantity is valid
     if checkout_quantity > this_set.available:
         return jsonify({'msg': 'Quantity requested is greater than available inventory'})

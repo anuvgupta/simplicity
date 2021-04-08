@@ -96,13 +96,6 @@ def create_project(id):
     # new_project.save(force_insert=True)
     return
 
-
-# use this function to checkout/check in hw sets
-def checkin(hw_set, checkin_quantity):
-    pass
-
-
-
 def update_project(id, hw_set, checkin_quantity, checkout_quantity):
     # TODO: figure out how to update a single element in the DictField
     pass

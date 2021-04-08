@@ -2,9 +2,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
     color: #131417;
-    font-size: 2.25rem;
     flex-direction: column;
 }
 .title {

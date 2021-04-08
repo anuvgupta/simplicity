@@ -101,33 +101,31 @@ class Projects extends React.Component {
         } else {
             console.log(this.state.posts);
             return (
-                <div className="">
-
-                    <div className="centerTitle">
-                        <h1> My Projects </h1>
-                    </div>
-                    {/* An area where users can create new project, by providing project name, description, and projectID. */}
-                    <Container fluid className="rightSide test">
-                        <CardDeck>
-                            {this.state.posts.map((info) => (
-                                <MyCard name={info.projectName}
-                                    desc={info.desc}
-                                    id={info.projectId} />
-                            ))}
-                            {/* <Card className="bg-dark text-white">
+                <div className="center">
+                    <div className="rightSide">
+                        <div className="centerTitle">
+                            <h1> My Projects </h1>
+                        </div>
+                        {/* An area where users can create new project, by providing project name, description, and projectID. */}
+                        <Container fluid className=" test">
+                            <CardDeck>
+                                {this.state.posts.map((info) => (
+                                    <MyCard name={info.projectName}
+                                        desc={info.desc}
+                                        id={info.projectId} />
+                                ))}
+                                {/* <Card className="bg-dark text-white">
                                 <Card.ImgOverlay>
                                     <Card.Text>New Project</Card.Text>
                                 </Card.ImgOverlay>
                             </Card> */}
-                        </CardDeck>
-                        <div className="spacer">
-
-                        </div>
-                        <Button href="/createProject">
-                            New Project
-                        </Button>
-                    </Container>
-
+                            </CardDeck>
+                            
+                            <Button href="/createProject">
+                                New Project
+                            </Button>
+                        </Container>
+                    </div>
 
 
                 </div>

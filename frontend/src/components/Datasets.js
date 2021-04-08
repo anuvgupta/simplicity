@@ -4,21 +4,6 @@ import { Button, Form, Container, CardDeck, Card } from 'react-bootstrap';
 import axios from 'axios'
 import '../styles/project.css'
 
-
-const MyCard = ({ name, id, desc }) => (
-    <Card>
-        <Card.Body>
-            <Card.Title>{name}</Card.Title>
-            <Card.Text>
-                {desc}
-            </Card.Text>
-        </Card.Body>
-        <Card.Footer>
-            <small className="text-muted">{id}</small>
-        </Card.Footer>
-    </Card>
-);
-
 class Datasets extends React.Component {
 
     constructor(props) {

@@ -14,14 +14,16 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import './global.js';
 import './App.css';
-import Account from "./components/Account"
-import LoginPage from "./components/LoginPage"
-import RegisterPage from "./components/RegisterPage"
-import ProjectForm from "./components/ProjectForm"
+import SideBar from "./components/SideBar";
+import LoginPage from "./components/LoginPage";
+import RegisterPage from "./components/RegisterPage";
+import ProjectForm from "./components/ProjectForm";
 import HardwareForm from './components/HardwareForm';
+import Hardware from './components/Hardware';
 import HomePage from "./components/HomePage";
 import Projects from './components/Projects';
 import Datasets from "./components/Datasets";
+import Overview from "./components/Overview";
 
 function App() {
   useEffect(_ => {
@@ -45,36 +47,41 @@ function App() {
           </Route>
 
           <Route path="/account">
-            <Account></Account>
+            <SideBar></SideBar>
+            <Overview></Overview>
           </Route>
           <Route path="/createProject">
-            <Account></Account>
+            <SideBar></SideBar>
             <ProjectForm></ProjectForm>
           </Route>
           <Route path="/project">
             {/* <Projects /> */}
-            <Account></Account>
+            <SideBar></SideBar>
             <Projects></Projects>
 
           </Route>
           <Route path="/editProject">
-            <Account></Account>
+            <SideBar></SideBar>
             <ProjectForm></ProjectForm>
           </Route>
           <Route path="/checkHardware">
-            <Account></Account>
-            <HardwareForm></HardwareForm>
+            <SideBar></SideBar>
+
 
           </Route>
           <Route path="/hardware">
-            <Account></Account>
-            Hardware
+            <SideBar></SideBar>
+            <Hardware></Hardware>
+            <div className="rightSide">
+              <HardwareForm></HardwareForm>
+            </div>
+
             {/* <Projects /> */}
 
           </Route>
           <Route path="/datasets">
             {/* <Projects /> */}
-            <Account></Account>
+            <SideBar></SideBar>
             Datasets
             <Datasets></Datasets>
           </Route>

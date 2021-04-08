@@ -43,7 +43,7 @@ class User(me.Document):
     password = me.StringField(max_length=60, required=True, validation=_not_empty)
 
 
-""" TO BE QUITE HONEST I DON'T KNOW IF MONGOENGINE WILL LET ME ADD FUNCTIONS INTO THE CLASSES SO HERE THEY ARE INSTEAD"""
+
 """ USER-RELATED FUNCTIONS """
 # function to create and save a new user to the database
 def create_user(username, email, pwd):
@@ -88,25 +88,15 @@ def get_user_obj(user):
 
 """ PROJECT-RELATION FUNCTIONS """
 # create a new project and save to database
-# TODO: we can change this later to take further inputs from the website 
-#       e.g. if we wanna have checkboxes for hardware sets on the project creation page.
-#       But for now the projects will just be created with a unique ID
-def create_project(id):
-    # new_project = Project(id)
+def create_project(name, proj_id, desc):
+    # new_project = Project(name=name, project_id=proj_id, description=desc, hw_sets=dict()
     # new_project.save(force_insert=True)
     return
-
-
-# use this function to checkout/check in hw sets
-def checkin(hw_set, checkin_quantity):
-    pass
-
 
 
 def update_project(id, hw_set, checkin_quantity, checkout_quantity):
     # TODO: figure out how to update a single element in the DictField
     pass
-
 
 
 def does_project_id_exist(input) -> bool:

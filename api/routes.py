@@ -95,6 +95,7 @@ def login():
     }), 500)
 
 
+
 @app.route('/api/account', methods=['GET', 'POST'])
 def account():
     pass
@@ -103,8 +104,36 @@ def account():
 
 @app.route('/api/createProject', methods=['GET', 'POST'])
 def createProject():
-    pass
+    try:
+        project_json = request.get_json()
+    except BadRequest:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid request input data.'
+        }), 400)
+    else:
+        project_name = project_json.get('name')
+        project_id = project_json.get('id')
+        description = project_json.get('desc')
 
+        if does_project_id_exist(project_id):
+            return jsonify({
+                'success': False,
+                'message': 'This Project ID already exists.'
+                }), 409
+        
+        else:
+            create_project(project_name, project_id, description)
+            access_token = create_access_token(identity=project_id)
+            return jsonify({
+                'success': True,
+                'data': {'token': access_token}
+            }), 200
+    return (jsonify({
+        'success': False,
+        'message': 'Unknown error.'
+    }), 500)
+           
 
 @app.route('/api/project', methods=['GET', 'POST'])
 def project():

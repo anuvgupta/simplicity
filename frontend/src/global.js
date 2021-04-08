@@ -1,5 +1,7 @@
 // globals
 
+import hash from 'hash.js';
+
 global.config = {
     // api_url: 'http://localhost:5000/api',
     // api_url: 'http://localhost:30010/api',
@@ -26,6 +28,9 @@ global.util = {
     },
     delete_cookie: id => {
         global.util.cookie(id, '', 'Thu, 01 Jan 1970 00:00:00 GMT');
+    },
+    sha256: value => {
+        return hash.sha256().update(`${value}`).digest('hex');
     },
     is: { // match types
         null: function (v) { return (v == null); },

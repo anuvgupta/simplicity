@@ -40,13 +40,14 @@ class Project(me.Document):
 class User(me.Document):
     username = me.StringField(max_length=50, required=True, unique=True, validation=_not_empty)
     email = me.StringField(max_length=50, required=True, unique=True, validation=_not_empty)    # we'll add this back in later
-    password = me.StringField(max_length=60, required=True, validation=_not_empty)
+    password = me.StringField(max_length=72, required=True, validation=_not_empty)
 
 
 """ TO BE QUITE HONEST I DON'T KNOW IF MONGOENGINE WILL LET ME ADD FUNCTIONS INTO THE CLASSES SO HERE THEY ARE INSTEAD"""
 """ USER-RELATED FUNCTIONS """
 # function to create and save a new user to the database
 def create_user(username, email, pwd):
+    # TODO: implement bcrypt hashing for pwd
     new_user = User(username=username, email=email, password=pwd)
     new_user.save(force_insert=True)    # creates a new document, doesn't allow for updates if this document already exists
     return
@@ -54,24 +55,42 @@ def create_user(username, email, pwd):
 
 # check if the username already exists in the database 
 def does_user_name_exist(username) -> bool:
-    retrieve = User.objects(username__exact=username)
-    return retrieve
+    query = User.objects(username__exact=username)
+    if len(query) != 1:
+        return False  # not found
+    current_user = query.first
+    if not current_user:
+        return False  # not found
+    if username != current_user.username:
+        return False
+    return True
 
 # check if the user email already exists in the database 
 def does_user_email_exist(email) -> bool:
-    retrieve = User.objects(email__exact=email)
-    return retrieve
+    query = User.objects(email__exact=email)
+    if len(query) != 1:
+        return False  # not found
+    current_user = query.first
+    if not current_user:
+        return False  # not found
+    if email != current_user.email:
+        return False
+    return True
 
 
 # find document with exact username (they all should be unique so only one should be found if it exists)
 # see if password is correct
-def verify_login(user, pwd) -> bool:
-    current_user = User.objects(username__exact=user)
+def verify_login(user, password) -> int:
+    query = User.objects(username__exact=user)
+    if len(query) != 1:
+        return 404  # not found
+    current_user = query.first()
     if not current_user:
-        return False
-    else:
-        if current_user.password == pwd:
-            return True
+        return 404  # not found
+    if current_user.password == password:
+        # TODO: implement bcrypt hashing for password
+        return 1
+    return 401
 
 
 # get current user and return as json object

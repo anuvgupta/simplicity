@@ -2,10 +2,10 @@
 
 
 import axios from 'axios';
-import bcryptjs from 'bcryptjs';
 import React from 'react';
 import { Button } from 'react-bootstrap';
-import { withouter, withRouter } from "react-router-dom";
+import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import '../global.js';
@@ -13,6 +13,11 @@ import '../styles/loginpage.css';
 
 
 class RegisterPage extends React.Component {
+
+    static propTypes = {
+        location: PropTypes.object.isRequired,
+        history: PropTypes.object.isRequired
+    };
 
     constructor(props) {
         super(props);
@@ -60,9 +65,10 @@ class RegisterPage extends React.Component {
     }
 
     hashPassword(value) {
-        const hashSalt = bcryptjs.genSaltSync();
-        const hashPassword = bcryptjs.hashSync(value, hashSalt);
-        return hashPassword;
+        // const hashSalt = bcryptjs.genSaltSync();
+        // const hashPassword = bcryptjs.hashSync(value, hashSalt);
+        // return hashPassword;
+        return global.util.sha256(value);
     }
 
     updateErrorMsg(value) {
@@ -89,7 +95,7 @@ class RegisterPage extends React.Component {
     }
 
     redirectPage() {
-        this.props.router.push('/account');
+        this.props.history.push('/account');
     }
 
     requestSignUp(username, email, password) {
@@ -113,6 +119,7 @@ class RegisterPage extends React.Component {
                     errorMsg: errorMessage
                 });
             } else if (accessToken) {
+                global.util.delete_cookie('token');
                 global.util.cookie('token', accessToken);
                 this.redirectPage();
             }
@@ -122,13 +129,17 @@ class RegisterPage extends React.Component {
             email: `${email}`,
             password: `${password}`
         }).then(response => {
-            console.log(response);
-        }).catch(error => {
             var resp_data = null;
-            if (error && error.response && error.response.data) {
-                resp_data = error.response.data;
-            }
+            if (response && response.data)
+                resp_data = response.data;
             handleResponse(resp_data);
+        }).catch(error => {
+            if (error) {
+                var resp_data = null;
+                if (error.response && error.response.data)
+                    resp_data = error.response.data;
+                handleResponse(resp_data);
+            }
         });
     }
 
@@ -136,7 +147,7 @@ class RegisterPage extends React.Component {
         return (
             <div className="center h100">
                 <div className="centerTitle">
-                    <h1 className="RegisterTitle">Sign Up</h1>
+                    <h1 className="loginTitle">Sign Up</h1>
                 </div>
                 <form>
                     Username: <input type="text" id="username" placeholder="username" onChange={this.updateUsername.bind(this)}></input><br />

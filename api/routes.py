@@ -78,13 +78,19 @@ def login():
     else:
         username = login_json.get('username')
         password = login_json.get('password')
-        if verify_login(username, password):
+        verify_code = verify_login(username, password)
+        if verify_code == 1:
             access_token = create_access_token(identity=username)
             return (jsonify({
                 'success': True,
                 'data': { 'token': access_token }
             }), 200)  # after the access token has been sent out, front end should redirect to '/account'
-        else:
+        elif verify_code == 404:
+            return (jsonify({
+                'success': False,
+                'message': 'User not found.'
+            }), 404)
+        elif verify_code == 401:
             return (jsonify({
                 'success': False,
                 'message': 'Incorrect username or password.'

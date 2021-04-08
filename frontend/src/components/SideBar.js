@@ -23,10 +23,10 @@ export default class SideBar extends React.Component {
         return (
             <div>
                 <div class="sidenav">
-                    <NavLink to="/account"><img className="profileImg"></img> Overview </NavLink>
-                    <NavLink to="/project"> Projects </NavLink>
-                    <NavLink to="/hardware"> Hardware </NavLink>
-                    <NavLink to="/datasets"> Datasets </NavLink>
+                    <NavLink to="/account"><img className="profileImg"></img>Overview </NavLink>
+                    <NavLink to="/project">Projects </NavLink>
+                    <NavLink to="/hardware">Hardware </NavLink>
+                    <NavLink to="/datasets">Datasets </NavLink>
                 </div>
                 <div class="main">
                 </div>

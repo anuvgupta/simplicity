@@ -15,7 +15,7 @@ from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_requir
 @app.route('/')
 def slash():
     return redirect(url_for('api'))
-    
+
 
 @app.route('/api')
 def api():
@@ -30,13 +30,13 @@ def home():
     user = {'username': 'Sylvia'}
 
     return jsonify(user)
-    
 
 
 @app.route('/api/register', methods=['POST'])
 def register():
     try:
-        register_json = request.get_json()      # if parsing fails, BadRequest exception is raised
+        # if parsing fails, BadRequest exception is raised
+        register_json = request.get_json()
     except BadRequest:
         return (jsonify({
             'success': False,
@@ -61,9 +61,8 @@ def register():
             access_token = create_access_token(identity=new_username)
             return (jsonify({
                 'success': True,
-                'data': { 'token': access_token }
+                'data': {'token': access_token}
             }), 200)
-
 
 
 @app.route('/api/login', methods=['POST'])
@@ -83,7 +82,7 @@ def login():
             access_token = create_access_token(identity=username)
             return (jsonify({
                 'success': True,
-                'data': { 'token': access_token }
+                'data': {'token': access_token}
             }), 200)  # after the access token has been sent out, front end should redirect to '/account'
         elif verify_code == 404:
             return (jsonify({
@@ -101,11 +100,16 @@ def login():
     }), 500)
 
 
-
 @app.route('/api/account', methods=['GET', 'POST'])
 def account():
-    pass
-
+    try:
+        login_json = request.get_json()
+    except BadRequest:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid request input data.'
+        }), 400)
+    return jsonify(login_json) 
 
 
 @app.route('/api/createProject', methods=['GET', 'POST'])
@@ -126,8 +130,8 @@ def createProject():
             return jsonify({
                 'success': False,
                 'message': 'This Project ID already exists.'
-                }), 409
-        
+            }), 409
+
         else:
             create_project(project_name, project_id, description)
             access_token = create_access_token(identity=project_id)
@@ -139,7 +143,7 @@ def createProject():
         'success': False,
         'message': 'Unknown error.'
     }), 500)
-           
+
 
 @app.route('/api/project', methods=['GET', 'POST'])
 def project():
@@ -164,10 +168,3 @@ def hardware():
 @app.route('/api/datasets', methods=['GET', 'POST'])
 def datasets():
     pass
-
-
-
-
-
-    
-

@@ -128,7 +128,7 @@ def does_project_id_exist(input) -> bool:
 """ HARDWARE SET RELATED FUNCTIONS """
 def check_in(hw_set, checkin_quantity):
     query = Hardware.objects(name__exact=hw_set)
-    if len(query) <= 1:
+    if len(query) != 1:
         return jsonify({'msg': "Hw set doesn't exist"})
     my_hw_set = query.first()
     if not my_hw_set:

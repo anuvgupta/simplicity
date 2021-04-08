@@ -21,7 +21,11 @@ class Overview extends React.Component {
     }
 
     componentDidMount() {
-
+        axios.get(`${global.config.api_url}/account`).then(response => {
+            console.log("SUCCESS", response)
+        }).catch(error => {
+            console.log(error)
+        });
     }
     componentWillUnmount() {
 

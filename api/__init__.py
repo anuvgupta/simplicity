@@ -26,6 +26,8 @@ app.config.from_object(Config)
 
 app.config['MONGODB_SETTINGS']= {
     "db": "web-app",
+    "host": "localhost",
+    "port": 27017
 }
 db = MongoEngine()
 db.init_app(app)    # db initialization occurs before the app starts

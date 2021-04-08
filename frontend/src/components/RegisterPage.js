@@ -1,7 +1,13 @@
+// register page
+
+
+import axios from 'axios';
+import bcryptjs from 'bcryptjs';
 import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button } from 'react-bootstrap';
-import axios from 'axios'
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import '../global.js';
 
 
 class RegisterPage extends React.Component {
@@ -10,7 +16,8 @@ class RegisterPage extends React.Component {
         super(props);
         this.state = {
             username: "",
-            password: ""
+            password: "",
+            errorMsg: ""
         };
     }
 
@@ -33,25 +40,63 @@ class RegisterPage extends React.Component {
         });
     }
 
-    requestSignUp() {
+    validateAlphanumeric(value) {
+        var alphaNumerics = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        for (var v in value) {
+            if (!alphaNumerics.includes(value[v])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    hashPassword(value) {
+        const hashSalt = bcryptjs.genSaltSync();
+        const hashPassword = bcryptjs.hashSync(value, hashSalt);
+        return hashPassword;
+    }
+
+    updateErrorMsg(value) {
+        console.log(value);
+        this.setState({
+            errorMsg: value
+        });
+    }
+
+    validateForm(sendRequest = false) {
         var username = this.state.username;
         var password = this.state.password;
-        if (username && password && username.trim().length > 0 && password.trim().length > 0) {
-            console.log(username, password);
-        }
+        if (username && username.trim().length > 0) {
+            if (password && password.trim().length > 0) {
+                if (this.validateAlphanumeric(username)) {
+                    password = this.hashPassword(password);
+                    if (sendRequest) this.requestSignUp(username, password);
+                } else this.updateErrorMsg('Invalid username (letters and numbers only).');
+            } else this.updateErrorMsg('Empty password.');
+        } else this.updateErrorMsg('Empty username.');
+    }
+
+    requestSignUp(username, password) {
+        axios.post(`${global.config.api_url}/register`, {
+            username: `${username}`,
+            password: `${password}`
+        }).then(response => {
+            console.log(response);
+        });
     }
 
     render() {
         return (
             <div className="center">
                 <div className="centerTitle">
-                    <h1>Register</h1>
+                    <h1 className="loginTitle">Sign Up</h1>
                 </div>
                 <form>
                     Username: <input type="text" id="username" placeholder="username" onChange={this.updateUsername.bind(this)}></input><br />
                     Password: <input type="password" id="password" placeholder="password" onChange={this.updatePassword.bind(this)}></input><br />
-                    <Button onClick={this.requestSignUp.bind(this)}> Sign Up </Button>
+                    <Button style={{ marginTop: '8px' }} onClick={this.validateForm.bind(this, true)}> Sign In </Button>
                 </form>
+                <span className="errorMessage">{this.state.errorMsg}</span>
             </div>
         );
     }

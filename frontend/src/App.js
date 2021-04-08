@@ -1,35 +1,36 @@
+// app
 
 import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import React, { useEffect, useState } from 'react';
+import { Button, Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import {
   BrowserRouter as Router,
-
-  Route, Switch
+  Switch,
+  Route,
+  Link,
+  NavLink
 } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import './global.js';
 import './App.css';
-import Account from "./components/Account";
+import Account from "./components/Account"
+import LoginPage from "./components/LoginPage"
+import RegisterPage from "./components/RegisterPage"
+import ProjectForm from "./components/ProjectForm"
 import HardwareForm from './components/HardwareForm';
 import HomePage from "./components/HomePage";
-import LoginPage from "./components/LoginPage";
-import ProjectForm from "./components/ProjectForm";
 import Projects from './components/Projects';
-import RegisterPage from "./components/RegisterPage";
 import Datasets from "./components/Datasets";
 
-
 function App() {
-  const [getMessage, setGetMessage] = useState({})
-
-  useEffect(() => {
-    axios.get('http://localhost:5000/').then(response => {
+  useEffect(_ => {
+    axios.get(`${global.config.api_url}`).then(response => {
       console.log("SUCCESS", response)
-      setGetMessage(response)
     }).catch(error => {
       console.log(error)
-    })
-
-  }, [])
+    });
+  }, []);
   return (
     <div className="App">
       <Router>
@@ -54,6 +55,7 @@ function App() {
             {/* <Projects /> */}
             <Account></Account>
             <Projects></Projects>
+
           </Route>
           <Route path="/editProject">
             <Account></Account>
@@ -67,6 +69,8 @@ function App() {
           <Route path="/hardware">
             <Account></Account>
             Hardware
+            {/* <Projects /> */}
+
           </Route>
           <Route path="/datasets">
             {/* <Projects /> */}
@@ -85,9 +89,9 @@ function App() {
           </Route>
         </Switch>
 
-      </Router>
+      </Router >
 
-    </div>
+    </div >
   );
 }
 

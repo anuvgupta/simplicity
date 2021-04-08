@@ -46,14 +46,19 @@ def register():
         new_username = register_json.get('username')
         new_email = register_json.get('email')
         new_password = register_json.get('password')
-        if does_user_exist(new_username):
+        if does_user_name_exist(new_username):
             return (jsonify({
                 'success': False,
                 'message': 'Username already exists. Please choose a different one.'
             }), 409)
+        elif does_user_email_exist(new_email):
+            return (jsonify({
+                'success': False,
+                'message': 'Email already exists. Please choose a different one.'
+            }), 409)
         else:
             create_user(new_username, new_email, new_password)
-            access_token = create_access_token(identity=username)
+            access_token = create_access_token(identity=new_username)
             return (jsonify({
                 'success': True,
                 'data': { 'token': access_token }

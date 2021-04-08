@@ -6,9 +6,8 @@ TESTER LOGIN:
 username: admin
 password: admin
 """
-from .__init__ import login, db
+from .__init__ import db
 from flask import jsonify
-from flask_login import UserMixin
 import mongoengine as me
 from wtforms.validators import DataRequired, ValidationError
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -26,10 +25,6 @@ class Hardware(me.Document):
     capacity = me.IntField(min_value=0)
     available = me.IntField(min_value=0, max_value=capacity)
 
-    def __init__(self, name, capacity, available):
-        self.name = name
-        self.capacity = capacity
-        self.available = capacity
 
 
 # defines fields for individual projects
@@ -40,43 +35,31 @@ class Project(me.Document):
     hw_sets = me.DictField()        # will map hardware-set names to the quantity checked out for this project
     description = me.StringField(max_length=200)
 
-    def __init__(self, name, id):
-        self.name = name
-        self.project_id = id
-        self.hw_sets = dict()
-
 
 # defines fields for user accounts
-class User(UserMixin, me.Document):
+class User(me.Document):
     username = me.StringField(max_length=50, required=True, unique=True, validation=_not_empty)
-    # email = me.StringField(max_length=50, required=True, unique=True, validation=_not_empty)    # we'll add this back in later
-    password = me.StringField(max_length=50, required=True, validation=_not_empty)
-    #password_hash = me.StringField() ==> hash passwords later
-
-    def __init__(self, user, email, pwd):
-        self.username = user
-        #self.email = email     # TODO: add email back in later
-        self.password = pwd
-
-
-
-@login.user_loader
-def load_user(id):
-    return User.objects(id)
+    email = me.StringField(max_length=50, required=True, unique=True, validation=_not_empty)    # we'll add this back in later
+    password = me.StringField(max_length=60, required=True, validation=_not_empty)
 
 
 """ TO BE QUITE HONEST I DON'T KNOW IF MONGOENGINE WILL LET ME ADD FUNCTIONS INTO THE CLASSES SO HERE THEY ARE INSTEAD"""
 """ USER-RELATED FUNCTIONS """
 # function to create and save a new user to the database
 def create_user(username, email, pwd):
-    new_user = User(username, email, pwd)
+    new_user = User(username=username, email=email, password=pwd)
     new_user.save(force_insert=True)    # creates a new document, doesn't allow for updates if this document already exists
     return
 
 
 # check if the username already exists in the database 
-def does_user_exist(input) -> bool:
-    retrieve = User.objects(username__exists=input)
+def does_user_name_exist(username) -> bool:
+    retrieve = User.objects(username__exact=username)
+    return retrieve
+
+# check if the user email already exists in the database 
+def does_user_email_exist(email) -> bool:
+    retrieve = User.objects(email__exact=email)
     return retrieve
 
 
@@ -109,8 +92,8 @@ def get_user_obj(user):
 #       e.g. if we wanna have checkboxes for hardware sets on the project creation page.
 #       But for now the projects will just be created with a unique ID
 def create_project(id):
-    new_project = Project(id)
-    new_project.save(force_insert=True)
+    # new_project = Project(id)
+    # new_project.save(force_insert=True)
     return
 
 

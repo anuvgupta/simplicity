@@ -44,26 +44,19 @@ class HardwareForm extends React.Component {
 
     render() {
         return (
-            <div className="center">
-                <div className="formBorder">
-                    <div className="centerTitle">
-                        <h1> Checkout Hardware </h1>
-                    </div>
-                    {/*a name, capacity, and available capacity */}
-                    <Form>
-                        <Form.Group controlId="projectName">
-                            <Form.Label>HW Set Name</Form.Label>
-                            <Form.Control type="name" placeholder="GPU" />
-                            <Form.Label>Requested Capacity </Form.Label>
-                            <Form.Control type="name" placeholder="1 GB" />
-                            <Form.Label>Total Available</Form.Label>
-                            <Form.Control type="name" placeholder="16 GB" />
-                            {/* <Form.Label>Description</Form.Label>
+            <div className="formCenter">
+                <Form>
+                    <Form.Group controlId="projectName">
+                        <Form.Label>HW Set Name</Form.Label>
+                        <Form.Control type="name" placeholder="GPU" />
+                        <Form.Label>Requested Capacity </Form.Label>
+                        <Form.Control type="name" placeholder="1 GB" />
+                        <Form.Label>Total Available</Form.Label>
+                        <Form.Control type="name" placeholder="16 GB" />
+                        {/* <Form.Label>Description</Form.Label>
                             <Form.Control as="textarea" rows={3} /> */}
-                        </Form.Group>
-                    </Form>
-
-                </div>
+                    </Form.Group>
+                </Form>
             </div>
         );
     }

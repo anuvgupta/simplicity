@@ -8,7 +8,7 @@ import {
     NavLink
 } from "react-router-dom";
 
-export default class Account extends React.Component {
+export default class SideBar extends React.Component {
     constructor(props) {
         super(props);
 

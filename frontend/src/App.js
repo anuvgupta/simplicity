@@ -16,6 +16,7 @@ import LoginPage from "./components/LoginPage"
 import RegisterPage from "./components/RegisterPage"
 import ProjectForm from "./components/ProjectForm"
 import HardwareForm from './components/HardwareForm';
+import Projects from './components/Projects';
 
 
 function App() {
@@ -47,24 +48,31 @@ function App() {
             <Account></Account>
           </Route>
           <Route path="/createProject">
+            <Account></Account>
             <ProjectForm></ProjectForm>
           </Route>
           <Route path="/project">
             {/* <Projects /> */}
-            
+            <Account></Account>
+            <Projects></Projects>
           </Route>
           <Route path="/editProject">
+            <Account></Account>
             <ProjectForm></ProjectForm>
           </Route>
           <Route path="/checkHardware">
+            <Account></Account>
             <HardwareForm></HardwareForm>
+
           </Route>
           <Route path="/hardware">
-            {/* <Projects /> */}
-            
+            <Account></Account>
+            Hardware
           </Route>
           <Route path="/datasets">
             {/* <Projects /> */}
+            <Account></Account>
+            Datasets
           </Route>
 
           <Route path="/">

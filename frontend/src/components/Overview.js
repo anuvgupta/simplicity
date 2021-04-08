@@ -67,9 +67,7 @@ class Overview extends React.Component {
                                 </div>
                             </div>
                         </div>
-
                     </div>
-
                 </div>
                 <Project></Project>
                 <div className="rightSide spacer">

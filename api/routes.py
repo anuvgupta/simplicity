@@ -10,7 +10,6 @@ from .__init__ import app, db
 from .models import *
 from werkzeug.exceptions import BadRequest
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, verify_jwt_in_request
-from flask_jwt import encode_token
 
 
 @app.route('/')
@@ -47,10 +46,15 @@ def register():
         new_username = register_json.get('username')
         new_email = register_json.get('email')
         new_password = register_json.get('password')
-        if does_user_exist(new_username):
+        if does_user_name_exist(new_username):
             return (jsonify({
                 'success': False,
                 'message': 'Username already exists. Please choose a different one.'
+            }), 409)
+        elif does_user_email_exist(new_email):
+            return (jsonify({
+                'success': False,
+                'message': 'Email already exists. Please choose a different one.'
             }), 409)
         else:
             create_user(new_username, new_email, new_password)

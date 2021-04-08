@@ -9,6 +9,8 @@
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 20px;
     border-right: 1px solid #111;
+    text-align: left;
+    padding-left: 2vw;
   }
   
   /* The navigation menu links */

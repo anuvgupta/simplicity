@@ -12,6 +12,8 @@ from config import Config
 from flask_login import LoginManager
 from flask_cors import CORS #comment this on deployment
 from flask_mongoengine import MongoEngine
+from flask_jwt_extended import JWTManager
+# from .routes import *
 # from flask_pymongo import PyMongo
 
 
@@ -28,12 +30,16 @@ app.config['MONGODB_SETTINGS']= {
 db = MongoEngine()
 db.init_app(app)    # db initialization occurs before the app starts
 
+jwt = JWTManager(app)
+
+# flask-login initialization below, will delete later
 login = LoginManager(app)
 login.login_view = 'login'
 
 CORS(app)
 
-
 from .routes import *
+
+
 
 

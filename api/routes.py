@@ -8,9 +8,9 @@ from flask import flash, jsonify, redirect, render_template, url_for, request
 from flask_cors import CORS
 from .__init__ import app, db
 from .models import *
-from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.exceptions import BadRequest
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, verify_jwt_in_request
+from flask_jwt import encode_token
 
 
 @app.route('/')
@@ -21,6 +21,7 @@ def slash():
 @app.route('/api')
 def api():
     return "Simplicity API"
+
 
 @app.route('/api/home')
 def home():
@@ -35,9 +36,10 @@ def home():
 
 @app.route('/api/register', methods=['POST'])
 def register():
-    if current_user.is_authenticated:
-        pass
-        # redirect logged-in users to their account page
+    if verify_jwt_in_request(optional=True):
+        current_user = get_jwt_identity()
+        if does_user_exist(current_user):
+            redirect(url_for('account'))
 
     while True:
         try:
@@ -61,8 +63,10 @@ def register():
 
 @app.route('/api/login', methods=['POST'])
 def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('account'))
+    if verify_jwt_in_request(optional=True):
+        current_user = get_jwt_identity()
+        if does_user_exist(current_user):
+            redirect(url_for('account'))
     
     while True:
         try:
@@ -78,8 +82,6 @@ def login():
             
             elif verify_login(username, password):
                 access_token = create_access_token(identity=username)
-                this_user = get_user_obj(username)
-                login_user(this_user)
                 break
     
     return jsonify({'access_token': access_token})      # after the access token has been sent out, front end should redirect to '/account'
@@ -104,6 +106,11 @@ def project():
 
 @app.route('/api/editProject', methods=['GET', 'POST'])
 def editProject():
+    pass
+
+
+@app.route('/api/checkHardware', methods=['GET', 'POST'])
+def checkHardware():
     pass
 
 

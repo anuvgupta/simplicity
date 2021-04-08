@@ -1,22 +1,21 @@
 
-import './App.css';
+import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Navbar, Nav, NavDropdown } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
 import {
   BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
+
+  Route, Switch
 } from "react-router-dom";
-import React, { useEffect, useState } from 'react';
-import axios from 'axios'
-import HomePage from "./components/HomePage"
-import Account from "./components/Account"
-import LoginPage from "./components/LoginPage"
-import RegisterPage from "./components/RegisterPage"
-import ProjectForm from "./components/ProjectForm"
+import './App.css';
+import Account from "./components/Account";
 import HardwareForm from './components/HardwareForm';
+import HomePage from "./components/HomePage";
+import LoginPage from "./components/LoginPage";
+import ProjectForm from "./components/ProjectForm";
 import Projects from './components/Projects';
+import RegisterPage from "./components/RegisterPage";
+import Datasets from "./components/Datasets";
 
 
 function App() {
@@ -73,6 +72,7 @@ function App() {
             {/* <Projects /> */}
             <Account></Account>
             Datasets
+            <Datasets></Datasets>
           </Route>
 
           <Route path="/">

@@ -134,7 +134,7 @@ class RegisterPage extends React.Component {
 
     render() {
         return (
-            <div className="center">
+            <div className="center h100">
                 <div className="centerTitle">
                     <h1 className="RegisterTitle">Sign Up</h1>
                 </div>

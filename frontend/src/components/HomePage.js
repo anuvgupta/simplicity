@@ -8,7 +8,7 @@ import '../styles/homepage.css';
 function HomePage(props) {
 
     return (
-        <div className="center">
+        <div className="center h100">
             <Container>
                 <Row>
                     <Col>
@@ -18,8 +18,8 @@ function HomePage(props) {
                     </Col>
                 </Row>
                 <div className="homepageOptions">
-                    <NavLink to="/login"> Sign In </NavLink>
-                    <NavLink to="/register"> Sign Up </NavLink>
+                    <NavLink className="f100" to="/login"> Sign In </NavLink>
+                    <NavLink className="f100" to="/register"> Sign Up </NavLink>
                 </div>
             </Container>
         </div>

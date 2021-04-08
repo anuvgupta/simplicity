@@ -122,7 +122,7 @@ class LoginPage extends React.Component {
 
     render() {
         return (
-            <div className="center">
+            <div className="center h100">
                 <div className="centerTitle">
                     <h1 className="loginTitle">Sign In</h1>
                 </div>

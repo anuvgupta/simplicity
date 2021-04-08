@@ -68,8 +68,8 @@ def load_user(id):
 """ TO BE QUITE HONEST I DON'T KNOW IF MONGOENGINE WILL LET ME ADD FUNCTIONS INTO THE CLASSES SO HERE THEY ARE INSTEAD"""
 """ USER-RELATED FUNCTIONS """
 # function to create and save a new user to the database
-def create_user(username, pwd):
-    new_user = User(username, pwd)
+def create_user(username, email, pwd):
+    new_user = User(username, email, pwd)
     new_user.save(force_insert=True)    # creates a new document, doesn't allow for updates if this document already exists
     return
 

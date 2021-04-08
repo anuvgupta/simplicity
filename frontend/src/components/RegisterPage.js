@@ -1,13 +1,15 @@
-// register page
+// Register page
 
 
 import axios from 'axios';
 import bcryptjs from 'bcryptjs';
 import React from 'react';
 import { Button } from 'react-bootstrap';
+import { withouter, withRouter } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import '../global.js';
+import '../styles/loginpage.css';
 
 
 class RegisterPage extends React.Component {
@@ -16,6 +18,7 @@ class RegisterPage extends React.Component {
         super(props);
         this.state = {
             username: "",
+            email: "",
             password: "",
             errorMsg: ""
         };
@@ -31,6 +34,12 @@ class RegisterPage extends React.Component {
     updateUsername(event) {
         this.setState({
             username: event.target.value
+        });
+    }
+
+    updateEmail(event) {
+        this.setState({
+            email: event.target.value
         });
     }
 
@@ -57,7 +66,6 @@ class RegisterPage extends React.Component {
     }
 
     updateErrorMsg(value) {
-        console.log(value);
         this.setState({
             errorMsg: value
         });
@@ -65,23 +73,62 @@ class RegisterPage extends React.Component {
 
     validateForm(sendRequest = false) {
         var username = this.state.username;
+        var email = this.state.email;
         var password = this.state.password;
         if (username && username.trim().length > 0) {
-            if (password && password.trim().length > 0) {
-                if (this.validateAlphanumeric(username)) {
-                    password = this.hashPassword(password);
-                    if (sendRequest) this.requestSignUp(username, password);
-                } else this.updateErrorMsg('Invalid username (letters and numbers only).');
-            } else this.updateErrorMsg('Empty password.');
+            if (email && email.trim().length > 0) {
+                if (password && password.trim().length > 0) {
+                    if (this.validateAlphanumeric(username)) {
+                        password = this.hashPassword(password);
+                        if (sendRequest) this.requestSignUp(username, email, password);
+                    } else this.updateErrorMsg('Invalid username (letters and numbers only).');
+                } else this.updateErrorMsg('Empty password.');
+            } else this.updateErrorMsg('Empty email.');
+
         } else this.updateErrorMsg('Empty username.');
     }
 
-    requestSignUp(username, password) {
+    redirectPage() {
+        this.props.router.push('/account');
+    }
+
+    requestSignUp(username, email, password) {
+        var handleResponse = response => {
+            var accessToken = null;
+            var errorMessage = 'Unknown error.';
+            if (response && response.hasOwnProperty('success')) {
+                if (response.success === true) {
+                    if (response.hasOwnProperty('data') && response.data.hasOwnProperty('token') && typeof response.data.token === 'string') {
+                        accessToken = response.data.token;
+                        errorMessage = null;
+                    }
+                } else {
+                    if (response.hasOwnProperty('message') && typeof response.message === 'string') {
+                        errorMessage = response.message;
+                    }
+                }
+            }
+            if (errorMessage) {
+                this.setState({
+                    errorMsg: errorMessage
+                });
+            } else if (accessToken) {
+                global.util.cookie('token', accessToken);
+                this.redirectPage();
+            }
+        };
         axios.post(`${global.config.api_url}/register`, {
             username: `${username}`,
+            email: `${email}`,
             password: `${password}`
         }).then(response => {
             console.log(response);
+        }).catch(error => {
+            var resp_data = null;
+            if (error && error.response && error.response.data) {
+                resp_data = error.response.data;
+            }
+            handleResponse(resp_data);
         });
     }
 
@@ -89,12 +136,13 @@ class RegisterPage extends React.Component {
         return (
             <div className="center">
                 <div className="centerTitle">
-                    <h1 className="loginTitle">Sign Up</h1>
+                    <h1 className="RegisterTitle">Sign Up</h1>
                 </div>
                 <form>
                     Username: <input type="text" id="username" placeholder="username" onChange={this.updateUsername.bind(this)}></input><br />
+                    Email: <input type="email" id="email" placeholder="name@email.com" onChange={this.updateEmail.bind(this)}></input><br />
                     Password: <input type="password" id="password" placeholder="password" onChange={this.updatePassword.bind(this)}></input><br />
-                    <Button style={{ marginTop: '8px' }} onClick={this.validateForm.bind(this, true)}> Sign In </Button>
+                    <Button style={{ marginTop: '8px' }} onClick={this.validateForm.bind(this, true)}> Sign Up </Button>
                 </form>
                 <span className="errorMessage">{this.state.errorMsg}</span>
             </div>
@@ -102,4 +150,4 @@ class RegisterPage extends React.Component {
     }
 }
 
-export default RegisterPage;
+export default withRouter(RegisterPage);

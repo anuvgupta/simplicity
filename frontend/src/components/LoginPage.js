@@ -5,6 +5,7 @@ import axios from 'axios';
 import bcryptjs from 'bcryptjs';
 import React from 'react';
 import { Button } from 'react-bootstrap';
+import { withouter, withRouter } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import '../global.js';
@@ -58,7 +59,6 @@ class LoginPage extends React.Component {
     }
 
     updateErrorMsg(value) {
-        console.log(value);
         this.setState({
             errorMsg: value
         });
@@ -77,12 +77,46 @@ class LoginPage extends React.Component {
         } else this.updateErrorMsg('Empty username.');
     }
 
+    redirectPage() {
+        this.props.router.push('/account');
+    }
+
     requestSignIn(username, password) {
+        var handleResponse = response => {
+            var accessToken = null;
+            var errorMessage = 'Unknown error.';
+            if (response && response.hasOwnProperty('success')) {
+                if (response.success === true) {
+                    if (response.hasOwnProperty('data') && response.data.hasOwnProperty('token') && typeof response.data.token === 'string') {
+                        accessToken = response.data.token;
+                        errorMessage = null;
+                    }
+                } else {
+                    if (response.hasOwnProperty('message') && typeof response.message === 'string') {
+                        errorMessage = response.message;
+                    }
+                }
+            }
+            if (errorMessage) {
+                this.setState({
+                    errorMsg: errorMessage
+                });
+            } else if (accessToken) {
+                global.util.cookie('token', accessToken);
+                this.redirectPage();
+            }
+        };
         axios.post(`${global.config.api_url}/login`, {
             username: `${username}`,
             password: `${password}`
         }).then(response => {
             console.log(response);
+        }).catch(error => {
+            var resp_data = null;
+            if (error && error.response && error.response.data) {
+                resp_data = error.response.data;
+            }
+            handleResponse(resp_data);
         });
     }
 
@@ -103,4 +137,4 @@ class LoginPage extends React.Component {
     }
 }
 
-export default LoginPage;
+export default withRouter(LoginPage);

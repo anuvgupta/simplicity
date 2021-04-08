@@ -21,12 +21,6 @@ function HomePage(props) {
                     <NavLink to="/login"> Sign In </NavLink>
                     <NavLink to="/register"> Sign Up </NavLink>
                 </div>
-
-
-
-
-
-
             </Container>
         </div>
     );

@@ -1,8 +1,12 @@
+import '../global.js'
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button } from 'react-bootstrap';
 import Dock from 'react-dock'
 import '../styles/account.css';
+import {
+    NavLink
+} from "react-router-dom";
 
 export default class Account extends React.Component {
     constructor(props) {
@@ -19,10 +23,10 @@ export default class Account extends React.Component {
         return (
             <div>
                 <div class="sidenav">
-                    <a href="/Account"><img className="profileImg"></img> Overview</a>
-                    <a href="/project"> My Projects</a>
-                    <a href="/hardware"> My HW</a>
-                    <a href="/datasets"> My Datasets </a>
+                    <NavLink to="/account"><img className="profileImg"></img> Overview </NavLink>
+                    <NavLink to="/project"> Projects </NavLink>
+                    <NavLink to="/hardware"> Hardware </NavLink>
+                    <NavLink to="/datasets"> Datasets </NavLink>
                 </div>
                 <div class="main">
                 </div>

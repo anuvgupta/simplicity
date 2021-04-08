@@ -30,10 +30,10 @@ class Hardware(me.Document):
 # defines fields for individual projects
 # TODO: might change this to an EmbeddedDocument when I figure out how to connect projects to users
 class Project(me.Document):
-    name = me.StringField(max_length=50, required=True, unique=True)
+    name = me.StringField(max_length=50, required=True, unique=False)
     project_id = me.StringField(max_length=20, required=True, unique=True, validation=_not_empty)
-    hw_sets = me.DictField()        # will map hardware-set names to the quantity checked out for this project
     description = me.StringField(max_length=200)
+    hw_sets = me.DictField()        # will map hardware-set names to the quantity checked out for this project
 
 
 # defines fields for user accounts
@@ -43,7 +43,7 @@ class User(me.Document):
     password = me.StringField(max_length=72, required=True, validation=_not_empty)
 
 
-""" TO BE QUITE HONEST I DON'T KNOW IF MONGOENGINE WILL LET ME ADD FUNCTIONS INTO THE CLASSES SO HERE THEY ARE INSTEAD"""
+
 """ USER-RELATED FUNCTIONS """
 # function to create and save a new user to the database
 def create_user(username, email, pwd):
@@ -107,19 +107,10 @@ def get_user_obj(user):
 
 """ PROJECT-RELATION FUNCTIONS """
 # create a new project and save to database
-# TODO: we can change this later to take further inputs from the website 
-#       e.g. if we wanna have checkboxes for hardware sets on the project creation page.
-#       But for now the projects will just be created with a unique ID
-def create_project(id):
-    # new_project = Project(id)
+def create_project(name, proj_id, desc):
+    # new_project = Project(name=name, project_id=proj_id, description=desc, hw_sets=dict()
     # new_project.save(force_insert=True)
     return
-
-
-# use this function to checkout/check in hw sets
-def checkin(hw_set, checkin_quantity):
-    pass
-
 
 
 def update_project(id, hw_set, checkin_quantity, checkout_quantity):
@@ -127,9 +118,9 @@ def update_project(id, hw_set, checkin_quantity, checkout_quantity):
     pass
 
 
-
-def does_project_exist(input):
-    pass
+def does_project_id_exist(input) -> bool:
+    retrieve_project = Project.objects(project_id__exists=input)
+    return retrieve_project
 
 
 
@@ -139,12 +130,14 @@ def check_in(hw_set, checkin_quantity):
 
 
 def check_out(hw_set, checkout_quantity):
-    pass
+    this_set = Hardware.objects(name__exact=hw_set)
+    # check if requested quantity is valid
+    if checkout_quantity > this_set.available:
+        return jsonify({'msg': 'Quantity requested is greater than available inventory'})
+    else:
+        this_set.available -= checkout_quantity
+        this_set.save()     # since the hardware set already existed, this saves the document with the new available quantity
 
 
-def get_capacity(hw_set):
-    return jsonify(hw_set.capacity)
-
-
-def get_available(hw_set):
-    return jsonify(hw_set.available)
+def get_capacity_and_available(hw_set):
+    return jsonify(capacity=hw_set.capacity, available=hw_set.available)

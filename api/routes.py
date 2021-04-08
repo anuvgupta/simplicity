@@ -61,10 +61,8 @@ def register():
             access_token = create_access_token(identity=new_username)
             return (jsonify({
                 'success': True,
-                'data': { 'token': access_token }
+                'data': { 'token': access_token, 'username': new_username }
             }), 200)
-
-
 
 @app.route('/api/login', methods=['POST'])
 def login():
@@ -83,7 +81,7 @@ def login():
             access_token = create_access_token(identity=username)
             return (jsonify({
                 'success': True,
-                'data': { 'token': access_token }
+                'data': { 'token': access_token, 'username': username }
             }), 200)  # after the access token has been sent out, front end should redirect to '/account'
         elif verify_code == 404:
             return (jsonify({
@@ -100,6 +98,19 @@ def login():
         'message': 'Unknown error.'
     }), 500)
 
+@app.route('/api/auth', methods=['GET'])
+@jwt_required()
+def auth():
+    current_username = get_jwt_identity()
+    if current_username:
+        return (jsonify({
+            'success': True,
+            'data': { 'username': current_username }
+        }), 200)
+    return (jsonify({
+        'success': False,
+        'message': 'Unknown error.'
+    }), 500)
 
 
 @app.route('/api/account', methods=['GET', 'POST'])

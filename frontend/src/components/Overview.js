@@ -4,6 +4,8 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Container, Form, Row } from 'react-bootstrap';
 import axios from 'axios';
+import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
 import Project from "../components/Projects";
 import Hardware from "../components/Hardware";
 import "../styles/overview.css";
@@ -12,39 +14,41 @@ import "../styles/overview.css";
 
 class Overview extends React.Component {
 
+    static propTypes = {
+        location: PropTypes.object.isRequired,
+        history: PropTypes.object.isRequired
+    };
+
     constructor(props) {
         super(props);
         this.state = {
-            username: "",
-            password: ""
+            username: ""
         };
     }
 
     componentDidMount() {
-
+        global.api.authenticated(user => {
+            if (user === false) this.redirectPage();
+            else this.setupPage(user.username);
+        });
     }
     componentWillUnmount() {
 
+    }
+
+    redirectPage() {
+        this.props.history.push('/home');
+    }
+
+    setupPage(username) {
+        console.log('loading user ' + username);
+        // TODO: load user data/info
     }
 
     updateUsername(event) {
         this.setState({
             username: event.target.value
         });
-    }
-
-    updatePassword(event) {
-        this.setState({
-            password: event.target.value
-        });
-    }
-
-    requestSignIn() {
-        var username = this.state.username;
-        var password = this.state.password;
-        if (username && password && username.trim().length > 0 && password.trim().length > 0) {
-            console.log(username, password);
-        }
     }
 
     render() {

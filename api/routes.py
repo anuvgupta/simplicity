@@ -61,7 +61,7 @@ def register():
             access_token = create_access_token(identity=new_username)
             return (jsonify({
                 'success': True,
-                'data': { 'token': access_token }
+                'data': { 'token': access_token, 'username': new_username }
             }), 200)
 
 
@@ -78,17 +78,38 @@ def login():
     else:
         username = login_json.get('username')
         password = login_json.get('password')
-        if verify_login(username, password):
+        verify_code = verify_login(username, password)
+        if verify_code == 1:
             access_token = create_access_token(identity=username)
             return (jsonify({
                 'success': True,
-                'data': { 'token': access_token }
+                'data': { 'token': access_token, 'username': username }
             }), 200)  # after the access token has been sent out, front end should redirect to '/account'
-        else:
+        elif verify_code == 404:
+            return (jsonify({
+                'success': False,
+                'message': 'User not found.'
+            }), 404)
+        elif verify_code == 401:
             return (jsonify({
                 'success': False,
                 'message': 'Incorrect username or password.'
             }), 401)
+    return (jsonify({
+        'success': False,
+        'message': 'Unknown error.'
+    }), 500)
+
+
+@app.route('/api/auth', methods=['GET'])
+@jwt_required()
+def auth():
+    current_username = get_jwt_identity()
+    if current_username:
+        return (jsonify({
+            'success': True,
+            'data': { 'username': current_username }
+        }), 200)
     return (jsonify({
         'success': False,
         'message': 'Unknown error.'
@@ -145,14 +166,21 @@ def editProject():
     pass
 
 
-@app.route('/api/checkHardware', methods=['GET', 'POST'])
+@app.route('/api/checkHardware', methods=['GET'])
 def checkHardware():
-    pass
+    hardware_dict = dict()
+    existing_hardware = Hardware.objects()
+
+    for hw in existing_hardware:
+        hardware_dict[hw.name] = hw.available
+    
+    return jsonify(hardware_dict)
 
 
 @app.route('/api/hardware', methods=['GET', 'POST'])
 def hardware():
     pass
+        
 
 
 @app.route('/api/datasets', methods=['GET', 'POST'])

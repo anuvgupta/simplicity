@@ -79,9 +79,6 @@ class Projects extends React.Component {
         }
 
         console.log(projects);
-        this.setState({
-            projectList: projectList
-        });
         return projects;
     }
 
@@ -99,11 +96,11 @@ class Projects extends React.Component {
             var projects = this.createCards(resp_data.data.projectList, user.token);
             console.log(projects);
 
-            // this.setState({
-            //     projectList: resp_data.data.projectList,
-            //     userToken: user.token,
-            //     projectsArr: projects
-            // });
+            this.setState({
+                projectList: resp_data.data.projectList,
+                userToken: user.token,
+                projectsArr: projects
+            });
         }).catch(error => {
             if (error) {
                 var resp_data = null;
@@ -143,7 +140,10 @@ class Projects extends React.Component {
 
                         <Button href="/createProject">
                             New Project
-                            </Button>
+                            </Button> {' '}
+                        <Button href="/joinProject">
+                            Join Project
+                        </Button>
                     </Container>
                 </div>
 

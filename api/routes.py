@@ -145,6 +145,7 @@ def user():
         'message': 'Invalid request input data.'
     }), 400)
 
+
 @ app.route('/api/projects', methods=['GET'])
 @jwt_required()
 def project():
@@ -152,7 +153,7 @@ def project():
     if projectId:
         print(projectId)
         project = get_project_json(projectId)
-        #user.projectList
+        # user.projectList
         # print(user['username'])
         return (project, 200)
     return (jsonify({
@@ -202,6 +203,51 @@ def createProject():
     }), 500)
 
 
+@app.route('/api/joinProject', methods=['POST'])
+@jwt_required()
+def joinProject():
+    current_username = get_jwt_identity()
+    if not current_username:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid token.'
+        }), 401)
+    try:
+        project_json = request.get_json()
+    except BadRequest:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid request input data.'
+        }), 400)
+    else:
+        project_id = project_json.get('id')
+        print(project_id)
+        if does_project_id_exist(project_id):
+            user = get_user_obj(current_username)
+            if user:
+                #TODO: Check for duplicates
+                user.projectList.append(project_id)
+                user.save()
+                return (jsonify({
+                    'success': True,
+                    'message': 'This Project ID already exists.'
+                }), 200)
+            else:
+                return (jsonify({
+                    'success': False,
+                    'message': "unknonw"
+                }), 500)
+        else:
+            # create_project(project_name, project_id, project_description)
+            print("oh no")
+            return (jsonify({
+                'success': False,
+                'message': "Couldn't find this project"
+            }), 404)
+    return (jsonify({
+        'success': False,
+        'message': 'Unknown error.'
+    }), 500)
 
 
 @ app.route('/api/editProject', methods=['GET', 'POST'])

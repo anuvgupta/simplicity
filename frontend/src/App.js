@@ -24,6 +24,7 @@ import HomePage from "./components/HomePage";
 import Projects from './components/Projects';
 import Datasets from "./components/Datasets";
 import Overview from "./components/Overview";
+import JoinProject from './components/JoinProject.js';
 
 function App() {
   
@@ -47,6 +48,10 @@ function App() {
           <Route path="/createProject">
             <SideBar></SideBar>
             <ProjectForm></ProjectForm>
+          </Route>
+          <Route path="/joinProject">
+            <SideBar></SideBar>
+            <JoinProject></JoinProject>
           </Route>
           <Route path="/project">
             {/* <Projects /> */}

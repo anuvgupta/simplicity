@@ -162,10 +162,10 @@ def get_project_json(project_id):
 
 
 def does_project_id_exist(p_id) -> bool:
-    query = Project.objects(project_id__exists=p_id)
-    if len(query) != 1:
+    query = Project.objects(project_id=p_id)
+    if len(query) < 1:
         return False  # not found
-    project = query.first
+    project = query.first()
     if not project:
         return False  # not found
     if p_id != project.project_id:

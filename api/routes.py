@@ -115,25 +115,16 @@ def auth():
     }), 500)
 
 
-@app.route('/api/user', methods=['GET', 'POST'])
+@app.route('/api/user', methods=['GET'])
+@jwt_required()
 def user():
-    try:
-        user_json = request.get_json()
-    except BadRequest:
-        return (jsonify({
-            'success': False,
-            'message': 'Invalid request input data.'
-        }), 400)
-    else:
-        username = user_json.get("username")
-        print(username)
-        user = get_user_json(username)
-        # print(user['username'])
-        return (user, 200)
+    username = request.args.get('username')
+    if username:
+        return (get_user_json(username), 200)
     return (jsonify({
         'success': False,
-        'message': 'Unknown error.'
-    }), 500)
+        'message': 'Invalid request input data.'
+    }), 400)
 
 @ app.route('/api/projects', methods=['GET'])
 def project():

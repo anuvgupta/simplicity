@@ -4,10 +4,17 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Form } from 'react-bootstrap';
 import axios from 'axios'
+import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
 import '../styles/project.css'
 
 
 class ProjectForm extends React.Component {
+
+    static propTypes = {
+        location: PropTypes.object.isRequired,
+        history: PropTypes.object.isRequired
+    };
 
     constructor(props) {
         super(props);
@@ -18,10 +25,22 @@ class ProjectForm extends React.Component {
     }
 
     componentDidMount() {
-
+        global.api.authenticated((user => {
+            if (user === false) this.redirectPage();
+            else this.setupPage(user);
+        }).bind(this));
     }
     componentWillUnmount() {
 
+    }
+
+    redirectPage() {
+        this.props.history.push('/home');
+    }
+
+    setupPage(user) {
+        console.log('ProjectForm: loading user ' + user.username);
+        // TODO: load user data/info
     }
 
     updateUsername(event) {
@@ -69,4 +88,4 @@ class ProjectForm extends React.Component {
     }
 }
 
-export default ProjectForm;
+export default withRouter(ProjectForm);

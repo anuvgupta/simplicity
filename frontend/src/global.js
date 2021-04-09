@@ -8,6 +8,7 @@ global.config = {
     // api_url: 'http://localhost:30010/api',
     api_url: `${window.location.protocol}//${window.location.host}/api`,
     home_url: `${window.location.protocol}//${window.location.host}`,
+    api_token: null,
     // token_length: 264
 };
 
@@ -19,7 +20,7 @@ global.api = {
                 if (response && response.hasOwnProperty('success')) {
                     if (response.success === true) {
                         if (response.hasOwnProperty('data') && response.data.hasOwnProperty('username') && typeof response.data.username === 'string') {
-                            return resolve({ username: response.data.username });
+                            return resolve({ username: response.data.username, token: token });
                         } else resolve(false);
                     } else {
                         if (response.hasOwnProperty('message') && typeof response.message === 'string') {

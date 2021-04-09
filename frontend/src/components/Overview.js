@@ -42,15 +42,13 @@ class Overview extends React.Component {
     }
 
     setupPage(user) {
-        console.log('loading user ' + user.username);
-        console.log("list is "+ user.email);
         axios.post(`${global.config.api_url}/user`, {
             username: `${user.username}`,
         }).then(response => {
             var resp_data = null;
             if (response && response.data)
                 resp_data = response.data;
-            console.log(resp_data);
+            // console.log(resp_data);
             this.setState({
                 username: resp_data.username,
                 projectList: resp_data.projectList
@@ -60,7 +58,7 @@ class Overview extends React.Component {
                 var resp_data = null;
                 if (error.response && error.response.data)
                     resp_data = error.response.data;
-                console.log(resp_data);
+                console.log(error);
             }
         });
     }
@@ -72,7 +70,6 @@ class Overview extends React.Component {
     }
 
     render() {
-        console.log(this.state.numProjects);
         return (
             <div>
                 <div className="center">

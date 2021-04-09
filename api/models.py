@@ -135,13 +135,13 @@ def update_project(name, id, desc):
 
 
 def does_project_id_exist(p_id) -> bool:
-    query = User.objects(project_id__exists=p_id)
+    query = Project.objects(project_id__exists=p_id)
     if len(query) != 1:
         return False  # not found
     project = query.first
     if not project:
         return False  # not found
-    if p_id != project.id:
+    if p_id != project.project_id:
         return False  # incorrect id
     return True
 

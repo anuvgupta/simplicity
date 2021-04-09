@@ -1,8 +1,10 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Form, Container, CardDeck, Card } from 'react-bootstrap';
-import axios from 'axios'
-import '../styles/project.css'
+import axios from 'axios';
+import { withRouter } from "react-router-dom";
+
+import '../styles/project.css';
 
 
 const MyCard = ({ name, id, desc }) => (
@@ -27,6 +29,7 @@ class Projects extends React.Component {
             username: "",
             password: "",
             isLoaded: true,
+            projectList: [],
             posts: [
                 {
                     projectName: "test1",
@@ -64,73 +67,84 @@ class Projects extends React.Component {
 
 
     componentDidMount() {
-
+        global.api.authenticated((user => {
+            if (user === false) this.redirectPage();
+            else this.setupPage(user);
+        }).bind(this));
     }
     componentWillUnmount() {
 
     }
 
-    updateUsername(event) {
-        this.setState({
-            username: event.target.value
+    redirectPage() {
+        this.props.history.push('/home');
+    }
+
+    setupPage(user) {
+
+        var username = user.username;
+        username = username.toString();
+        console.log(username);
+        axios.get(`${global.config.api_url}/projects?username=` + username).then(response => {
+            var resp_data = null;
+            if (response && response.data)
+                resp_data = response.data;
+            console.log(resp_data);
+            this.setState({
+                projectList: resp_data.projectList
+            });
+        }).catch(error => {
+            if (error) {
+                var resp_data = null;
+                if (error.response && error.response.data)
+                    resp_data = error.response.data;
+                console.log(resp_data);
+            }
         });
     }
-
-    updatePassword(event) {
-        this.setState({
-            password: event.target.value
-        });
-    }
-
-    requestSignIn() {
-        var username = this.state.username;
-        var password = this.state.password;
-        if (username && password && username.trim().length > 0 && password.trim().length > 0) {
-            console.log(username, password);
-        }
-    }
-
     render() {
         const { error, isLoaded, posts } = this.state;
 
-        if (error) {
-            return <div>Error in loading</div>
-        } else if (!isLoaded) {
-            return <div>Loading ...</div>
-        } else {
-            console.log(this.state.posts);
-            return (
-                <div className="center">
-                    <div className="rightSide">
-                        <div className="centerTitle">
-                            <h1> My Projects </h1>
-                        </div>
-                        {/* An area where users can create new project, by providing project name, description, and projectID. */}
-                        <Container fluid className=" test">
-                            <CardDeck>
-                                {this.state.posts.map((info) => (
-                                    <MyCard name={info.projectName}
-                                        desc={info.desc}
-                                        id={info.projectId} />
-                                ))}
-                                {/* <Card className="bg-dark text-white">
+        console.log(this.state);
+        return (
+            <div className="center">
+                <div className="rightSide">
+                    <div className="centerTitle">
+                        <h1> My Projects </h1>
+                    </div>
+                    {/* An area where users can create new project, by providing project name, description, and projectID. */}
+                    <Container fluid className=" test">
+                        <CardDeck>
+                            {
+                                this.state.projectList.length > 0 ? 
+                                    this.state.projectList.map((info) => (
+                                        // need to avtually parse here
+                                        <MyCard name={info.projectName}
+                                            desc={info.desc}
+                                            id={info.projectId} />
+                                    ))
+                                : <h1> There are no projects </h1> 
+                                
+                            
+                            
+                            }
+                            {/* <Card className="bg-dark text-white">
                                 <Card.ImgOverlay>
                                     <Card.Text>New Project</Card.Text>
                                 </Card.ImgOverlay>
                             </Card> */}
-                            </CardDeck>
-                            
-                            <Button href="/createProject">
-                                New Project
+                        </CardDeck>
+
+                        <Button href="/createProject">
+                            New Project
                             </Button>
-                        </Container>
-                    </div>
-
-
+                    </Container>
                 </div>
-            );
-        }
+
+
+            </div>
+        );
     }
 }
 
-export default Projects;
+export default withRouter(Projects);

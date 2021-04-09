@@ -135,17 +135,19 @@ def user():
         'message': 'Unknown error.'
     }), 500)
 
-
-@app.route('/api/account', methods=['GET', 'POST'])
-def account():
-    try:
-        login_json = request.get_json()
-    except BadRequest:
-        return (jsonify({
-            'success': False,
-            'message': 'Invalid request input data.'
-        }), 400)
-    return jsonify(login_json)
+@ app.route('/api/projects', methods=['GET'])
+def project():
+    username = request.args.get('username')
+    if username:
+        print(username)
+        user = get_user_json(username)
+        #user.projectList
+        # print(user['username'])
+        return (user, 200)
+    return (jsonify({
+        'success': False,
+        'message': 'Username not provided.'
+    }), 500)
 
 
 @app.route('/api/createProject', methods=['POST'])
@@ -189,9 +191,6 @@ def createProject():
     }), 500)
 
 
-@ app.route('/api/project', methods=['GET', 'POST'])
-def project():
-    pass
 
 
 @ app.route('/api/editProject', methods=['GET', 'POST'])

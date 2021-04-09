@@ -21,40 +21,47 @@ def _not_empty(val):
 
 # defines fields for hardware sets
 class Hardware(me.Document):
-    name = me.StringField(max_length=20, required=True, unique=True, validation=_not_empty)
+    name = me.StringField(max_length=20, required=True,
+                          unique=True, validation=_not_empty)
     capacity = me.IntField(min_value=0)
     available = me.IntField(min_value=0, max_value=capacity)
-
 
 
 # defines fields for individual projects
 # TODO: might change this to an EmbeddedDocument when I figure out how to connect projects to users
 class Project(me.Document):
     name = me.StringField(max_length=50, required=True, unique=False)
-    project_id = me.StringField(max_length=20, required=True, unique=True, validation=_not_empty)
+    project_id = me.StringField(
+        max_length=20, required=True, unique=True, validation=_not_empty)
     description = me.StringField(max_length=200)
-    hw_sets = me.DictField()        # will map hardware-set names to the quantity checked out for this project
+    # will map hardware-set names to the quantity checked out for this project
+    hw_sets = me.DictField()
 
 
 # defines fields for user accounts
 class User(me.Document):
-    username = me.StringField(max_length=50, required=True, unique=True, validation=_not_empty)
-    email = me.StringField(max_length=50, required=True, unique=True, validation=_not_empty)    # we'll add this back in later
-    password = me.StringField(max_length=72, required=True, validation=_not_empty)
+    username = me.StringField(
+        max_length=50, required=True, unique=True, validation=_not_empty)
+    email = me.StringField(max_length=50, required=True, unique=True,
+                           validation=_not_empty)    # we'll add this back in later
+    password = me.StringField(
+        max_length=72, required=True, validation=_not_empty)
     projectList = me.ListField()
-
 
 
 """ USER-RELATED FUNCTIONS """
 # function to create and save a new user to the database
+
+
 def create_user(username, email, pwd):
     # TODO: implement bcrypt hashing for pwd
     new_user = User(username=username, email=email, password=pwd)
-    new_user.save(force_insert=True)    # creates a new document, doesn't allow for updates if this document already exists
+    # creates a new document, doesn't allow for updates if this document already exists
+    new_user.save(force_insert=True)
     return
 
 
-# check if the username already exists in the database 
+# check if the username already exists in the database
 def does_user_name_exist(username) -> bool:
     query = User.objects(username__exact=username)
     if len(query) != 1:
@@ -66,7 +73,9 @@ def does_user_name_exist(username) -> bool:
         return False
     return True
 
-# check if the user email already exists in the database 
+# check if the user email already exists in the database
+
+
 def does_user_email_exist(email) -> bool:
     query = User.objects(email__exact=email)
     if len(query) != 1:
@@ -109,6 +118,8 @@ def get_user_json(username):
     })
 
 # get current user and return as mongoengine document
+
+
 def get_user_obj(username):
     query = User.objects(username__exact=username)
     if len(query) != 1:
@@ -119,19 +130,35 @@ def get_user_obj(username):
     return current_user
 
 
-
 """ PROJECT-RELATION FUNCTIONS """
 # create a new project and save to database
+
+
 def create_project(name, proj_id, desc):
     # new_project = Project(name=name, project_id=proj_id, description=desc, hw_sets=dict()
     # new_project.save(force_insert=True)
     return
+
 
 def update_project(name, id, desc):
     # TODO: figure out how to update a single element in the DictField
     curr_project = does_project_id_exist(id)
 
     pass
+
+
+def get_project_json(project_id):
+    query = Project.objects(project_id__exact=project_id)
+    if len(query) != 1:
+        return None
+    project = query.first()
+    if not project:
+        return None
+    return jsonify({
+        "projectName": project.name,
+        "id": project.project_id,
+        "description": project.description
+    })
 
 
 def does_project_id_exist(p_id) -> bool:

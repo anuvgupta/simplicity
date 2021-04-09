@@ -31,42 +31,8 @@ class Projects extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: "",
-            password: "",
-            isLoaded: true,
             projectList: [],
-            posts: [
-                {
-                    projectName: "test1",
-                    projectId: "1",
-                    desc: " Lorem impsum ldeokdeosjdoisejdis"
-                },
-                {
-                    projectName: "test2",
-                    projectId: "2",
-                    desc: " Lorem impsum ldeokdeosjdoisejdis"
-                },
-                {
-                    projectName: "test1",
-                    projectId: "1",
-                    desc: " Lorem impsum ldeokdeosjdoisejdis"
-                },
-                {
-                    projectName: "test2",
-                    projectId: "2",
-                    desc: " Lorem impsum ldeokdeosjdoisejdis"
-                },
-                {
-                    projectName: "test1",
-                    projectId: "1",
-                    desc: " Lorem impsum ldeokdeosjdoisejdis"
-                },
-                {
-                    projectName: "test2",
-                    projectId: "2",
-                    desc: " Lorem impsum ldeokdeosjdoisejdis"
-                },
-            ],
+            projectsArr: [],
         };
     }
 
@@ -85,29 +51,49 @@ class Projects extends React.Component {
         this.props.history.push('/home');
     }
 
-    setupPage(user) {
-        console.log('Projects: loading user ' + user.username);
-        // TODO: load user data/info
+    createCards(projectList, token) {
+        console.log("starting vcreate cards " + projectList[0]);
+        var projects = [];
+        for (var i = 0; i < projectList.length; i++) {
+            console.log("curr project id is " + projectList[i]);
+            axios.get(`${global.config.api_url}/projects?id=${projectList[i]}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            }).then(response => {
+                var resp_data = null;
+                if (response && response.data)
+                    resp_data = response.data;
+                console.log(resp_data);
+                projects.push(resp_data);
+            }).catch(error => {
+                if (error) {
+                    var resp_data = null;
+                    if (error.response && error.response.data)
+                        resp_data = error.response.data;
+                    console.log(error);
+                }
+            });
+        }
+
+        console.log(projects);
+        return projects;
     }
 
-    updateUsername(event) {
-        this.setState({
-            username: event.target.value
-        });
-    }
-
     setupPage(user) {
-
         var username = user.username;
         username = username.toString();
-        console.log(username);
-        axios.get(`${global.config.api_url}/projects?username=` + username).then(response => {
+        console.log("Project page " + username);
+        axios.get(`${global.config.api_url}/user?username=` + username, {
+            headers: { Authorization: `Bearer ${user.token}` }
+        }).then(response => {
             var resp_data = null;
             if (response && response.data)
                 resp_data = response.data;
-            console.log(resp_data);
+            var projects = this.createCards(resp_data.projectList, user.token);
+            console.log(projects);
             this.setState({
-                projectList: resp_data.projectList
+                projectList: resp_data.projectList,
+                userToken: user.token,
+                projectsArr: projects
             });
         }).catch(error => {
             if (error) {
@@ -119,9 +105,7 @@ class Projects extends React.Component {
         });
     }
     render() {
-        const { error, isLoaded, posts } = this.state;
-
-        console.log(this.state);
+        console.log(this.state.projectsArr);
         return (
             <div className="center">
                 <div className="rightSide">
@@ -129,30 +113,27 @@ class Projects extends React.Component {
                         <h1> My Projects </h1>
                     </div>
                     {/* An area where users can create new project, by providing project name, description, and projectID. */}
-                    <Container fluid className=" test">
+                    <Container fluid className="test">
                         <CardDeck>
                             {
-                                this.state.projectList.length > 0 ? 
-                                    this.state.projectList.map((info) => (
+                                this.state.projectList.length > 0 ?
+                                    this.state.projectsArr.map((info) => (
                                         // need to avtually parse here
                                         <MyCard name={info.projectName}
-                                            desc={info.desc}
-                                            id={info.projectId} />
+                                            desc={info.description}
+                                            id={info.id} />
                                     ))
-                                : <h1> There are no projects </h1> 
-                                
-                            
-                            
+                                    : <h1> There are no projects </h1>
                             }
                             {/* <Card className="bg-dark text-white">
                                 <Card.ImgOverlay>
                                     <Card.Text>New Project</Card.Text>
                                 </Card.ImgOverlay>
                             </Card> */}
-                            </CardDeck>
+                        </CardDeck>
 
-                            <Button href="/createProject">
-                                New Project
+                        <Button href="/createProject">
+                            New Project
                             </Button>
                     </Container>
                 </div>

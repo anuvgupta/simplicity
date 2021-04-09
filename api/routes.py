@@ -127,14 +127,15 @@ def user():
     }), 400)
 
 @ app.route('/api/projects', methods=['GET'])
+@jwt_required()
 def project():
-    username = request.args.get('username')
-    if username:
-        print(username)
-        user = get_user_json(username)
+    projectId = request.args.get('id')
+    if projectId:
+        print(projectId)
+        project = get_project_json(projectId)
         #user.projectList
         # print(user['username'])
-        return (user, 200)
+        return (project, 200)
     return (jsonify({
         'success': False,
         'message': 'Username not provided.'

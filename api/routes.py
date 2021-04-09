@@ -115,6 +115,28 @@ def auth():
     }), 500)
 
 
+@app.route('/api/user', methods=['GET', 'POST'])
+def auth():
+    try:
+        user_json = request.get_json()
+    except BadRequest:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid request input data.'
+        }), 400)
+    else:
+        username = user_json.get("username")
+        user = get_user_json(username)
+        return (jsonify({
+                'success': True,
+                'data': {'userObj': user}
+            }), 200)
+    return (jsonify({
+        'success': False,
+        'message': 'Unknown error.'
+    }), 500)
+
+
 @app.route('/api/account', methods=['GET', 'POST'])
 def account():
     try:
@@ -151,7 +173,7 @@ def createProject():
             return (jsonify({
                 'success': False,
                 'message': 'This Project ID already exists.'
-            }), 409
+            }), 409)
         else:
             create_project(project_name, project_id, project_description)
             return (jsonify({
@@ -168,26 +190,26 @@ def createProject():
     }), 500)
 
 
-@ app.route('/api/project', methods = ['GET', 'POST'])
+@ app.route('/api/project', methods=['GET', 'POST'])
 def project():
     pass
 
 
-@ app.route('/api/editProject', methods = ['GET', 'POST'])
+@ app.route('/api/editProject', methods=['GET', 'POST'])
 def editProject():
     pass
 
 
-@ app.route('/api/checkHardware', methods = ['GET', 'POST'])
+@ app.route('/api/checkHardware', methods=['GET', 'POST'])
 def checkHardware():
     pass
 
 
-@ app.route('/api/hardware', methods = ['GET', 'POST'])
+@ app.route('/api/hardware', methods=['GET', 'POST'])
 def hardware():
     pass
 
 
-@ app.route('/api/datasets', methods = ['GET', 'POST'])
+@ app.route('/api/datasets', methods=['GET', 'POST'])
 def datasets():
     pass

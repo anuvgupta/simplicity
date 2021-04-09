@@ -29,7 +29,7 @@ class Overview extends React.Component {
     componentDidMount() {
         global.api.authenticated((user => {
             if (user === false) this.redirectPage();
-            else this.setupPage(user.username);
+            else this.setupPage(user);
         }).bind(this));
     }
     componentWillUnmount() {
@@ -40,8 +40,26 @@ class Overview extends React.Component {
         this.props.history.push('/home');
     }
 
-    setupPage(username) {
-        console.log('loading user ' + username);
+    setupPage(user) {
+        console.log('loading user ' + user.username);
+        console.log("list is "+ user.email);
+        axios.post(`${global.config.api_url}/user`, {
+            username: `${user.username}`,
+        }).then(response => {
+            var resp_data = null;
+            if (response && response.data)
+                resp_data = response.data;
+            console.log(resp_data);
+        }).catch(error => {
+            if (error) {
+                var resp_data = null;
+                if (error.response && error.response.data)
+                    resp_data = error.response.data;
+                console.log(resp_data);
+            }
+        });
+        // this.state.username = user.username;
+        // this.state.projectIds = user.projectList;
         // TODO: load user data/info
     }
 

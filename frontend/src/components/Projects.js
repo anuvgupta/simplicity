@@ -48,8 +48,8 @@ class Projects extends React.Component {
 
     }
 
-    redirectPage() {
-        this.props.history.push('/home');
+    redirectPage(page = 'home') {
+        this.props.history.push(`/${page}`);
     }
 
     createCards(projectList, token) {
@@ -130,7 +130,7 @@ class Projects extends React.Component {
                                         // need to avtually parse here
                                         <MyCard name={info.projectName}
                                             desc={info.description}
-                                            id={info.id} key={i}/>
+                                            id={info.id} key={i} />
                                     ))
                                     : <h1> There are no projects </h1>
                             }
@@ -141,9 +141,9 @@ class Projects extends React.Component {
                             </Card> */}
                         </CardDeck>
 
-                        <Button href="/createProject">
+                        <Button onClick={this.redirectPage.bind(this, 'createProject')}>
                             New Project
-                            </Button>
+                        </Button>
                     </Container>
                 </div>
 

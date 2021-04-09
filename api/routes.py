@@ -116,7 +116,7 @@ def auth():
 
 
 @app.route('/api/user', methods=['GET', 'POST'])
-def auth():
+def user():
     try:
         user_json = request.get_json()
     except BadRequest:
@@ -126,11 +126,10 @@ def auth():
         }), 400)
     else:
         username = user_json.get("username")
+        print(username)
         user = get_user_json(username)
-        return (jsonify({
-                'success': True,
-                'data': {'userObj': user}
-            }), 200)
+        # print(user['username'])
+        return (user, 200)
     return (jsonify({
         'success': False,
         'message': 'Unknown error.'

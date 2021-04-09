@@ -43,6 +43,27 @@ class Overview extends React.Component {
     setupPage(user) {
         console.log('loading user ' + user.username);
         console.log("list is "+ user.email);
+        var handleResponse = response => {
+            var errorMessage = 'Unknown error.';
+            if (response && response.hasOwnProperty('success')) {
+                if (response.success === true) {
+                    if (response.hasOwnProperty('data')) {
+                        errorMessage = null;
+                    }
+                } else {
+                    if (response.hasOwnProperty('message') && typeof response.message === 'string') {
+                        errorMessage = response.message;
+                    }
+                }
+            }
+            if (errorMessage) {
+                this.setState({
+                    errorMsg: errorMessage
+                });
+            } else {
+                console.log("here");
+            }
+        };
         axios.post(`${global.config.api_url}/user`, {
             username: `${user.username}`,
         }).then(response => {
@@ -55,7 +76,7 @@ class Overview extends React.Component {
                 var resp_data = null;
                 if (error.response && error.response.data)
                     resp_data = error.response.data;
-                console.log(resp_data);
+                handleResponse(resp_data);
             }
         });
         // this.state.username = user.username;

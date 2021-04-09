@@ -24,6 +24,7 @@ class Overview extends React.Component {
         this.state = {
             username: "",
             projectList: [],
+            totalHW: "",
         };
     }
 
@@ -52,9 +53,11 @@ class Overview extends React.Component {
                 resp_data = response.data;
             // console.log('resp_data', resp_data);
             if (resp_data && resp_data.success && resp_data.success === true && resp_data.data && resp_data.data.username && resp_data.data.projectList) {
+                var totalCheckedout = resp_data.data.hwSet1 + resp_data.data.hwSet2
                 this.setState({
                     username: resp_data.data.username,
-                    projectList: resp_data.data.projectList
+                    projectList: resp_data.data.projectList,
+                    totalHW: totalCheckedout
                 });
             } else console.log('Invalid response: ', resp_data);
         }).catch(error => {
@@ -91,7 +94,9 @@ class Overview extends React.Component {
                             </div>
                             <div className="rightOverView">
                                 <div className="overviewCard">
-                                    <h1> You have checked out X hardware</h1>
+                                    <h1> You have checked out </h1>
+                                        <h1>{this.state.totalHW}</h1> 
+                                    <h1>hardware</h1>
                                 </div>
                             </div>
                         </div>

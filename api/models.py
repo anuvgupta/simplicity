@@ -13,8 +13,6 @@ from wtforms.validators import DataRequired, ValidationError
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-
-
 # function to be called to raise an error if a required field is left empty
 def _not_empty(val):
     if not val:
@@ -28,6 +26,7 @@ class Hardware(me.Document):
     capacity = me.IntField(min_value=0)
     available = me.IntField(min_value=0, max_value=1024)
 
+
 def init_hardware():
     query = Hardware.objects(name="hwSet1")
     hwSet1 = query.first()
@@ -40,11 +39,13 @@ def init_hardware():
         hw2 = Hardware(name="hwSet2", capacity=1024, available=1024)
         hw2.save(force_insert=True)
     # creates a new document, doesn't allow for updates if this document already exists
-    
+
     return
 
 # defines fields for individual projects
 # TODO: might change this to an EmbeddedDocument when I figure out how to connect projects to users
+
+
 class Project(me.Document):
     name = me.StringField(max_length=50, required=True, unique=False)
     owner = me.StringField(max_length=50, required=True, unique=False)
@@ -72,7 +73,30 @@ class User(me.Document):
 
 def create_user(username, email, pwd):
     # TODO: implement bcrypt hashing for pwd
-    new_user = User(username=username, email=email, password=pwd, projectList=[], hw_sets={})
+    hw_set = {}
+    hw1 = Hardware.objects(name="hwSet1")
+    if len(hw1) != 1:
+        return False  # not found
+    hwSet1 = hw1.first()
+    if not hwSet1:
+        return False  # not found
+    if hwSet1.name != "hwSet1":
+        return False
+
+    hw2 = Hardware.objects(name="hwSet2")
+    if len(hw2) != 1:
+        return False  # not found
+    hwSet2 = hw2.first()
+    if not hwSet2:
+        return False  # not found
+    if hwSet2.name != "hwSet2":
+        return False
+
+    hw_set[hwSet1.name] = 0
+    hw_set[hwSet2.name] = 0
+
+    new_user = User(username=username, email=email,
+                    password=pwd, projectList=[], hw_sets=hw_set)
     # creates a new document, doesn't allow for updates if this document already exists
     new_user.save(force_insert=True)
     return
@@ -135,6 +159,8 @@ def get_user_json(username):
     })
 
 # get current user and return as mongoengine document
+
+
 def get_user_obj(username):
     query = User.objects(username__exact=username)
     if len(query) != 1:
@@ -147,8 +173,11 @@ def get_user_obj(username):
 
 """ PROJECT-RELATION FUNCTIONS """
 # create a new project and save to database
+
+
 def create_project(name, proj_id, desc, username=""):
-    new_project = Project(name=name, project_id=proj_id, description=desc, owner=username)
+    new_project = Project(name=name, project_id=proj_id,
+                          description=desc, owner=username)
     new_project.save(force_insert=True)
     if username != "":
         query = User.objects(username__exact=username)
@@ -204,8 +233,9 @@ def does_project_id_exist(p_id) -> bool:
     return True
 
 
-
 """ HARDWARE SET RELATED FUNCTIONS """
+
+
 def check_in(hw_set_name, checkin_quantity, username) -> int:
     queryA = Hardware.objects(name__exact=hw_set_name)
     if len(queryA) != 1:
@@ -254,6 +284,7 @@ def check_out(hw_set, checkout_quantity, username):
 
 def get_capacity_and_available(hw_set):
     return jsonify(capacity=hw_set.capacity, available=hw_set.available)
+
 
 def does_hw_set_exist(hw_set_name) -> bool:
     query = Hardware.objects(name__exact=hw_set_name)

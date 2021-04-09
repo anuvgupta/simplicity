@@ -85,7 +85,6 @@ function App() {
           <Route path="/datasets">
             {/* <Projects /> */}
             <SideBar></SideBar>
-            Datasets
             <Datasets></Datasets>
           </Route>
 

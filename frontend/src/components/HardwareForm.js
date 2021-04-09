@@ -4,7 +4,7 @@ import { Button, Form } from 'react-bootstrap';
 import axios from 'axios'
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
-// import '../styles/project.css'
+import '../styles/hardware.css'
 
 
 class HardwareForm extends React.Component {
@@ -18,7 +18,11 @@ class HardwareForm extends React.Component {
         super(props);
         this.state = {
             username: "",
-            password: ""
+            password: "",
+            hwSetName: "hwSet1",
+            amount: "",
+            msg: "",
+            color: ""
         };
     }
 
@@ -41,42 +45,60 @@ class HardwareForm extends React.Component {
         // TODO: load user data/info
     }
 
-    updateUsername(event) {
+    updateSetName(event) {
+        console.log(event.target.value);
         this.setState({
-            username: event.target.value
+            hwSetName: event.target.value
         });
     }
-
-    updatePassword(event) {
+    updateAmount(event){
+        console.log(event.target.value);
         this.setState({
-            password: event.target.value
+            amount: event.target.value
         });
     }
-
-    requestSignIn() {
-        var username = this.state.username;
-        var password = this.state.password;
-        if (username && password && username.trim().length > 0 && password.trim().length > 0) {
-            console.log(username, password);
+    checkHardware(isCheckin){
+        console.log(this.state);
+        // TODO: POST request here to check out / check in data
+        if(isCheckin){
+            //TODO: POST checkin
+        }
+        else{
+            //TODO: POST checkout
         }
     }
 
     render() {
         return (
-            <div className="formCenter">
-                <Form>
-                    <Form.Group controlId="projectName">
-                        <Form.Label>HW Set Name</Form.Label>
-                        <Form.Control type="name" placeholder="GPU" />
-                        <Form.Label>Requested Capacity </Form.Label>
-                        <Form.Control type="name" placeholder="1 GB" />
-                        <Form.Label>Total Available</Form.Label>
-                        <Form.Control type="name" placeholder="16 GB" />
-                        {/* <Form.Label>Description</Form.Label>
+            <div className="formCard">
+                <div className="formCenter">
+                    <Form>
+                        <Form.Group controlId="projectName">
+                            <Form.Label>HW Set Name</Form.Label>
+                            <Form.Control as="select" onChange={this.updateSetName.bind(this)}>
+                                <option>hwSet1</option>
+                                <option>hwSet2</option>
+                            </Form.Control>
+                            <Form.Label>Requested Capacity </Form.Label>
+                            <Form.Control type="name" placeholder="1 GB" onChange={this.updateAmount.bind(this)} />
+                            <Form.Label>Total Available</Form.Label>
+                            <Form.Control type="name" placeholder="16 GB" disabled />
+                            {/* <Form.Label>Description</Form.Label>
                             <Form.Control as="textarea" rows={3} /> */}
-                    </Form.Group>
-                </Form>
+                        </Form.Group>
+                    </Form>
+                    <Button className="mt9px" onClick={this.checkHardware.bind(this, true)} >
+                        Check In
+                        </Button> {' '}
+                    <Button className="mt9px" onClick={this.checkHardware.bind(this, false)}>
+                        Check Out
+                        </Button>
+                    <div style={{ marginTop: '30px' }}>
+                        <span className={this.state.color}>{this.state.msg}</span>
+                    </div>
+                </div>
             </div>
+
         );
     }
 }

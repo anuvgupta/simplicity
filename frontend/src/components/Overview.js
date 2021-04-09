@@ -27,10 +27,10 @@ class Overview extends React.Component {
     }
 
     componentDidMount() {
-        global.api.authenticated(user => {
+        global.api.authenticated((user => {
             if (user === false) this.redirectPage();
             else this.setupPage(user.username);
-        });
+        }).bind(this));
     }
     componentWillUnmount() {
 
@@ -83,4 +83,4 @@ class Overview extends React.Component {
         );
     }
 }
-export default Overview;
+export default withRouter(Overview);

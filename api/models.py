@@ -79,27 +79,41 @@ def does_user_email_exist(email) -> bool:
 
 # find document with exact username (they all should be unique so only one should be found if it exists)
 # see if password is correct
-def verify_login(user, password) -> int:
-    query = User.objects(username__exact=user)
+def verify_login(username, password) -> int:
+    query = User.objects(username__exact=username)
     if len(query) != 1:
         return 404  # not found
     current_user = query.first()
     if not current_user:
         return 404  # not found
+    # TODO: implement bcrypt hashing for password
     if current_user.password == password:
-        # TODO: implement bcrypt hashing for password
         return 1
     return 401
 
 
 # get current user and return as json object
-def get_user_json(input):
-    user = User.objects(user__exact=input)
-    return jsonify(user)
+def get_user_json(username):
+    query = User.objects(username__exact=username)
+    if len(query) != 1:
+        return None
+    current_user = query.first()
+    if not current_user:
+        return None
+    return jsonify({
+        "username": current_user.username,
+        "email": current_user.email,
+        "projectList": current_user.projectList
+    })
 
-
-def get_user_obj(user):
-    current_user = User.objects(username__exact=user)
+# get current user and return as mongoengine document
+def get_user_obj(username):
+    query = User.objects(username__exact=username)
+    if len(query) != 1:
+        return None
+    current_user = query.first()
+    if not current_user:
+        return None
     return current_user
 
 

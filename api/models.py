@@ -117,9 +117,16 @@ def update_project(id, hw_set, checkin_quantity, checkout_quantity):
     pass
 
 
-def does_project_id_exist(input) -> bool:
-    retrieve_project = Project.objects(project_id__exists=input)
-    return retrieve_project
+def does_project_id_exist(p_id) -> bool:
+    query = User.objects(project_id__exists=p_id)
+    if len(query) != 1:
+        return False  # not found
+    project = query.first
+    if not project:
+        return False  # not found
+    if p_id != project.id:
+        return False  # incorrect id
+    return True
 
 
 

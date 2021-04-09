@@ -1,11 +1,55 @@
 // globals
 
+import axios from 'axios';
 import hash from 'hash.js';
 
 global.config = {
     // api_url: 'http://localhost:5000/api',
     // api_url: 'http://localhost:30010/api',
-    api_url: `${window.location.protocol}//${window.location.host}/api`
+    api_url: `${window.location.protocol}//${window.location.host}/api`,
+    home_url: `${window.location.protocol}//${window.location.host}`,
+    // token_length: 264
+};
+
+global.api = {
+    authenticated: resolve => {
+        var token = global.util.cookie('token');
+        if (token && token.trim().length > 0) {
+            var handleResponse = response => {
+                if (response && response.hasOwnProperty('success')) {
+                    if (response.success === true) {
+                        if (response.hasOwnProperty('data') && response.data.hasOwnProperty('username') && typeof response.data.username === 'string') {
+                            return resolve({ username: response.data.username });
+                        } else resolve(false);
+                    } else {
+                        if (response.hasOwnProperty('message') && typeof response.message === 'string') {
+                            console.log(response.message);
+                        }
+                        resolve(false);
+                    }
+                } else resolve(false);
+            };
+            axios.get(`${global.config.api_url}/auth`, {
+                headers: { Authorization: `Bearer ${token}` }
+            }).then(response => {
+                var resp_data = null;
+                if (response && response.data)
+                    resp_data = response.data;
+                handleResponse(resp_data);
+            }).catch(error => {
+                if (error) {
+                    var resp_data = null;
+                    if (error.response && error.response.data)
+                        resp_data = error.response.data;
+                    handleResponse(resp_data);
+                }
+            });
+        } else resolve(false);
+    },
+    logout: (redirect = true) => {
+        global.util.delete_cookie('token');
+        if (redirect) window.location = `${global.config.home_url}/`;
+    }
 };
 
 global.util = {

@@ -64,8 +64,6 @@ def register():
                 'data': { 'token': access_token, 'username': new_username }
             }), 200)
 
-
-
 @app.route('/api/login', methods=['POST'])
 def login():
     try:
@@ -100,6 +98,19 @@ def login():
         'message': 'Unknown error.'
     }), 500)
 
+@app.route('/api/auth', methods=['GET'])
+@jwt_required()
+def auth():
+    current_username = get_jwt_identity()
+    if current_username:
+        return (jsonify({
+            'success': True,
+            'data': { 'username': current_username }
+        }), 200)
+    return (jsonify({
+        'success': False,
+        'message': 'Unknown error.'
+    }), 500)
 
 @app.route('/api/auth', methods=['GET'])
 @jwt_required()
@@ -123,8 +134,15 @@ def account():
 
 
 
-@app.route('/api/createProject', methods=['GET', 'POST'])
+@app.route('/api/createProject', methods=['POST'])
+@jwt_required()
 def createProject():
+    current_username = get_jwt_identity()
+    if not current_username:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid token.'
+        }), 401)
     try:
         project_json = request.get_json()
     except BadRequest:
@@ -135,21 +153,22 @@ def createProject():
     else:
         project_name = project_json.get('name')
         project_id = project_json.get('id')
-        description = project_json.get('desc')
-
+        project_description = project_json.get('desc')
         if does_project_id_exist(project_id):
-            return jsonify({
+            return (jsonify({
                 'success': False,
-                'message': 'This Project ID already exists.'
-                }), 409
-        
+                'message': 'Project ID already exists.'
+            }), 409)
         else:
-            create_project(project_name, project_id, description)
-            access_token = create_access_token(identity=project_id)
-            return jsonify({
+            create_project(project_name, project_id, project_description)
+            return (jsonify({
                 'success': True,
-                'data': {'token': access_token}
-            }), 200
+                'data': {
+                    name: project_name,
+                    id: project_id,
+                    description: project_description
+                }
+            }), 200)
     return (jsonify({
         'success': False,
         'message': 'Unknown error.'

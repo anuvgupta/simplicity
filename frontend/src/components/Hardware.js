@@ -29,7 +29,7 @@ class Hardware extends React.Component {
     componentDidMount() {
         global.api.authenticated((user => {
             if (user === false) this.redirectPage();
-            else this.setupPage(user.username);
+            else this.setupPage(user);
         }).bind(this));
     }
     componentWillUnmount() {
@@ -40,8 +40,8 @@ class Hardware extends React.Component {
         this.props.history.push('/home');
     }
 
-    setupPage(username) {
-        console.log('Hardware: loading user ' + username);
+    setupPage(user) {
+        console.log('Hardware: loading user ' + user.username);
         // TODO: load user data/info
     }
 

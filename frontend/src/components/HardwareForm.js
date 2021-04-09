@@ -25,7 +25,7 @@ class HardwareForm extends React.Component {
     componentDidMount() {
         global.api.authenticated((user => {
             if (user === false) this.redirectPage();
-            else this.setupPage(user.username);
+            else this.setupPage(user);
         }).bind(this));
     }
     componentWillUnmount() {
@@ -36,8 +36,8 @@ class HardwareForm extends React.Component {
         this.props.history.push('/home');
     }
 
-    setupPage(username) {
-        console.log('HardwareForm: loading user ' + username);
+    setupPage(user) {
+        console.log('HardwareForm: loading user ' + user.username);
         // TODO: load user data/info
     }
 

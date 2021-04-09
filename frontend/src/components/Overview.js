@@ -42,10 +42,10 @@ class Overview extends React.Component {
     }
 
     setupPage(user) {
-        console.log('loading user ' + user.username);
-        console.log("list is " + user.email);
-        axios.post(`${global.config.api_url}/user`, {
-            username: `${user.username}`,
+        console.log('Overview: loading user ' + user.username);
+        // console.log("list is " + user.email);
+        axios.get(`${global.config.api_url}/user?username=${user.username}`, {
+            headers: { Authorization: `Bearer ${user.token}` }
         }).then(response => {
             var resp_data = null;
             if (response && response.data)
@@ -54,7 +54,7 @@ class Overview extends React.Component {
             this.setState({
                 username: resp_data.username,
                 projectList: resp_data.projectList
-            })
+            });
         }).catch(error => {
             if (error) {
                 var resp_data = null;

@@ -22,7 +22,8 @@ class JoinProject extends React.Component {
             username: "",
             password: "",
             msg: "",
-            token: ""
+            token: "",
+            color: "",
         };
     }
 
@@ -44,7 +45,7 @@ class JoinProject extends React.Component {
         console.log('ProjectForm: loading user ' + user.username);
         this.setState({
             token: user.token
-        })        
+        })
         // TODO: load user data/info
     }
 
@@ -54,27 +55,35 @@ class JoinProject extends React.Component {
         });
     }
 
-    addProject(){
+    addProject() {
         console.log(this.state.id);
         console.log(this.state.token);
         axios.post(`${global.config.api_url}/joinProject`, {
             id: `${this.state.id}`,
         },
-        {
-            headers: { Authorization: `Bearer ${this.state.token}`} 
-        }).then(response => {
-            var resp_data = null;
-            if (response && response.data)
-                resp_data = response.data;
-            console.log(resp_data);
-        }).catch(error => {
-            if (error) {
+            {
+                headers: { Authorization: `Bearer ${this.state.token}` }
+            }).then(response => {
                 var resp_data = null;
-                if (error.response && error.response.data)
-                    resp_data = error.response.data;
-                console.log(resp_data);
-            }
-        });
+                if (response && response.data)
+                    resp_data = response.data;
+                console.log(resp_data.success);
+                this.setState({
+                    msg: "Success!",
+                    color: "green"
+                })
+            }).catch(error => {
+                if (error) {
+                    var resp_data = null;
+                    if (error.response && error.response.data)
+                        resp_data = error.response.data;
+                    console.log(resp_data.message);
+                    this.setState({
+                        msg: "Error: " + resp_data.message,
+                        color: "red"
+                    })
+                }
+            });
     }
 
 
@@ -95,7 +104,10 @@ class JoinProject extends React.Component {
                     <Button onClick={this.addProject.bind(this)}>
                         Join
                     </Button>
-                    <span>{this.state.msg}</span>
+                    <div style={{ marginTop: '30px' }}>
+                        <span className={this.state.color}>{this.state.msg}</span>
+                    </div>
+
                 </div>
             </div>
         );

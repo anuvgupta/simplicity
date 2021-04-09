@@ -122,7 +122,7 @@ class Projects extends React.Component {
                         <h1> My Projects </h1>
                     </div>
                     {/* An area where users can create new project, by providing project name, description, and projectID. */}
-                    <Container fluid className="test">
+                    <Container fluid className="cardContainer">
                         <CardDeck>
                             {
                                 this.state.projectList.length > 0 ?

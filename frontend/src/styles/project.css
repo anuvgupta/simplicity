@@ -3,9 +3,9 @@
     border-radius: 8px;
     padding: 100px;
 }
-.test{
+.cardContainer{
     /* background-color: black; */
-    height: 100px;
+    height: auto;
 }
 .rightSide{
     width: 85% !important;
@@ -18,4 +18,10 @@
 }
 .mt9px{
     margin-top: 10px;
+}
+.green{
+    color: green;
+}
+.red{
+    color: red;
 }

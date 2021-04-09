@@ -2,6 +2,8 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Form, Container, CardDeck, Card } from 'react-bootstrap';
 import axios from 'axios'
+import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
 import '../styles/project.css'
 
 
@@ -20,6 +22,11 @@ const MyCard = ({ name, id, desc }) => (
 );
 
 class Projects extends React.Component {
+
+    static propTypes = {
+        location: PropTypes.object.isRequired,
+        history: PropTypes.object.isRequired
+    };
 
     constructor(props) {
         super(props);
@@ -64,10 +71,22 @@ class Projects extends React.Component {
 
 
     componentDidMount() {
-
+        global.api.authenticated((user => {
+            if (user === false) this.redirectPage();
+            else this.setupPage(user.username);
+        }).bind(this));
     }
     componentWillUnmount() {
 
+    }
+
+    redirectPage() {
+        this.props.history.push('/home');
+    }
+
+    setupPage(username) {
+        console.log('Projects: loading user ' + username);
+        // TODO: load user data/info
     }
 
     updateUsername(event) {
@@ -119,7 +138,7 @@ class Projects extends React.Component {
                                 </Card.ImgOverlay>
                             </Card> */}
                             </CardDeck>
-                            
+
                             <Button href="/createProject">
                                 New Project
                             </Button>
@@ -133,4 +152,4 @@ class Projects extends React.Component {
     }
 }
 
-export default Projects;
+export default withRouter(Projects);

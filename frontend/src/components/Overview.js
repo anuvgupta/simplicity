@@ -41,8 +41,8 @@ class Overview extends React.Component {
     }
 
     setupPage(user) {
-        console.log('loading user ' + user.username);
-        console.log("list is "+ user.email);
+        console.log('Overview: loading user ' + user.username);
+        console.log("list is " + user.email);
         var handleResponse = response => {
             var errorMessage = 'Unknown error.';
             if (response && response.hasOwnProperty('success')) {

@@ -2,9 +2,16 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Form, Container, CardDeck, Card } from 'react-bootstrap';
 import axios from 'axios'
+import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
 import '../styles/project.css'
 
 class Datasets extends React.Component {
+
+    static propTypes = {
+        location: PropTypes.object.isRequired,
+        history: PropTypes.object.isRequired
+    };
 
     constructor(props) {
         super(props);
@@ -50,10 +57,22 @@ class Datasets extends React.Component {
 
 
     componentDidMount() {
-
+        global.api.authenticated((user => {
+            if (user === false) this.redirectPage();
+            else this.setupPage(user.username);
+        }).bind(this));
     }
     componentWillUnmount() {
 
+    }
+
+    redirectPage() {
+        this.props.history.push('/home');
+    }
+
+    setupPage(username) {
+        console.log('Datasets: loading user ' + username);
+        // TODO: load user data/info
     }
 
     updateUsername(event) {
@@ -133,4 +152,4 @@ class Datasets extends React.Component {
 }
 
 
-export default Datasets;
+export default withRouter(Datasets);

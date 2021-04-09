@@ -22,7 +22,8 @@ class Overview extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: ""
+            username: "",
+            projectList: [],
         };
     }
 
@@ -43,27 +44,6 @@ class Overview extends React.Component {
     setupPage(user) {
         console.log('loading user ' + user.username);
         console.log("list is "+ user.email);
-        var handleResponse = response => {
-            var errorMessage = 'Unknown error.';
-            if (response && response.hasOwnProperty('success')) {
-                if (response.success === true) {
-                    if (response.hasOwnProperty('data')) {
-                        errorMessage = null;
-                    }
-                } else {
-                    if (response.hasOwnProperty('message') && typeof response.message === 'string') {
-                        errorMessage = response.message;
-                    }
-                }
-            }
-            if (errorMessage) {
-                this.setState({
-                    errorMsg: errorMessage
-                });
-            } else {
-                console.log("here");
-            }
-        };
         axios.post(`${global.config.api_url}/user`, {
             username: `${user.username}`,
         }).then(response => {
@@ -71,17 +51,18 @@ class Overview extends React.Component {
             if (response && response.data)
                 resp_data = response.data;
             console.log(resp_data);
+            this.setState({
+                username: resp_data.username,
+                projectList: resp_data.projectList
+            })
         }).catch(error => {
             if (error) {
                 var resp_data = null;
                 if (error.response && error.response.data)
                     resp_data = error.response.data;
-                handleResponse(resp_data);
+                console.log(resp_data);
             }
         });
-        // this.state.username = user.username;
-        // this.state.projectIds = user.projectList;
-        // TODO: load user data/info
     }
 
     updateUsername(event) {
@@ -91,17 +72,20 @@ class Overview extends React.Component {
     }
 
     render() {
+        console.log(this.state.numProjects);
         return (
             <div>
                 <div className="center">
                     <div className="rightSide">
                         <div className="centerTitle">
-                            <h1> Welcome back User</h1>
+                            <h1> Welcome back @{this.state.username}</h1>
                         </div>
                         <div className="topPanel">
                             <div className="leftOverview">
                                 <div className="overviewCard">
-                                    <h1>You have X projects</h1>
+                                    <h1>You have </h1>
+                                        <h1 className="num"> {this.state.projectList.length} </h1>
+                                    <h1>projects</h1>
                                 </div>
                             </div>
                             <div className="rightOverView">
@@ -114,7 +98,6 @@ class Overview extends React.Component {
                 </div>
                 <Project></Project>
                 <div className="rightSide spacer">
-
                 </div>
                 <Hardware></Hardware>
             </div>

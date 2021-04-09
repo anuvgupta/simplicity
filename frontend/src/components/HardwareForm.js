@@ -23,6 +23,7 @@ class HardwareForm extends React.Component {
             hwSetName: "hwSet1",
             respData: {},
             amount: "",
+            quantity: "",
             msg: "",
             color: ""
         };
@@ -41,7 +42,28 @@ class HardwareForm extends React.Component {
     redirectPage() {
         this.props.history.push('/home');
     }
-
+    getHardwareInfo(token, resolve) {
+        axios.post(`${global.config.api_url}/checkHardware`, {},
+            {
+                headers: { Authorization: `Bearer ${token}` }
+            }).then(response => {
+                var resp_data = null;
+                if (response && response.data)
+                    resp_data = response.data;
+                console.log(this.state);
+                console.log(resp_data);
+                resolve(resp_data);
+            }).catch(error => {
+                if (error) {
+                    var resp_data = null;
+                    if (error.response && error.response.data)
+                        resp_data = error.response.data;
+                    console.log(error, resp_data);
+                    console.log("here");
+                    resolve(false, resp_data);
+                }
+            });
+    }
 
 
     setupPage(user) {
@@ -67,35 +89,7 @@ class HardwareForm extends React.Component {
 
         // TODO: load user data/info
     }
-    getHardwareInfo(token, resolve) {
-        var resp = "";
-        axios.post(`${global.config.api_url}/checkHardware`, {},
-            {
-                headers: { Authorization: `Bearer ${token}` }
-            }).then(response => {
-                var resp_data = null;
-                if (response && response.data)
-                    resp_data = response.data;
-                // resp = resp_data.data;
-                // this.setState({
-                //     respData: resp_data.data
-                // })
 
-                console.log(this.state);
-                console.log(resp_data);
-                resolve(resp_data);
-            }).catch(error => {
-                if (error) {
-                    var resp_data = null;
-                    if (error.response && error.response.data)
-                        resp_data = error.response.data;
-                    console.log(error, resp_data);
-                    console.log("here");
-                    resolve(false, resp_data);
-                }
-            });
-        return resp;
-    }
 
 
     updateSetName(event) {
@@ -117,10 +111,10 @@ class HardwareForm extends React.Component {
             }
         });
     }
-    updateAmount(event) {
+    updateQuantity(event) {
         console.log(event.target.value);
         this.setState({
-            amount: event.target.value
+            quantity: event.target.value
         });
     }
     checkHardware(isCheckin) {
@@ -128,9 +122,96 @@ class HardwareForm extends React.Component {
         // TODO: POST request here to check out / check in data
         if (isCheckin) {
             //TODO: POST checkin
+            axios.post(`${global.config.api_url}/checkInHardware`, {
+                name: `${this.state.hwSetName}`,
+                quantity: `${this.state.quantity}`
+            },
+                {
+                    headers: { Authorization: `Bearer ${this.state.token}` }
+                }).then(response => {
+                    var resp_data = null;
+                    if (response && response.data)
+                        resp_data = response.data;
+                    console.log(this.state);
+                    console.log(resp_data);
+                    var resp = this.getHardwareInfo(this.state.token, (response, error = null) => {
+                        if (response) {
+                            var hwSetName = this.state.hwSetName;
+                            this.setState({
+                                amount: response.data[hwSetName],
+                                msg: "Success!",
+                                color: "green"
+                            });
+                            window.location.reload();
+                        } else {
+                            console.log(error);
+                        }
+                    });
+                }).catch(error => {
+                    if (error) {
+                        var resp_data = null;
+                        if (error.response && error.response.data)
+                            resp_data = error.response.data;
+
+                        if (error.response.status == 500) {
+                            this.setState({
+                                msg: "Unknown error",
+                                color: "red"
+                            });
+                        } else {
+                            this.setState({
+                                msg: resp_data.message,
+                                color: "red"
+                            });
+                        }
+                    }
+                });
         }
         else {
             //TODO: POST checkout
+            axios.post(`${global.config.api_url}/checkOutHardware`, {
+                name: `${this.state.hwSetName}`,
+                quantity: `${this.state.quantity}`
+            },
+                {
+                    headers: { Authorization: `Bearer ${this.state.token}` }
+                }).then(response => {
+                    var resp_data = null;
+                    if (response && response.data)
+                        resp_data = response.data;
+                    var resp = this.getHardwareInfo(this.state.token, (response, error = null) => {
+                        if (response) {
+                            var hwSetName = this.state.hwSetName;
+                            this.setState({
+                                amount: response.data[hwSetName],
+                                msg: "Success!",
+                                color: "green"
+                            });
+                            window.location.reload();
+                        } else {
+                            console.log(error);
+                        }
+                    });
+                }).catch(error => {
+                    if (error) {
+                        var resp_data = null;
+                        if (error.response && error.response.data)
+                            resp_data = error.response.data;
+                        console.log(error.response.status);
+                        if (error.response.status == 500) {
+                            this.setState({
+                                msg: "Unknown error",
+                                color: "red"
+                            });
+                        } else {
+                            this.setState({
+                                msg: resp_data.message,
+                                color: "red"
+                            });
+                        }
+                        console.log(error, resp_data);
+                    }
+                });
         }
     }
 
@@ -146,7 +227,7 @@ class HardwareForm extends React.Component {
                                 <option>hwSet2</option>
                             </Form.Control>
                             <Form.Label>Requested Capacity </Form.Label>
-                            <Form.Control type="name" placeholder="1 GB" onChange={this.updateAmount.bind(this)} />
+                            <Form.Control type="name" placeholder="1 GB" onChange={this.updateQuantity.bind(this)} />
                             <Form.Label>Total Available</Form.Label>
                             <Form.Control type="name" value={this.state.amount} disabled />
                             {/* <Form.Label>Description</Form.Label>

@@ -250,7 +250,12 @@ def check_in(hw_set_name, checkin_quantity, username) -> int:
     if not user:
         return 404
     # check if requested quantity is valid
-    if checkin_quantity > user.hw_sets[hw_set_name] or checkin_quantity > hw_set.available:
+    print(hw_set.capacity)
+    if checkin_quantity > int(user.hw_sets[hw_set_name]): 
+        #this is if the user tries to check in more than they've checked out
+        return 400
+    if checkin_quantity > int(hw_set.capacity):
+        #this is when a user tries to check in more than capacity
         return 400
     hw_set.available += checkin_quantity
     hw_set.save()     # since the hardware set already existed, this saves the document with the new available quantity
@@ -259,7 +264,7 @@ def check_in(hw_set_name, checkin_quantity, username) -> int:
     return 1
 
 
-def check_out(hw_set, checkout_quantity, username):
+def check_out(hw_set_name, checkout_quantity, username):
     queryA = Hardware.objects(name__exact=hw_set_name)
     if len(queryA) != 1:
         return 404
@@ -275,9 +280,9 @@ def check_out(hw_set, checkout_quantity, username):
     # check if requested quantity is valid
     if checkout_quantity > hw_set.available:
         return 400
-    hw_set.available -= checkin_quantity
+    hw_set.available -= checkout_quantity
     hw_set.save()
-    user.hw_sets[hw_set_name] += checkin_quantity
+    user.hw_sets[hw_set_name] += checkout_quantity
     user.save()
     return 1
 

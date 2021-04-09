@@ -329,15 +329,15 @@ def checkHardware():
 @app.route('/api/checkInHardware', methods=['POST'])
 @jwt_required()
 def checkInHardware():
-    hw_response_400 = lambda a : jsonify({
+    hw_response_400 = lambda : jsonify({
         'success': False,
-        'message': 'Invalid request input data.'
+        'message': 'Checking in more than capacity'
     })
-    hw_response_404 = lambda a : jsonify({
+    hw_response_404 = lambda : jsonify({
         'success': False,
         'message': 'Hardware set not found.'
     })
-    hw_response_500 = lambda a : jsonify({
+    hw_response_500 = lambda : jsonify({
         'success': False,
         'message': 'Unknown error.'
     })
@@ -353,7 +353,7 @@ def checkInHardware():
         return (hw_response_400(), 400)
     else:
         hardware_name = hardware_json.get('name')
-        checkin_quantity = hardware_json.get('quantity')
+        checkin_quantity = int(hardware_json.get('quantity'))
         if not does_hw_set_exist(hardware_name):
             return (hw_response_404(), 404)
         ret_val = check_in(hardware_name, checkin_quantity, current_username)
@@ -372,15 +372,15 @@ def checkInHardware():
 @app.route('/api/checkOutHardware', methods=['POST'])
 @jwt_required()
 def checkOutHardware():
-    hw_response_400 = lambda a : jsonify({
+    hw_response_400 = lambda : jsonify({
         'success': False,
-        'message': 'Invalid request input data.'
+        'message': 'Checking out more than possible '
     })
-    hw_response_404 = lambda a : jsonify({
+    hw_response_404 = lambda : jsonify({
         'success': False,
         'message': 'Hardware set not found.'
     })
-    hw_response_500 = lambda a : jsonify({
+    hw_response_500 = lambda : jsonify({
         'success': False,
         'message': 'Unknown error.'
     })
@@ -396,7 +396,7 @@ def checkOutHardware():
         return (hw_response_400(), 400)
     else:
         hardware_name = hardware_json.get('name')
-        checkout_quantity = hardware_json.get('quantity')
+        checkout_quantity = int(hardware_json.get('quantity'))
         if not does_hw_set_exist(hardware_name):
             return (hw_response_404(), 404)
         ret_val = check_out(hardware_name, checkout_quantity, current_username)

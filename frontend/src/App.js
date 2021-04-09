@@ -24,82 +24,67 @@ import HomePage from "./components/HomePage";
 import Projects from './components/Projects';
 import Datasets from "./components/Datasets";
 import Overview from "./components/Overview";
+import NavigationBar from "./components/NavBar";
 import JoinProject from './components/JoinProject.js';
 
 function App() {
-
   return (
     <div className="App">
       <Router>
         <Switch>
-
           <Route path="/login">
             <LoginPage></LoginPage>
           </Route>
-
           <Route path="/register">
             <RegisterPage></RegisterPage>
           </Route>
-
           <Route path="/account">
-            <SideBar></SideBar>
+            <NavigationBar></NavigationBar>
+            <SideBar active="overview"></SideBar>
             <Overview></Overview>
           </Route>
           <Route path="/createProject">
-            <SideBar></SideBar>
+            <NavigationBar></NavigationBar>
+            <SideBar active="project"></SideBar>
             <ProjectForm action="create"></ProjectForm>
           </Route>
           <Route path="/editProject/:id">
-            <SideBar></SideBar>
+            <NavigationBar></NavigationBar>
+            <SideBar active="project"></SideBar>
             <ProjectForm action="edit"></ProjectForm>
           </Route>
           <Route path="/joinProject">
-            <SideBar></SideBar>
+            <NavigationBar></NavigationBar>
+            <SideBar active="project"></SideBar>
             <JoinProject></JoinProject>
           </Route>
           <Route path="/project">
-            {/* <Projects /> */}
-            <SideBar></SideBar>
-            <Projects></Projects>
-
-          </Route>
-          <Route path="/editProject">
-            <SideBar></SideBar>
-            <ProjectForm></ProjectForm>
+            <NavigationBar></NavigationBar>
+            <SideBar active="project"></SideBar>
+            <Projects hideButtons="false"></Projects>
           </Route>
           <Route path="/checkHardware">
-            <SideBar></SideBar>
-
-
+            <NavigationBar></NavigationBar>
+            <SideBar active="hardware"></SideBar>
           </Route>
           <Route path="/hardware">
-            <SideBar></SideBar>
+            <NavigationBar></NavigationBar>
+            <SideBar active="hardware"></SideBar>
             <Hardware></Hardware>
             <div className="rightSide">
               <HardwareForm></HardwareForm>
             </div>
-
-            {/* <Projects /> */}
-
           </Route>
           <Route path="/datasets">
-            {/* <Projects /> */}
-            <SideBar></SideBar>
+            <NavigationBar></NavigationBar>
+            <SideBar active="datasets"></SideBar>
             <Datasets></Datasets>
           </Route>
-
           <Route path="/">
             <HomePage></HomePage>
-            {/* <div>{getMessage.status === 200 ?
-        <h3>{getMessage.data.username}</h3>
-        :
-        <h3>Not found</h3>}
-      </div> */}
           </Route>
         </Switch>
-
       </Router >
-
     </div >
   );
 }

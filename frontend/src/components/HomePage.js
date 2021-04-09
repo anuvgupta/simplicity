@@ -38,7 +38,7 @@ class HomePage extends React.Component {
                     <Row>
                         <Col>
                             <div className="centerTitle">
-                                <h1 className="title"> Welcome to Simplicity </h1>
+                                <h1 className="title titleFont"> Simplicity </h1>
                             </div>
                         </Col>
                     </Row>

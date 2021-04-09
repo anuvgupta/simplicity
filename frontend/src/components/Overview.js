@@ -102,7 +102,7 @@ class Overview extends React.Component {
                         </div>
                     </div>
                 </div>
-                <Project></Project>
+                <Project hideButtons="true"></Project>
                 <div className="rightSide spacer">
                 </div>
                 <Hardware></Hardware>

@@ -65,6 +65,9 @@ class Projects extends React.Component {
                     resp_data = response.data;
                 console.log(resp_data);
                 projects.push(resp_data);
+                this.setState({
+                    projectsArr: projects
+                });
             }).catch(error => {
                 if (error) {
                     var resp_data = null;
@@ -76,6 +79,9 @@ class Projects extends React.Component {
         }
 
         console.log(projects);
+        this.setState({
+            projectList: projectList
+        });
         return projects;
     }
 
@@ -93,11 +99,11 @@ class Projects extends React.Component {
             var projects = this.createCards(resp_data.data.projectList, user.token);
             console.log(projects);
 
-            this.setState({
-                projectList: resp_data.data.projectList,
-                userToken: user.token,
-                projectsArr: projects
-            });
+            // this.setState({
+            //     projectList: resp_data.data.projectList,
+            //     userToken: user.token,
+            //     projectsArr: projects
+            // });
         }).catch(error => {
             if (error) {
                 var resp_data = null;
@@ -120,11 +126,11 @@ class Projects extends React.Component {
                         <CardDeck>
                             {
                                 this.state.projectList.length > 0 ?
-                                    this.state.projectsArr.map((info) => (
+                                    this.state.projectsArr.map((info, i) => (
                                         // need to avtually parse here
                                         <MyCard name={info.projectName}
                                             desc={info.description}
-                                            id={info.id} />
+                                            id={info.id} key={i}/>
                                     ))
                                     : <h1> There are no projects </h1>
                             }

@@ -49,7 +49,7 @@ function App() {
             <SideBar></SideBar>
             <ProjectForm action="create"></ProjectForm>
           </Route>
-          <Route path="/editProject">
+          <Route path="/editProject/:id">
             <SideBar></SideBar>
             <ProjectForm action="edit"></ProjectForm>
           </Route>

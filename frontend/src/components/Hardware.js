@@ -69,7 +69,7 @@ class Hardware extends React.Component {
         return (
             <div className="rightSide">
                 <div className="centerTitle">
-                    <h1> My Hardware</h1>
+                    <h1> Hardware</h1>
                 </div>
                 <div className="">
                     <div className="hardwareTop">

@@ -50,6 +50,16 @@ global.api = {
     logout: (redirect = true) => {
         global.util.delete_cookie('token');
         if (redirect) window.location = `${global.config.home_url}/`;
+    },
+    login: (accessToken, redirect = true) => {
+        global.util.delete_cookie('token');
+        global.util.cookie('token', accessToken);
+        if (redirect) window.location = `${global.config.home_url}/account`;
+    },
+    get_token: _ => {
+        var cookie = global.util.cookie('token');
+        if (cookie) return cookie;
+        return null;
     }
 };
 
@@ -91,5 +101,20 @@ global.util = {
         obj: function (v) { return (v !== null && v != undefined && (typeof v === 'object' || v instanceof Object)); },
         int: function (v) { return (v !== null && v != undefined && (v === parseInt(v, 10) && !isNaN(v))); },
         type: function (v, t) { return (typeof v === t); }
-    }
+    },
+    validateAlphanumeric: (value) => {
+        var alphaNumerics = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        for (var v in value) {
+            if (!alphaNumerics.includes(value[v])) {
+                return false;
+            }
+        }
+        return true;
+    },
+    hashPassword: (value) => {
+        // const hashSalt = bcryptjs.genSaltSync();
+        // const hashPassword = bcryptjs.hashSync(value, hashSalt);
+        // return hashPassword;
+        return global.util.sha256(value);
+    },
 };

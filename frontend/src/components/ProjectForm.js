@@ -19,8 +19,14 @@ class ProjectForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: "",
-            password: ""
+            projectID: "",
+            projectName: "",
+            projectDescription: "",
+            initialProjectID: "",
+            initialProjectName: "",
+            initialProjectDescription: "",
+            errorMsg: "",
+            token: "",
         };
     }
 
@@ -34,33 +40,128 @@ class ProjectForm extends React.Component {
 
     }
 
-    redirectPage() {
-        this.props.history.push('/home');
+    redirectPage(page = 'home') {
+        this.props.history.push(`/${page}`);
     }
 
     setupPage(user) {
         console.log('ProjectForm: loading user ' + user.username);
         // TODO: load user data/info
-    }
-
-    updateUsername(event) {
+        var project_id = '';
+        if (this.props.match.params.hasOwnProperty('id'))
+            project_id = this.props.match.params.id;
         this.setState({
-            username: event.target.value
+            token: user.token,
+            projectID: `${project_id}`,
+            initialProjectID: `${project_id}`
         });
-    }
-
-    updatePassword(event) {
-        this.setState({
-            password: event.target.value
-        });
-    }
-
-    requestSignIn() {
-        var username = this.state.username;
-        var password = this.state.password;
-        if (username && password && username.trim().length > 0 && password.trim().length > 0) {
-            console.log(username, password);
+        if (this.props.action == 'edit') {
+            axios.get(`${global.config.api_url}/projects?id=${project_id}`, {
+                headers: { Authorization: `Bearer ${user.token}` }
+            }).then(response => {
+                console.log(response);
+                var resp_data = null;
+                if (response && response.data)
+                    resp_data = response.data;
+                // console.log('resp_data', resp_data);
+                if (resp_data && resp_data.projectName && resp_data.id && resp_data.description) {
+                    this.setState({
+                        projectName: resp_data.projectName,
+                        projectDescription: resp_data.description,
+                        initialProjectName: resp_data.projectName,
+                        initialProjectDescription: resp_data.description,
+                    });
+                } else console.log('Invalid response: ', resp_data);
+            }).catch(error => {
+                if (error) {
+                    var resp_data = null;
+                    if (error.response && error.response.data)
+                        resp_data = error.response.data;
+                    console.log(error, resp_data);
+                }
+            });
         }
+    }
+
+    updateProjectID(event) {
+        this.setState({
+            projectID: event.target.value
+        });
+    }
+
+    updateProjectName(event) {
+        this.setState({
+            projectName: event.target.value
+        });
+    }
+
+    updateProjectDescription(event) {
+        this.setState({
+            projectDescription: event.target.value
+        });
+    }
+
+    updateErrorMsg(value) {
+        this.setState({
+            errorMsg: value
+        });
+    }
+
+    requestForProject(projectID, projectName, projectDescription) {
+        const action = this.props.action;
+        var handleResponse = response => {
+            var errorMessage = 'Unknown error.';
+            if (response && response.hasOwnProperty('success')) {
+                if (response.success === true) {
+                    errorMessage = null;
+                } else {
+                    if (response.hasOwnProperty('message') && typeof response.message === 'string') {
+                        errorMessage = response.message;
+                    }
+                }
+            }
+            if (errorMessage) {
+                this.setState({
+                    errorMsg: errorMessage
+                });
+            } else {
+                this.redirectPage('account');
+            }
+        };
+        axios.post(`${global.config.api_url}/${action}Project`, {
+            id: `${projectID}`,
+            name: `${projectName}`,
+            desc: `${projectDescription}`
+        }, {
+            headers: { Authorization: `Bearer ${this.state.token}` }
+        }).then(response => {
+            var resp_data = null;
+            if (response && response.data)
+                resp_data = response.data;
+            handleResponse(resp_data);
+        }).catch(error => {
+            if (error) {
+                var resp_data = null;
+                if (error.response && error.response.data)
+                    resp_data = error.response.data;
+                handleResponse(resp_data);
+            }
+        });
+    }
+
+    validateForm(sendRequest = false) {
+        var projectID = this.state.projectID;
+        var projectName = this.state.projectName;
+        var projectDescription = this.state.projectDescription;
+        if (projectID && projectID.trim().length > 0) {
+            if (projectName && projectName.trim().length > 0) {
+                if (projectDescription && projectDescription.trim().length > 0) {
+                    if (global.util.validateAlphanumeric(projectID)) {
+                        if (sendRequest) this.requestForProject(projectID, projectName, projectDescription);
+                    } else this.updateErrorMsg('Invalid projectID (letters and numbers only).');
+                } else this.updateErrorMsg('Empty project description.');
+            } else this.updateErrorMsg('Empty project name.');
+        } else this.updateErrorMsg('Empty project ID.');
     }
 
     render() {
@@ -70,20 +171,21 @@ class ProjectForm extends React.Component {
         return (
             <div className="center">
                 <div className="formBorder">
-                    <div className="centerTitle">
+                    <div className="centerTitle" style={{ marginBottom: '15px' }}>
                         <h1> {action_title} Project </h1>
                     </div>
                     {/* An area where users can create new project, by providing project name, description, and projectID. */}
                     <Form>
                         <Form.Group controlId="projectName">
+                            <Form.Label style={{ opacity: (create ? '1' : '0.9') }}>Project ID</Form.Label>
+                            <Form.Control type="text" placeholder="testProject1" disabled={!create} value={create ? '' : this.state.initialProjectID} onChange={this.updateProjectID.bind(this)} style={{ opacity: (create ? '1' : '0.7'), marginBottom: '10px' }} />
                             <Form.Label>Project Name</Form.Label>
-                            <Form.Control type="text" placeholder="Test Project" />
-                            <Form.Label>Project ID</Form.Label>
-                            <Form.Control disabled={!create} style={{ opacity: (create ? '1' : '0.6') }} type="text" placeholder="testProject1" />
-                            <Form.Label>Description</Form.Label>
-                            <Form.Control type="text" as="textarea" placeholder="Lorem ipsum dolor sit amet..." rows={3} />
-                            <Button style={{ marginTop: '25px' }}>{action_title}</Button>
+                            <Form.Control type="text" placeholder="Test Project" defaultValue={create ? '' : this.state.initialProjectName} onChange={this.updateProjectName.bind(this)} style={{ marginBottom: '10px' }} />
+                            <Form.Label>Project Description</Form.Label>
+                            <Form.Control type="text" as="textarea" rows={3} defaultValue={create ? '' : this.state.initialProjectDescription} placeholder="Lorem ipsum dolor sit amet..." onChange={this.updateProjectDescription.bind(this)} style={{ marginBottom: '10px' }} />
+                            <Button onClick={this.validateForm.bind(this, true)} style={{ marginTop: '20px' }}>{action_title}</Button>
                         </Form.Group>
+                        <span className="errorMessage" style={{ paddingTop: '15px' }}>{this.state.errorMsg}</span>
                     </Form>
 
                 </div>

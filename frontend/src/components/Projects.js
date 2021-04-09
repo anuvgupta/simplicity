@@ -100,12 +100,12 @@ class Projects extends React.Component {
 
         var username = user.username;
         username = username.toString();
-        console.log(username);
+        // console.log(username);
         axios.get(`${global.config.api_url}/projects?username=` + username).then(response => {
             var resp_data = null;
             if (response && response.data)
                 resp_data = response.data;
-            console.log(resp_data);
+            // console.log(resp_data);
             this.setState({
                 projectList: resp_data.projectList
             });
@@ -121,7 +121,7 @@ class Projects extends React.Component {
     render() {
         const { error, isLoaded, posts } = this.state;
 
-        console.log(this.state);
+        // console.log(this.state);
         return (
             <div className="center">
                 <div className="rightSide">
@@ -132,27 +132,27 @@ class Projects extends React.Component {
                     <Container fluid className=" test">
                         <CardDeck>
                             {
-                                this.state.projectList.length > 0 ? 
+                                this.state.projectList.length > 0 ?
                                     this.state.projectList.map((info) => (
                                         // need to avtually parse here
                                         <MyCard name={info.projectName}
                                             desc={info.desc}
                                             id={info.projectId} />
                                     ))
-                                : <h1> There are no projects </h1> 
-                                
-                            
-                            
+                                    : <h1> There are no projects </h1>
+
+
+
                             }
                             {/* <Card className="bg-dark text-white">
                                 <Card.ImgOverlay>
                                     <Card.Text>New Project</Card.Text>
                                 </Card.ImgOverlay>
                             </Card> */}
-                            </CardDeck>
+                        </CardDeck>
 
-                            <Button href="/createProject">
-                                New Project
+                        <Button href="/createProject">
+                            New Project
                             </Button>
                     </Container>
                 </div>

@@ -118,9 +118,28 @@ def auth():
 @app.route('/api/user', methods=['GET'])
 @jwt_required()
 def user():
+    current_username = get_jwt_identity()
     username = request.args.get('username')
     if username:
-        return (get_user_json(username), 200)
+        if current_username and username == current_username:
+            user = get_user_obj(username)
+            if user:
+                return (jsonify({
+                    'success': True,
+                    'data': {
+                        'username': user.username,
+                        'email': user.email,
+                        'projectList': user.projectList
+                    }
+                }), 200)
+            return (jsonify({
+                'success': False,
+                'message': 'User not found.'
+            }), 404)
+        return (jsonify({
+            'success': False,
+            'message': 'Unauthorized access.'
+        }), 401)
     return (jsonify({
         'success': False,
         'message': 'Invalid request input data.'

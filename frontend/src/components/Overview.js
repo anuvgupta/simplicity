@@ -50,11 +50,13 @@ class Overview extends React.Component {
             var resp_data = null;
             if (response && response.data)
                 resp_data = response.data;
-            // console.log(resp_data);
-            this.setState({
-                username: resp_data.username,
-                projectList: resp_data.projectList
-            });
+            // console.log('resp_data', resp_data);
+            if (resp_data && resp_data.success && resp_data.success === true && resp_data.data && resp_data.data.username && resp_data.data.projectList) {
+                this.setState({
+                    username: resp_data.data.username,
+                    projectList: resp_data.data.projectList
+                });
+            } else console.log('Invalid response: ', resp_data);
         }).catch(error => {
             if (error) {
                 var resp_data = null;

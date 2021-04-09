@@ -28,7 +28,9 @@ class LoginPage extends React.Component {
     }
 
     componentDidMount() {
-
+        global.api.authenticated(is_authenticated => {
+            if (is_authenticated) this.redirectPage();
+        });
     }
     componentWillUnmount() {
 

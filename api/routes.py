@@ -105,15 +105,15 @@ def login():
 @jwt_required()
 def auth():
     current_username = get_jwt_identity()
-    if current_username:
+    if current_username and does_user_name_exist(current_username):
         return (jsonify({
             'success': True,
             'data': {'username': current_username}
         }), 200)
     return (jsonify({
         'success': False,
-        'message': 'Unknown error.'
-    }), 500)
+        'message': 'Invalid user.'
+    }), 401)
 
 
 @app.route('/api/user', methods=['GET'])
@@ -185,16 +185,16 @@ def createProject():
         if does_project_id_exist(project_id):
             return (jsonify({
                 'success': False,
-                'message': 'This Project ID already exists.'
+                'message': 'Project ID already exists.'
             }), 409)
         else:
-            create_project(project_name, project_id, project_description)
+            create_project(project_name, project_id, project_description, current_username)
             return (jsonify({
                 'success': True,
                 'data': {
-                    name: project_name,
-                    id: project_id,
-                    description: project_description
+                    'name': project_name,
+                    'id': project_id,
+                    'desc': project_description
                 }
             }), 200)
     return (jsonify({
@@ -249,21 +249,60 @@ def joinProject():
     }), 500)
 
 
-@ app.route('/api/editProject', methods=['GET', 'POST'])
+@app.route('/api/editProject', methods=['POST'])
+@jwt_required()
 def editProject():
-    pass
+    current_username = get_jwt_identity()
+    if not current_username:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid token.'
+        }), 401)
+    try:
+        project_json = request.get_json()
+    except BadRequest:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid request input data.'
+        }), 400)
+    else:
+        project_name = project_json.get('name')
+        project_id = project_json.get('id')
+        project_description = project_json.get('desc')
+        if not does_project_id_exist(project_id):
+            return (jsonify({
+                'success': False,
+                'message': 'Project not found.'
+            }), 404)
+        else:
+            update_project(project_name, project_id, project_description)
+            return (jsonify({
+                'success': True,
+                'data': {
+                    'name': project_name,
+                    'id': project_id,
+                    'desc': project_description
+                }
+            }), 200)
+    return (jsonify({
+        'success': False,
+        'message': 'Unknown error.'
+    }), 500)
 
 
-@ app.route('/api/checkHardware', methods=['GET', 'POST'])
+@app.route('/api/checkHardware', methods=['GET', 'POST'])
+@jwt_required()
 def checkHardware():
     pass
 
 
-@ app.route('/api/hardware', methods=['GET', 'POST'])
+@app.route('/api/hardware', methods=['GET', 'POST'])
+@jwt_required()
 def hardware():
     pass
 
 
-@ app.route('/api/datasets', methods=['GET', 'POST'])
+@app.route('/api/datasets', methods=['GET', 'POST'])
+@jwt_required()
 def datasets():
     pass

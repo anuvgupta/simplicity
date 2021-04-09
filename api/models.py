@@ -47,6 +47,7 @@ def init_hardware():
 # TODO: might change this to an EmbeddedDocument when I figure out how to connect projects to users
 class Project(me.Document):
     name = me.StringField(max_length=50, required=True, unique=False)
+    owner = me.StringField(max_length=50, required=True, unique=False)
     project_id = me.StringField(
         max_length=20, required=True, unique=True, validation=_not_empty)
     description = me.StringField(max_length=200)
@@ -71,7 +72,7 @@ class User(me.Document):
 
 def create_user(username, email, pwd):
     # TODO: implement bcrypt hashing for pwd
-    new_user = User(username=username, email=email, password=pwd)
+    new_user = User(username=username, email=email, password=pwd, projectList=[])
     # creates a new document, doesn't allow for updates if this document already exists
     new_user.save(force_insert=True)
     return
@@ -82,7 +83,7 @@ def does_user_name_exist(username) -> bool:
     query = User.objects(username__exact=username)
     if len(query) != 1:
         return False  # not found
-    current_user = query.first
+    current_user = query.first()
     if not current_user:
         return False  # not found
     if username != current_user.username:
@@ -96,7 +97,7 @@ def does_user_email_exist(email) -> bool:
     query = User.objects(email__exact=email)
     if len(query) != 1:
         return False  # not found
-    current_user = query.first
+    current_user = query.first()
     if not current_user:
         return False  # not found
     if email != current_user.email:
@@ -146,19 +147,35 @@ def get_user_obj(username):
 
 """ PROJECT-RELATION FUNCTIONS """
 # create a new project and save to database
-
-
-def create_project(name, proj_id, desc):
-    # new_project = Project(name=name, project_id=proj_id, description=desc, hw_sets=dict()
-    # new_project.save(force_insert=True)
+def create_project(name, proj_id, desc, username=""):
+    new_project = Project(name=name, project_id=proj_id, description=desc, hw_sets=dict(), owner=username)
+    new_project.save(force_insert=True)
+    if username != "":
+        query = User.objects(username__exact=username)
+        if len(query) != 1:
+            return
+        user = query.first()
+        if not user:
+            return
+        user.projectList.append(proj_id)
+        user.save()
     return
 
 
-def update_project(name, id, desc):
+def update_project(name, p_id, desc):
     # TODO: figure out how to update a single element in the DictField
-    curr_project = does_project_id_exist(id)
-
-    pass
+    query = Project.objects(project_id__exact=p_id)
+    if len(query) < 1:
+        return
+    project = query.first()
+    if not project:
+        return
+    if p_id != project.project_id:
+        return
+    project.name = name
+    project.description = desc
+    project.save()
+    return
 
 
 def get_project_json(project_id):
@@ -176,7 +193,7 @@ def get_project_json(project_id):
 
 
 def does_project_id_exist(p_id) -> bool:
-    query = Project.objects(project_id=p_id)
+    query = Project.objects(project_id__exact=p_id)
     if len(query) < 1:
         return False  # not found
     project = query.first()

@@ -14,7 +14,7 @@ const MyCard = ({ name, id, desc }) => (
             <Card.Text>
                 {desc}
             </Card.Text>
-            <Button href={"/editProject/:"+id}>
+            <Button href={"/editProject/" + id}>
                 Edit Project
             </Button>
         </Card.Body>
@@ -119,7 +119,7 @@ class Projects extends React.Component {
             <div className="center">
                 <div className="rightSide">
                     <div className="centerTitle">
-                        <h1> My Projects </h1>
+                        <h1> Projects </h1>
                     </div>
                     {/* An area where users can create new project, by providing project name, description, and projectID. */}
                     <Container fluid className="cardContainer">

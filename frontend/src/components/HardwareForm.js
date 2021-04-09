@@ -57,9 +57,15 @@ class HardwareForm extends React.Component {
             amount: event.target.value
         });
     }
-    checkHardware(){
+    checkHardware(isCheckin){
         console.log(this.state);
         // TODO: POST request here to check out / check in data
+        if(isCheckin){
+            //TODO: POST checkin
+        }
+        else{
+            //TODO: POST checkout
+        }
     }
 
     render() {
@@ -81,10 +87,10 @@ class HardwareForm extends React.Component {
                             <Form.Control as="textarea" rows={3} /> */}
                         </Form.Group>
                     </Form>
-                    <Button className="mt9px" onClick={this.checkHardware.bind(this)} >
+                    <Button className="mt9px" onClick={this.checkHardware.bind(this, true)} >
                         Check In
                         </Button> {' '}
-                    <Button className="mt9px" onClick={this.checkHardware.bind(this)}>
+                    <Button className="mt9px" onClick={this.checkHardware.bind(this, false)}>
                         Check Out
                         </Button>
                     <div style={{ marginTop: '30px' }}>

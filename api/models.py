@@ -13,6 +13,8 @@ from wtforms.validators import DataRequired, ValidationError
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
+
+
 # function to be called to raise an error if a required field is left empty
 def _not_empty(val):
     if not val:
@@ -24,8 +26,22 @@ class Hardware(me.Document):
     name = me.StringField(max_length=20, required=True,
                           unique=True, validation=_not_empty)
     capacity = me.IntField(min_value=0)
-    available = me.IntField(min_value=0, max_value=capacity)
+    available = me.IntField(min_value=0, max_value=1024)
 
+def init_hardware():
+    query = Hardware.objects(name="hwSet1")
+    hwSet1 = query.first()
+    if not hwSet1:
+        hw1 = Hardware(name="hwSet1", capacity=512, available=512)
+        hw1.save(force_insert=True)
+    query = Hardware.objects(name="hwSet2")
+    hwSet2 = query.first()
+    if not hwSet2:
+        hw2 = Hardware(name="hwSet2", capacity=1024, available=1024)
+        hw2.save(force_insert=True)
+    # creates a new document, doesn't allow for updates if this document already exists
+    
+    return
 
 # defines fields for individual projects
 # TODO: might change this to an EmbeddedDocument when I figure out how to connect projects to users
@@ -118,8 +134,6 @@ def get_user_json(username):
     })
 
 # get current user and return as mongoengine document
-
-
 def get_user_obj(username):
     query = User.objects(username__exact=username)
     if len(query) != 1:

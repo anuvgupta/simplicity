@@ -12,6 +12,7 @@ from werkzeug.exceptions import BadRequest
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, verify_jwt_in_request
 
 
+
 @app.route('/')
 def slash():
     return redirect(url_for('api'))
@@ -151,7 +152,6 @@ def user():
 def project():
     projectId = request.args.get('id')
     if projectId:
-        print(projectId)
         project = get_project_json(projectId)
         # user.projectList
         # print(user['username'])
@@ -221,7 +221,6 @@ def joinProject():
         }), 400)
     else:
         project_id = project_json.get('id')
-        print(project_id)
         if does_project_id_exist(project_id):
             user = get_user_obj(current_username)
             if user:
@@ -230,7 +229,7 @@ def joinProject():
                 user.save()
                 return (jsonify({
                     'success': True,
-                    'message': 'This Project ID already exists.'
+                    'message': 'Added existing project'
                 }), 200)
             else:
                 return (jsonify({

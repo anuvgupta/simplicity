@@ -27,7 +27,7 @@ import Overview from "./components/Overview";
 import JoinProject from './components/JoinProject.js';
 
 function App() {
-  
+
   return (
     <div className="App">
       <Router>
@@ -47,7 +47,11 @@ function App() {
           </Route>
           <Route path="/createProject">
             <SideBar></SideBar>
-            <ProjectForm></ProjectForm>
+            <ProjectForm action="create"></ProjectForm>
+          </Route>
+          <Route path="/editProject">
+            <SideBar></SideBar>
+            <ProjectForm action="edit"></ProjectForm>
           </Route>
           <Route path="/joinProject">
             <SideBar></SideBar>

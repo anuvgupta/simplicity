@@ -64,21 +64,25 @@ class ProjectForm extends React.Component {
     }
 
     render() {
+        const action = this.props.action;
+        const action_title = (`${action[0]}`).toUpperCase() + (`${action.substring(1)}`);
+        const create = action == 'create';
         return (
             <div className="center">
                 <div className="formBorder">
                     <div className="centerTitle">
-                        <h1> Create / Edit Project</h1>
+                        <h1> {action_title} Project </h1>
                     </div>
                     {/* An area where users can create new project, by providing project name, description, and projectID. */}
                     <Form>
                         <Form.Group controlId="projectName">
                             <Form.Label>Project Name</Form.Label>
-                            <Form.Control type="name" placeholder="Test Project" />
+                            <Form.Control type="text" placeholder="Test Project" />
                             <Form.Label>Project ID</Form.Label>
-                            <Form.Control type="name" placeholder="1" />
+                            <Form.Control disabled={!create} style={{ opacity: (create ? '1' : '0.6') }} type="text" placeholder="testProject1" />
                             <Form.Label>Description</Form.Label>
-                            <Form.Control as="textarea" rows={3} />
+                            <Form.Control type="text" as="textarea" placeholder="Lorem ipsum dolor sit amet..." rows={3} />
+                            <Button style={{ marginTop: '25px' }}>{action_title}</Button>
                         </Form.Group>
                     </Form>
 

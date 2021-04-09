@@ -152,9 +152,11 @@ def user():
 def project():
     projectId = request.args.get('id')
     if projectId:
+        print(projectId)
         project = get_project_json(projectId)
         # user.projectList
         # print(user['username'])
+        print(project)
         return (project, 200)
     return (jsonify({
         'success': False,
@@ -290,10 +292,121 @@ def editProject():
     }), 500)
 
 
-@app.route('/api/checkHardware', methods=['GET', 'POST'])
+@app.route('/api/checkHardware', methods=['POST'])
 @jwt_required()
 def checkHardware():
-    pass
+    current_username = get_jwt_identity()
+    if not current_username:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid token.'
+        }), 401)
+
+    hardware_dict = dict()
+    query_hardware = Hardware.objects()
+
+    if not query_hardware:
+        return (jsonify({
+            'success': False,
+            'message': 'Hardware not found.'
+        }), 404)
+    else: 
+        for hw in query_hardware:
+            hardware_dict[hw.name] = hw.available
+        return (jsonify({
+            'success': True,
+            'data': hardware_dict
+        }), 200)
+    return (jsonify({
+        'success': False,
+        'message': 'Unknown error.'
+    }), 500)
+
+@app.route('/api/checkInHardware', methods=['POST'])
+@jwt_required()
+def checkInHardware():
+    hw_response_400 = lambda a : jsonify({
+        'success': False,
+        'message': 'Invalid request input data.'
+    })
+    hw_response_404 = lambda a : jsonify({
+        'success': False,
+        'message': 'Hardware set not found.'
+    })
+    hw_response_500 = lambda a : jsonify({
+        'success': False,
+        'message': 'Unknown error.'
+    })
+    current_username = get_jwt_identity()
+    if not current_username:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid token.'
+        }), 401)
+    try:
+        hardware_json = request.get_json()
+    except BadRequest:
+        return (hw_response_400(), 400)
+    else:
+        hardware_name = hardware_json.get('name')
+        checkin_quantity = hardware_json.get('quantity')
+        if not does_hw_set_exist(hardware_name):
+            return (hw_response_404(), 404)
+        ret_val = check_in(hardware_name, checkin_quantity, current_username)
+        if ret_val == 400:
+            return (hw_response_400(), 400)
+        elif ret_val == 404:
+            return (hw_response_404(), 404)
+        elif ret_val == 500:
+            return (hw_response_500(), 500)
+        return (jsonify({
+            'success': True,
+            'data': { }
+        }), 200)
+    return (hw_response_500(), 500)
+
+@app.route('/api/checkOutHardware', methods=['POST'])
+@jwt_required()
+def checkOutHardware():
+    hw_response_400 = lambda a : jsonify({
+        'success': False,
+        'message': 'Invalid request input data.'
+    })
+    hw_response_404 = lambda a : jsonify({
+        'success': False,
+        'message': 'Hardware set not found.'
+    })
+    hw_response_500 = lambda a : jsonify({
+        'success': False,
+        'message': 'Unknown error.'
+    })
+    current_username = get_jwt_identity()
+    if not current_username:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid token.'
+        }), 401)
+    try:
+        hardware_json = request.get_json()
+    except BadRequest:
+        return (hw_response_400(), 400)
+    else:
+        hardware_name = hardware_json.get('name')
+        checkout_quantity = hardware_json.get('quantity')
+        if not does_hw_set_exist(hardware_name):
+            return (hw_response_404(), 404)
+        ret_val = check_out(hardware_name, checkout_quantity, current_username)
+        if ret_val == 400:
+            return (hw_response_400(), 400)
+        elif ret_val == 404:
+            return (hw_response_404(), 404)
+        elif ret_val == 500:
+            return (hw_response_500(), 500)
+        return (jsonify({
+            'success': True,
+            'data': { }
+        }), 200)
+    return (hw_response_500(), 500)
 
 
 @app.route('/api/hardware', methods=['GET', 'POST'])

@@ -51,8 +51,6 @@ class Project(me.Document):
     project_id = me.StringField(
         max_length=20, required=True, unique=True, validation=_not_empty)
     description = me.StringField(max_length=200)
-    # will map hardware-set names to the quantity checked out for this project
-    hw_sets = me.DictField()
 
 
 # defines fields for user accounts
@@ -64,6 +62,8 @@ class User(me.Document):
     password = me.StringField(
         max_length=72, required=True, validation=_not_empty)
     projectList = me.ListField()
+    # will map hardware-set names to the quantity checked out for this project
+    hw_sets = me.DictField()
 
 
 """ USER-RELATED FUNCTIONS """
@@ -72,7 +72,7 @@ class User(me.Document):
 
 def create_user(username, email, pwd):
     # TODO: implement bcrypt hashing for pwd
-    new_user = User(username=username, email=email, password=pwd, projectList=[])
+    new_user = User(username=username, email=email, password=pwd, projectList=[], hw_sets={})
     # creates a new document, doesn't allow for updates if this document already exists
     new_user.save(force_insert=True)
     return
@@ -148,7 +148,7 @@ def get_user_obj(username):
 """ PROJECT-RELATION FUNCTIONS """
 # create a new project and save to database
 def create_project(name, proj_id, desc, username=""):
-    new_project = Project(name=name, project_id=proj_id, description=desc, hw_sets=dict(), owner=username)
+    new_project = Project(name=name, project_id=proj_id, description=desc, owner=username)
     new_project.save(force_insert=True)
     if username != "":
         query = User.objects(username__exact=username)
@@ -206,35 +206,62 @@ def does_project_id_exist(p_id) -> bool:
 
 
 """ HARDWARE SET RELATED FUNCTIONS """
-def check_in(hw_set, checkin_quantity):
-    query = Hardware.objects(name__exact=hw_set)
-    if len(query) != 1:
-        return jsonify({'msg': "Hw set doesn't exist"})
-    my_hw_set = query.first()
-    if not my_hw_set:
-        return jsonify({'msg': "Error I think"})
+def check_in(hw_set_name, checkin_quantity, username) -> int:
+    queryA = Hardware.objects(name__exact=hw_set_name)
+    if len(queryA) != 1:
+        return 404
+    hw_set = queryA.first()
+    if not hw_set:
+        return 404
+    queryB = User.objects(username__exact=username)
+    if len(queryB) != 1:
+        return 404
+    user = queryB.first()
+    if not user:
+        return 404
     # check if requested quantity is valid
-    if checkin_quantity > my_hw_set.available:
-        return jsonify({'msg': 'Wise guy huh'})
-    else:
-        my_hw_set.available += checkin_quantity
-        my_hw_set.save()     # since the hardware set already existed, this saves the document with the new available quantity
+    if checkin_quantity > user.hw_sets[hw_set_name] or checkin_quantity > hw_set.available:
+        return 400
+    hw_set.available += checkin_quantity
+    hw_set.save()     # since the hardware set already existed, this saves the document with the new available quantity
+    user.hw_sets[hw_set_name] -= checkin_quantity
+    user.save()
+    return 1
 
 
-def check_out(hw_set, checkout_quantity):
-    query = Hardware.objects(name__exact=hw_set)
-    if len(query) <= 1:
-        return jsonify({'msg': "Hw set doesn't exist"})
-    this_set = query.first()
-    if not this_set:
-        return jsonify({'msg': "Error I think"})
+def check_out(hw_set, checkout_quantity, username):
+    queryA = Hardware.objects(name__exact=hw_set_name)
+    if len(queryA) != 1:
+        return 404
+    hw_set = queryA.first()
+    if not hw_set:
+        return 404
+    queryB = User.objects(username__exact=username)
+    if len(queryB) != 1:
+        return 404
+    user = queryB.first()
+    if not user:
+        return 404
     # check if requested quantity is valid
-    if checkout_quantity > this_set.available:
-        return jsonify({'msg': 'Quantity requested is greater than available inventory'})
-    else:
-        this_set.available -= checkout_quantity
-        this_set.save()     # since the hardware set already existed, this saves the document with the new available quantity
+    if checkout_quantity > hw_set.available:
+        return 400
+    hw_set.available -= checkin_quantity
+    hw_set.save()
+    user.hw_sets[hw_set_name] += checkin_quantity
+    user.save()
+    return 1
 
 
 def get_capacity_and_available(hw_set):
     return jsonify(capacity=hw_set.capacity, available=hw_set.available)
+
+def does_hw_set_exist(hw_set_name) -> bool:
+    query = Hardware.objects(name__exact=hw_set_name)
+    if len(query) < 1:
+        return False  # not found
+    hardware_set = query.first()
+    if not hardware_set:
+        return False  # not found
+    if hw_set_name != hardware_set.name:
+        return False  # incorrect id
+    return True

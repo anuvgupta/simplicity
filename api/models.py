@@ -38,7 +38,7 @@ class Project(me.Document):
 # defines fields for user accounts
 class User(me.Document):
     username = me.StringField(max_length=50, required=True, unique=True, validation=_not_empty)
-    email = me.StringField(max_length=50, required=True, unique=True, validation=_not_empty)    # we'll add this back in later
+    email = me.StringField(max_length=50, required=True, unique=True, validation=_not_empty)    
     password = me.StringField(max_length=72, required=True, validation=_not_empty)
 
 

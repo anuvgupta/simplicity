@@ -24,7 +24,6 @@ def api():
 
 @app.route('/api/home')
 def home():
-    # TODO: Render homepage
 
     # Mock homepage below
     user = {'username': 'Sylvia'}
@@ -64,6 +63,7 @@ def register():
                 'data': { 'token': access_token, 'username': new_username }
             }), 200)
 
+
 @app.route('/api/login', methods=['POST'])
 def login():
     try:
@@ -98,6 +98,7 @@ def login():
         'message': 'Unknown error.'
     }), 500)
 
+
 @app.route('/api/auth', methods=['GET'])
 @jwt_required()
 def auth():
@@ -111,6 +112,7 @@ def auth():
         'success': False,
         'message': 'Unknown error.'
     }), 500)
+
 
 @app.route('/api/auth', methods=['GET'])
 @jwt_required()
@@ -164,9 +166,9 @@ def createProject():
             return (jsonify({
                 'success': True,
                 'data': {
-                    name: project_name,
-                    id: project_id,
-                    description: project_description
+                    'name': project_name,
+                    'id': project_id,
+                    'description': project_description
                 }
             }), 200)
     return (jsonify({

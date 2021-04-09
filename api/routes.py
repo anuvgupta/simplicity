@@ -104,15 +104,15 @@ def login():
 @jwt_required()
 def auth():
     current_username = get_jwt_identity()
-    if current_username:
+    if current_username and does_user_name_exist(current_username):
         return (jsonify({
             'success': True,
             'data': {'username': current_username}
         }), 200)
     return (jsonify({
         'success': False,
-        'message': 'Unknown error.'
-    }), 500)
+        'message': 'Invalid user.'
+    }), 401)
 
 
 @app.route('/api/user', methods=['GET'])

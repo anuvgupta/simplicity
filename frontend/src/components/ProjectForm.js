@@ -178,7 +178,7 @@ class ProjectForm extends React.Component {
                     <Form>
                         <Form.Group controlId="projectName">
                             <Form.Label style={{ opacity: (create ? '1' : '0.9') }}>Project ID</Form.Label>
-                            <Form.Control type="text" placeholder="testProject1" disabled={!create} value={create ? '' : this.state.initialProjectID} onChange={this.updateProjectID.bind(this)} style={{ opacity: (create ? '1' : '0.7'), marginBottom: '10px' }} />
+                            <Form.Control type="text" placeholder="testProject1" disabled={!create} defaultValue={create ? '' : this.state.initialProjectID} onChange={this.updateProjectID.bind(this)} style={{ opacity: (create ? '1' : '0.7'), marginBottom: '10px' }} />
                             <Form.Label>Project Name</Form.Label>
                             <Form.Control type="text" placeholder="Test Project" defaultValue={create ? '' : this.state.initialProjectName} onChange={this.updateProjectName.bind(this)} style={{ marginBottom: '10px' }} />
                             <Form.Label>Project Description</Form.Label>

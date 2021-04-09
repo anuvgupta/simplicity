@@ -134,8 +134,8 @@ def get_user_obj(username):
 def create_project(name, proj_id, desc, username=""):
     new_project = Project(name=name, project_id=proj_id, description=desc, hw_sets=dict(), owner=username)
     new_project.save(force_insert=True)
-    if name != "":
-        query = User.objects(username__exact=name)
+    if username != "":
+        query = User.objects(username__exact=username)
         if len(query) != 1:
             return
         user = query.first()

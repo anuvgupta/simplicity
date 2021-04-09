@@ -141,10 +141,10 @@ class Projects extends React.Component {
                             </Card> */}
                         </CardDeck>
 
-                        <Button onClick={this.redirectPage.bind(this, 'createProject')}>
+                        <Button className="mt9px" onClick={this.redirectPage.bind(this, 'createProject')}>
                             New Project
                         </Button> {' '}
-                        <Button href="/joinProject">
+                        <Button className="mt9px" onClick={this.redirectPage.bind(this, 'joinProject')}>
                             Join Project
                         </Button>
                     </Container>

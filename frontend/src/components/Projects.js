@@ -33,6 +33,7 @@ class Projects extends React.Component {
         this.state = {
             projectList: [],
             projectsArr: [],
+            userToken: "",
         };
     }
 
@@ -52,10 +53,10 @@ class Projects extends React.Component {
     }
 
     createCards(projectList, token) {
-        console.log("starting vcreate cards " + projectList[0]);
+        // console.log("starting vcreate cards " + projectList[0]);
         var projects = [];
         for (var i = 0; i < projectList.length; i++) {
-            console.log("curr project id is " + projectList[i]);
+            // console.log("curr project id is " + projectList[i]);s
             axios.get(`${global.config.api_url}/projects?id=${projectList[i]}`, {
                 headers: { Authorization: `Bearer ${token}` }
             }).then(response => {
@@ -88,10 +89,12 @@ class Projects extends React.Component {
             var resp_data = null;
             if (response && response.data)
                 resp_data = response.data;
-            var projects = this.createCards(resp_data.projectList, user.token);
+            console.log(resp_data);
+            var projects = this.createCards(resp_data.data.projectList, user.token);
             console.log(projects);
+
             this.setState({
-                projectList: resp_data.projectList,
+                projectList: resp_data.data.projectList,
                 userToken: user.token,
                 projectsArr: projects
             });
@@ -100,12 +103,12 @@ class Projects extends React.Component {
                 var resp_data = null;
                 if (error.response && error.response.data)
                     resp_data = error.response.data;
-                console.log(resp_data);
+                console.log("Error " + resp_data);
             }
         });
     }
     render() {
-        console.log(this.state.projectsArr);
+        console.log(this.state);
         return (
             <div className="center">
                 <div className="rightSide">

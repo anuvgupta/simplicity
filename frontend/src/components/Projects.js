@@ -14,6 +14,9 @@ const MyCard = ({ name, id, desc }) => (
             <Card.Text>
                 {desc}
             </Card.Text>
+            <Button href={"/editProject/:"+id}>
+                Edit Project
+            </Button>
         </Card.Body>
         <Card.Footer>
             <small className="text-muted">{id}</small>

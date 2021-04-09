@@ -7,7 +7,6 @@
 }
 .title {
     font-size: 5.5rem;
-    font-family: 'Rubik', sans-serif;
     font-weight: 300;
 }
 .homepageOptions {
@@ -19,9 +18,9 @@
 a {
     margin-top: 9px;
 }
-.h100{
+.h100 {
     height: 100vh;
 }
-.f100{
+.f100 {
     font-size: 2.25rem;
 }

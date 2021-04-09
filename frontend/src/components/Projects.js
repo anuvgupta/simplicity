@@ -7,14 +7,14 @@ import { withRouter } from "react-router-dom";
 import '../styles/project.css'
 
 
-const MyCard = ({ name, id, desc }) => (
+const MyCard = ({ name, id, desc, hideButtons }) => (
     <Card>
         <Card.Body>
             <Card.Title>{name}</Card.Title>
             <Card.Text>
                 {desc}
             </Card.Text>
-            <Button href={"/editProject/" + id}>
+            <Button href={"/editProject/" + id} style={{ display: (hideButtons === 'true' ? 'none' : 'inline-block') }}>
                 Edit Project
             </Button>
         </Card.Body>
@@ -130,7 +130,8 @@ class Projects extends React.Component {
                                         // need to avtually parse here
                                         <MyCard name={info.projectName}
                                             desc={info.description}
-                                            id={info.id} key={i} />
+                                            id={info.id} key={i}
+                                            hideButtons={this.props.hideButtons} />
                                     ))
                                     : <h1> There are no projects </h1>
                             }
@@ -141,10 +142,10 @@ class Projects extends React.Component {
                             </Card> */}
                         </CardDeck>
 
-                        <Button className="mt9px" onClick={this.redirectPage.bind(this, 'createProject')}>
+                        <Button className="mt9px" onClick={this.redirectPage.bind(this, 'createProject')} style={{ display: (this.props.hideButtons === 'true' ? 'none' : 'inline-block') }}>
                             New Project
                         </Button> {' '}
-                        <Button className="mt9px" onClick={this.redirectPage.bind(this, 'joinProject')}>
+                        <Button className="mt9px" onClick={this.redirectPage.bind(this, 'joinProject')} style={{ display: (this.props.hideButtons === 'true' ? 'none' : 'inline-block') }}>
                             Join Project
                         </Button>
                     </Container>

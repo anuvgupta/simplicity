@@ -131,7 +131,7 @@ class RegisterPage extends React.Component {
         return (
             <div className="center h100">
                 <div className="centerTitle">
-                    <h1 className="loginTitle">Sign Up</h1>
+                    <h1 className="loginTitle titleFont">Sign Up</h1>
                 </div>
                 <form>
                     Username: <input type="text" id="username" placeholder="username" onChange={this.updateUsername.bind(this)}></input><br />

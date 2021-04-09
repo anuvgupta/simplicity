@@ -20,6 +20,7 @@ def slash():
 
 @app.route('/api')
 def api():
+    
     return "Simplicity API"
 
 
@@ -130,7 +131,9 @@ def user():
                     'data': {
                         'username': user.username,
                         'email': user.email,
-                        'projectList': user.projectList
+                        'projectList': user.projectList,
+                        'hwSet1': user.hw_sets["hwSet1"],
+                        'hwSet2': user.hw_sets["hwSet2"]
                     }
                 }), 200)
             return (jsonify({
@@ -296,12 +299,13 @@ def editProject():
 @jwt_required()
 def checkHardware():
     current_username = get_jwt_identity()
+    print("here?")
     if not current_username:
         return (jsonify({
             'success': False,
             'message': 'Invalid token.'
         }), 401)
-
+    print("here?")
     hardware_dict = dict()
     query_hardware = Hardware.objects()
 

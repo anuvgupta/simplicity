@@ -22,7 +22,8 @@ class Hardware extends React.Component {
         super(props);
         this.state = {
             username: "",
-            password: ""
+            hw1: "",
+            hw2: ""
         };
     }
 
@@ -42,6 +43,27 @@ class Hardware extends React.Component {
 
     setupPage(user) {
         console.log('Hardware: loading user ' + user.username);
+        axios.get(`${global.config.api_url}/user?username=${user.username}`, {
+            headers: { Authorization: `Bearer ${user.token}` }
+        }).then(response => {
+            var resp_data = null;
+            if (response && response.data)
+                resp_data = response.data;
+            // console.log('resp_data', resp_data);
+            if (resp_data && resp_data.success && resp_data.success === true && resp_data.data && resp_data.data.username && resp_data.data.projectList) {
+                this.setState({
+                    hw1: resp_data.data.hwSet1,
+                    hw2: resp_data.data.hwSet2
+                });
+            } else console.log('Invalid response: ', resp_data);
+        }).catch(error => {
+            if (error) {
+                var resp_data = null;
+                if (error.response && error.response.data)
+                    resp_data = error.response.data;
+                console.log(error);
+            }
+        });
         // TODO: load user data/info
     }
 
@@ -76,18 +98,20 @@ class Hardware extends React.Component {
                         <div className="leftOverview stack">
                             <h1> Hw Set 1 overview </h1>
                             <div className="overviewCard">
-                                <h1> You have checked out X hardware</h1>
+                                <h1> You have checked out </h1>
+                                <h1> {this.state.hw1}  </h1>
+                                <h1> hardware </h1>
                             </div>
                         </div>
                         <div className="rightOverView stack">
                             <h1> Hw Set 2 overview </h1>
                             <div className="overviewCard">
-                                <h1> You have checked out X hardware</h1>
+                            <h1> You have checked out </h1>
+                                <h1> {this.state.hw2} </h1>
+                                <h1> hardware </h1>
                             </div>
                         </div>
                     </div>
-
-
                 </div>
                 {/* <Hardware></Hardware> */}
 

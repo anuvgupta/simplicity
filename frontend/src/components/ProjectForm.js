@@ -125,7 +125,7 @@ class ProjectForm extends React.Component {
                     errorMsg: errorMessage
                 });
             } else {
-                this.redirectPage('account');
+                this.redirectPage('project');
             }
         };
         axios.post(`${global.config.api_url}/${action}Project`, {

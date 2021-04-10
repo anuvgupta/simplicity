@@ -5,11 +5,9 @@ import hash from 'hash.js';
 
 global.config = {
     // api_url: 'http://localhost:5000/api',
-    // api_url: 'http://localhost:30010/api',
     api_url: `${window.location.protocol}//${window.location.host}/api`,
     home_url: `${window.location.protocol}//${window.location.host}`,
     api_token: null,
-    // token_length: 264
 };
 
 global.api = {

@@ -50,8 +50,8 @@ class HardwareForm extends React.Component {
                 var resp_data = null;
                 if (response && response.data)
                     resp_data = response.data;
-                console.log(this.state);
-                console.log(resp_data);
+                // console.log(this.state);
+                // console.log(resp_data);
                 resolve(resp_data);
             }).catch(error => {
                 if (error) {
@@ -59,7 +59,7 @@ class HardwareForm extends React.Component {
                     if (error.response && error.response.data)
                         resp_data = error.response.data;
                     console.log(error, resp_data);
-                    console.log("here");
+                    // console.log("here");
                     resolve(false, resp_data);
                 }
             });
@@ -74,8 +74,8 @@ class HardwareForm extends React.Component {
         var resp = this.getHardwareInfo(user.token, (response, error = null) => {
             if (response) {
                 var hwSetName = this.state.hwSetName;
-                console.log(hwSetName);
-                console.log(response.data[hwSetName]);
+                // console.log(hwSetName);
+                // console.log(response.data[hwSetName]);
                 this.setState({
                     amount: response.data[hwSetName]
                 })
@@ -85,7 +85,7 @@ class HardwareForm extends React.Component {
         });
 
         // this.updateSetName(user.token, "hwSet1");
-        console.log("this is what im loking for: " + resp);
+        // console.log("this is what im looking for: " + resp);
 
         // TODO: load user data/info
     }
@@ -93,7 +93,7 @@ class HardwareForm extends React.Component {
 
 
     updateSetName(event) {
-        console.log(event.target.value);
+        // console.log(event.target.value);
         // console.log(this.state.token)
         this.setState({
             hwSetName: event.target.value
@@ -101,8 +101,8 @@ class HardwareForm extends React.Component {
         var resp = this.getHardwareInfo(this.state.token, (response, error = null) => {
             if (response) {
                 var hwSetName = this.state.hwSetName;
-                console.log(hwSetName);
-                console.log(response.data[hwSetName]);
+                // console.log(hwSetName);
+                // console.log(response.data[hwSetName]);
                 this.setState({
                     amount: response.data[hwSetName]
                 });
@@ -112,13 +112,13 @@ class HardwareForm extends React.Component {
         });
     }
     updateQuantity(event) {
-        console.log(event.target.value);
+        // console.log(event.target.value);
         this.setState({
             quantity: event.target.value
         });
     }
     checkHardware(isCheckin) {
-        console.log(this.state);
+        // console.log(this.state);
         // TODO: POST request here to check out / check in data
         if (isCheckin) {
             //TODO: POST checkin
@@ -132,8 +132,8 @@ class HardwareForm extends React.Component {
                     var resp_data = null;
                     if (response && response.data)
                         resp_data = response.data;
-                    console.log(this.state);
-                    console.log(resp_data);
+                    // console.log(this.state);
+                    // console.log(resp_data);
                     var resp = this.getHardwareInfo(this.state.token, (response, error = null) => {
                         if (response) {
                             var hwSetName = this.state.hwSetName;

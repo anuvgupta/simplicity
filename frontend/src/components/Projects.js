@@ -66,7 +66,7 @@ class Projects extends React.Component {
                 var resp_data = null;
                 if (response && response.data)
                     resp_data = response.data;
-                console.log(resp_data);
+                // console.log(resp_data);
                 projects.push(resp_data);
                 this.setState({
                     projectsArr: projects
@@ -81,14 +81,14 @@ class Projects extends React.Component {
             });
         }
 
-        console.log(projects);
+        // console.log(projects);
         return projects;
     }
 
     setupPage(user) {
         var username = user.username;
         username = username.toString();
-        console.log("Project page " + username);
+        console.log("Project: loading user " + username);
         axios.get(`${global.config.api_url}/user?username=` + username, {
             headers: { Authorization: `Bearer ${user.token}` }
         }).then(response => {

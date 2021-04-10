@@ -22,7 +22,7 @@ export default class SideBar extends React.Component {
 
     render() {
         var active = this.props.active;
-        console.log(`active: ${active}`);
+        console.log(`SideBar.active: ${active}`);
         return (
             <div>
                 <div className="sidenav">

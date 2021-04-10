@@ -1,6 +1,6 @@
-URL: simplicitycloud.ml
+URL: http://simplicitycloud.ml/
 
-(alternate in case it doesn't work): simplicitycloud.anuv.me
+(alternate in case it doesn't work): http://simplicitycloud.anuv.me/
 
 Instructions:
 

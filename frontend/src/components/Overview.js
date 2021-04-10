@@ -82,21 +82,21 @@ class Overview extends React.Component {
                 <div className="center overviewMain">
                     <div className="rightSideAlt">
                         <div className="centerTitle">
-                            <h1 style={{ fontSize: '3em' }}> Welcome back @{this.state.username}</h1>
+                            <h1 style={{ fontSize: '3em', marginBottom:"3.5vh" }}> Welcome back @{this.state.username}</h1>
                         </div>
                         <div className="topPanel">
                             <div className="leftOverview">
                                 <div className="overviewCard">
-                                    <h1>You have </h1>
+                                    <h1 className="top">You have </h1>
                                     <h1 className="num"> {this.state.projectList.length} </h1>
-                                    <h1>projects</h1>
+                                    <h1 className="bottom">projects</h1>
                                 </div>
                             </div>
                             <div className="rightOverView">
                                 <div className="overviewCard">
-                                    <h1> You have checked out </h1>
-                                    <h1>{this.state.totalHW}</h1>
-                                    <h1>hardware</h1>
+                                    <h1 className="top"> You have checked out </h1>
+                                    <h1 class="num">{this.state.totalHW} gb</h1>
+                                    <h1 className="bottom">of hardware</h1>
                                 </div>
                             </div>
                         </div>

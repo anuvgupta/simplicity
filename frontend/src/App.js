@@ -61,7 +61,7 @@ function App() {
           <Route path="/project">
             <NavigationBar></NavigationBar>
             <SideBar active="project"></SideBar>
-            <Projects hideButtons="false"></Projects>
+            <Projects mainView="true" hideButtons="false"></Projects>
           </Route>
           <Route path="/checkHardware">
             <NavigationBar></NavigationBar>
@@ -70,8 +70,8 @@ function App() {
           <Route path="/hardware">
             <NavigationBar></NavigationBar>
             <SideBar active="hardware"></SideBar>
-            <Hardware></Hardware>
-            <div className="rightSide">
+            <Hardware mainView="true" ></Hardware>
+            <div className="rightSide" style={{ marginBottom: '45px' }}>
               <HardwareForm></HardwareForm>
             </div>
           </Route>

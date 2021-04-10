@@ -79,10 +79,10 @@ class Overview extends React.Component {
     render() {
         return (
             <div>
-                <div className="center">
-                    <div className="rightSide">
+                <div className="center overviewMain">
+                    <div className="rightSideAlt">
                         <div className="centerTitle">
-                            <h1> Welcome back @{this.state.username}</h1>
+                            <h1 style={{ fontSize: '3em' }}> Welcome back @{this.state.username}</h1>
                         </div>
                         <div className="topPanel">
                             <div className="leftOverview">
@@ -95,18 +95,19 @@ class Overview extends React.Component {
                             <div className="rightOverView">
                                 <div className="overviewCard">
                                     <h1> You have checked out </h1>
-                                        <h1>{this.state.totalHW}</h1> 
+                                    <h1>{this.state.totalHW}</h1>
                                     <h1>hardware</h1>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <Project hideButtons="true"></Project>
-                <div className="rightSide spacer">
+                <Project mainView="false" hideButtons="true"></Project>
+                <div className="rightSideAlt projectSpacer">
+                    <div className="spacerAlt"></div>
                 </div>
-                <Hardware></Hardware>
-            </div>
+                <Hardware mainView="false" ></Hardware>
+            </div >
 
         );
     }

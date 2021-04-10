@@ -95,14 +95,16 @@ class Projects extends React.Component {
             var resp_data = null;
             if (response && response.data)
                 resp_data = response.data;
-            console.log(resp_data);
-            var projects = this.createCards(resp_data.data.projectList, user.token);
-            console.log(projects);
+            // console.log(resp_data);
+
+            /*var projects =*/
+            this.createCards(resp_data.data.projectList, user.token);
+            // console.log(projects);
 
             this.setState({
                 projectList: resp_data.data.projectList,
                 userToken: user.token,
-                projectsArr: projects
+                // projectsArr: projects
             });
         }).catch(error => {
             if (error) {
@@ -114,11 +116,11 @@ class Projects extends React.Component {
         });
     }
     render() {
-        console.log(this.state);
+        // console.log(this.state);
         return (
-            <div className="center">
-                <div className="rightSide">
-                    <div className="centerTitle">
+            <div className="center projectMain" style={{ marginTop: (this.props.mainView == 'true' ? '100px' : '30px') }}>
+                <div className="rightSideAlt">
+                    <div className="centerTitle" style={{ marginBottom: '11px', textAlign: 'center' }}>
                         <h1> Projects </h1>
                     </div>
                     {/* An area where users can create new project, by providing project name, description, and projectID. */}
@@ -133,7 +135,7 @@ class Projects extends React.Component {
                                             id={info.id} key={i}
                                             hideButtons={this.props.hideButtons} />
                                     ))
-                                    : <h1> There are no projects </h1>
+                                    : <h2> No projects found. </h2>
                             }
                             {/* <Card className="bg-dark text-white">
                                 <Card.ImgOverlay>

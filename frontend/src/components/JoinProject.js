@@ -37,8 +37,8 @@ class JoinProject extends React.Component {
 
     }
 
-    redirectPage() {
-        this.props.history.push('/home');
+    redirectPage(page = 'home') {
+        this.props.history.push(`/${page}`);
     }
 
     setupPage(user) {
@@ -72,6 +72,9 @@ class JoinProject extends React.Component {
                     msg: "Success!",
                     color: "green"
                 })
+                setTimeout((_ => {
+                    this.redirectPage('account');
+                }).bind(this), 550);
             }).catch(error => {
                 if (error) {
                     var resp_data = null;

@@ -5,6 +5,10 @@
     opacity: 0.998;
 }
 
+#navbar .MuiToolbar-root {
+    /* min-height: 68px; */
+}
+
 #navbar #logoutButton {
     position: absolute;
     right: 29px;

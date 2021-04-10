@@ -98,9 +98,9 @@ class Datasets extends React.Component {
     render() {
         return (
 
-            <div className="rightSide">
+            <div className="rightSide" style={{ marginTop: '100px', marginBottom: '45px' }} >
                 <h1> Datasets </h1>
-                <div className="datasets">
+                <div className="datasets" style={{ marginTop: '20px' }}>
 
                     <Table className="halfWidth" striped bordered hover>
 
@@ -143,7 +143,7 @@ class Datasets extends React.Component {
                             <tr>
                                 <td>8</td>
                                 <td>BIDMC PPG and Respiration Dataset</td>
-                                <td><Button href="https://physionet.org/static/published-projects/bidmc/bidmc-ppg-and-respiration-dataset-1.0.0.zip"  target="_blank"> Downloand Zip </Button></td>
+                                <td><Button href="https://physionet.org/static/published-projects/bidmc/bidmc-ppg-and-respiration-dataset-1.0.0.zip" target="_blank"> Downloand Zip </Button></td>
                             </tr>
                             <tr>
                                 <td>9</td>

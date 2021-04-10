@@ -89,14 +89,14 @@ class Hardware extends React.Component {
 
     render() {
         return (
-            <div className="rightSide">
-                <div className="centerTitle">
+            <div className="rightSide" style={{ marginTop: (this.props.mainView == 'true' ? '100px' : '30px') }}>
+                <div className="centerTitle" style={{ marginBottom: '33px', textAlign: 'center' }}>
                     <h1> Hardware</h1>
                 </div>
                 <div className="">
                     <div className="hardwareTop">
                         <div className="leftOverview stack">
-                            <h1> Hw Set 1 overview </h1>
+                            <h1> Hardware Set 1 </h1>
                             <div className="overviewCard">
                                 <h1> You have checked out </h1>
                                 <h1> {this.state.hw1}  </h1>
@@ -104,9 +104,9 @@ class Hardware extends React.Component {
                             </div>
                         </div>
                         <div className="rightOverView stack">
-                            <h1> Hw Set 2 overview </h1>
+                            <h1> Hardware Set 2 </h1>
                             <div className="overviewCard">
-                            <h1> You have checked out </h1>
+                                <h1> You have checked out </h1>
                                 <h1> {this.state.hw2} </h1>
                                 <h1> hardware </h1>
                             </div>

@@ -8,13 +8,11 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Avatar from '@material-ui/core/Avatar';
-import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 
 import "../styles/navbar.css";
 
-
 function NavigationBar(props) {
-    return <AppBar position="fixed" id="navbar">
+    return <AppBar position="fixed" id="navbar" style={{ backgroundColor: 'black', color: 'white' }}>
         <Toolbar>
             <IconButton edge="start" color="inherit" style={{ marginRight: '8px' }}>
                 <Avatar alt="Logo" src={`${global.config.home_url}/img/board_tt.png`} />

@@ -116,6 +116,7 @@ class RegisterPage extends React.Component {
             var resp_data = null;
             if (response && response.data)
                 resp_data = response.data;
+            console.log(resp_data);
             handleResponse(resp_data);
         }).catch(error => {
             if (error) {

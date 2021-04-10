@@ -89,7 +89,7 @@ class Hardware extends React.Component {
 
     render() {
         return (
-            <div className="center overviewMain rightSide" style={{ marginTop: (this.props.mainView == 'true' ? '100px' : '30px') }}>
+            <div className="center overviewMain rightSide" style={{ marginTop: (this.props.mainView == 'true' ? '100px' : '40px') }}>
                 <div className="centerTitle" style={{ marginBottom: '33px', textAlign: 'center' }}>
                     <h1> Hardware</h1>
                 </div>
@@ -97,22 +97,22 @@ class Hardware extends React.Component {
                 <div className="topPanel">
                     <div className="leftOverview">
                         <div className="stack">
-                            <h1> Hardware Set 1 </h1>
+                            <h2> Hardware Set 1 </h2>
                             <div className="overviewCard">
-                                <h1 className="top"> You have checked out </h1>
-                                <h1 className="num"> {this.state.hw1} gb  </h1>
-                                <h1 className="bottom">of hardware </h1>
+                                <h1 className="top" style={{ fontSize: '1.4em' }}> You have checked out </h1>
+                                <h1 className="num"> {this.state.hw1} GB </h1>
+                                <h1 className="bottom" style={{ fontSize: '1.9em' }}> of hwSet1 </h1>
                             </div>
                         </div>
 
                     </div>
                     <div className="rightOverView">
                         <div className="stack">
-                            <h1> Hardware Set 2 </h1>
+                            <h2> Hardware Set 2 </h2>
                             <div className="overviewCard">
-                                <h1 className="top"> You have checked out </h1>
-                                <h1 className="num"> {this.state.hw2} gb </h1>
-                                <h1 className="bottom">of hardware </h1>
+                                <h1 className="top" style={{ fontSize: '1.4em' }}> You have checked out </h1>
+                                <h1 className="num"> {this.state.hw2} GB </h1>
+                                <h1 className="bottom" style={{ fontSize: '1.9em' }}> of hwSet2 </h1>
                             </div>
                         </div>
                     </div>

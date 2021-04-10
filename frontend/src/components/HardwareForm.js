@@ -221,14 +221,14 @@ class HardwareForm extends React.Component {
                 <div className="formCenter">
                     <Form>
                         <Form.Group controlId="projectName">
-                            <Form.Label>HW Set Name</Form.Label>
+                            <Form.Label style={{ marginTop: '1em' }}> Hardware Set </Form.Label>
                             <Form.Control as="select" onChange={this.updateSetName.bind(this)}>
                                 <option>hwSet1</option>
                                 <option>hwSet2</option>
                             </Form.Control>
-                            <Form.Label>Requested Capacity </Form.Label>
+                            <Form.Label style={{ marginTop: '1em' }}> Request Capacity </Form.Label>
                             <Form.Control type="name" placeholder="1 GB" onChange={this.updateQuantity.bind(this)} />
-                            <Form.Label>Total Available</Form.Label>
+                            <Form.Label style={{ marginTop: '1em' }}> Total Availability </Form.Label>
                             <Form.Control type="name" value={this.state.amount} disabled />
                             {/* <Form.Label>Description</Form.Label>
                             <Form.Control as="textarea" rows={3} /> */}

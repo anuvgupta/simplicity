@@ -118,7 +118,7 @@ class Projects extends React.Component {
     render() {
         // console.log(this.state);
         return (
-            <div className="center projectMain" style={{ marginTop: (this.props.mainView == 'true' ? '100px' : '30px') }}>
+            <div className="center projectMain" style={{ marginTop: (this.props.mainView == 'true' ? '100px' : '40px') }}>
                 <div className="rightSideAlt">
                     <div className="centerTitle" style={{ marginBottom: '11px', textAlign: 'center' }}>
                         <h1> Projects </h1>
@@ -135,7 +135,7 @@ class Projects extends React.Component {
                                             id={info.id} key={i}
                                             hideButtons={this.props.hideButtons} />
                                     ))
-                                    : <h2> No projects found. </h2>
+                                    : <div style={{ textAlign: 'center', width: '100%', marginTop: '10px' }}><h3 style={{ opacity: '0.8' }}> No projects found. </h3></div>
                             }
                             {/* <Card className="bg-dark text-white">
                                 <Card.ImgOverlay>
@@ -143,7 +143,7 @@ class Projects extends React.Component {
                                 </Card.ImgOverlay>
                             </Card> */}
                         </CardDeck>
-
+                        <div style={{ height: '22px' }}></div>
                         <Button className="mt9px" onClick={this.redirectPage.bind(this, 'createProject')} style={{ display: (this.props.hideButtons === 'true' ? 'none' : 'inline-block') }}>
                             New Project
                         </Button> {' '}

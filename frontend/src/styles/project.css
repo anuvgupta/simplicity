@@ -1,7 +1,8 @@
 .formBorder {
-    border: 0.2rem solid #ececec;
+    border: 1px solid rgba(50, 50, 5, 0.04);
+    box-shadow: 2px 5px 10px 0 rgba(0, 0, 0, 0.05);
     border-radius: 8px;
-    padding: 100px;
+    padding: 70px 120px;
 }
 .cardContainer {
     /* background-color: black; */

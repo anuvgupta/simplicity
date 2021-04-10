@@ -177,11 +177,11 @@ class ProjectForm extends React.Component {
                     {/* An area where users can create new project, by providing project name, description, and projectID. */}
                     <Form>
                         <Form.Group controlId="projectName">
-                            <Form.Label style={{ opacity: (create ? '1' : '0.9') }}>Project ID</Form.Label>
+                            <Form.Label style={{ opacity: (create ? '1' : '0.9'), marginTop: '0.5em' }}>Project ID</Form.Label>
                             <Form.Control type="text" placeholder="testProject1" disabled={!create} defaultValue={create ? '' : this.state.initialProjectID} onChange={this.updateProjectID.bind(this)} style={{ opacity: (create ? '1' : '0.7'), marginBottom: '10px' }} />
-                            <Form.Label>Project Name</Form.Label>
+                            <Form.Label style={{ marginTop: '0.5em' }}>Project Name</Form.Label>
                             <Form.Control type="text" placeholder="Test Project" defaultValue={create ? '' : this.state.initialProjectName} onChange={this.updateProjectName.bind(this)} style={{ marginBottom: '10px' }} />
-                            <Form.Label>Project Description</Form.Label>
+                            <Form.Label style={{ marginTop: '0.5em' }}>Project Description</Form.Label>
                             <Form.Control type="text" as="textarea" rows={3} defaultValue={create ? '' : this.state.initialProjectDescription} placeholder="Lorem ipsum dolor sit amet..." onChange={this.updateProjectDescription.bind(this)} style={{ marginBottom: '10px' }} />
                             <Button onClick={this.validateForm.bind(this, true)} style={{ marginTop: '20px' }}>{action_title}</Button>
                         </Form.Group>

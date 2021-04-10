@@ -67,6 +67,12 @@ class LoginPage extends React.Component {
         } else this.updateErrorMsg('Empty username.');
     }
 
+    checkEnter(event) {
+        if (event && event.keyCode == 13) {
+            this.validateForm(true);
+        }
+    }
+
     redirectPage() {
         this.props.history.push('/account');
     }
@@ -121,8 +127,8 @@ class LoginPage extends React.Component {
                     <h1 className="loginTitle titleFont">Sign In</h1>
                 </div>
                 <form>
-                    Username: <input type="text" id="username" placeholder="username" onChange={this.updateUsername.bind(this)}></input><br />
-                    Password: <input type="password" id="password" placeholder="password" onChange={this.updatePassword.bind(this)}></input><br />
+                    Username: <input type="text" id="username" placeholder="username" onChange={this.updateUsername.bind(this)} onKeyUp={this.checkEnter.bind(this)}></input><br />
+                    Password: <input type="password" id="password" placeholder="password" onChange={this.updatePassword.bind(this)} onKeyUp={this.checkEnter.bind(this)}></input><br />
                     <Button style={{ marginTop: '8px' }} onClick={this.validateForm.bind(this, true)}> Sign In </Button>
                 </form>
                 <span className="errorMessage">{this.state.errorMsg}</span>

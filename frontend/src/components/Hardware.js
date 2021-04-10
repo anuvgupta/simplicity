@@ -89,30 +89,35 @@ class Hardware extends React.Component {
 
     render() {
         return (
-            <div className="rightSide" style={{ marginTop: (this.props.mainView == 'true' ? '100px' : '30px') }}>
+            <div className="center overviewMain rightSide" style={{ marginTop: (this.props.mainView == 'true' ? '100px' : '30px') }}>
                 <div className="centerTitle" style={{ marginBottom: '33px', textAlign: 'center' }}>
                     <h1> Hardware</h1>
                 </div>
-                <div className="">
-                    <div className="hardwareTop">
-                        <div className="leftOverview stack">
+
+                <div className="topPanel">
+                    <div className="leftOverview">
+                        <div className="stack">
                             <h1> Hardware Set 1 </h1>
                             <div className="overviewCard">
-                                <h1> You have checked out </h1>
-                                <h1> {this.state.hw1}  </h1>
-                                <h1> hardware </h1>
+                                <h1 className="top"> You have checked out </h1>
+                                <h1 className="num"> {this.state.hw1} gb  </h1>
+                                <h1 className="bottom">of hardware </h1>
                             </div>
                         </div>
-                        <div className="rightOverView stack">
+
+                    </div>
+                    <div className="rightOverView">
+                        <div className="stack">
                             <h1> Hardware Set 2 </h1>
                             <div className="overviewCard">
-                                <h1> You have checked out </h1>
-                                <h1> {this.state.hw2} </h1>
-                                <h1> hardware </h1>
+                                <h1 className="top"> You have checked out </h1>
+                                <h1 className="num"> {this.state.hw2} gb </h1>
+                                <h1 className="bottom">of hardware </h1>
                             </div>
                         </div>
                     </div>
                 </div>
+
                 {/* <Hardware></Hardware> */}
 
             </div>

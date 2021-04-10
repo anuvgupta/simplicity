@@ -169,7 +169,7 @@ class ProjectForm extends React.Component {
         const action_title = (`${action[0]}`).toUpperCase() + (`${action.substring(1)}`);
         const create = action == 'create';
         return (
-            <div className="center">
+            <div className="center rightSide vCenter">
                 <div className="formBorder">
                     <div className="centerTitle" style={{ marginBottom: '15px' }}>
                         <h1> {action_title} Project </h1>

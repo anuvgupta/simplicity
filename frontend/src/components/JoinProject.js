@@ -89,7 +89,7 @@ class JoinProject extends React.Component {
 
     render() {
         return (
-            <div className="center">
+            <div className="center rightSide vCenter">
                 <div className="formBorder">
                     <div className="centerTitle">
                         <h1> Join Project</h1>

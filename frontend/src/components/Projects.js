@@ -58,7 +58,6 @@ class Projects extends React.Component {
                     projectId: "2",
                     desc: " Lorem impsum ldeokdeosjdoisejdis"
                 },
-
             ],
         };
     }

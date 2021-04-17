@@ -26,13 +26,7 @@ import Datasets from "./components/Datasets";
 import Overview from "./components/Overview";
 
 function App() {
-  useEffect(_ => {
-    axios.get(`${global.config.api_url}`).then(response => {
-      console.log("SUCCESS", response)
-    }).catch(error => {
-      console.log(error)
-    });
-  }, []);
+  
   return (
     <div className="App">
       <Router>

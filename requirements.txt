@@ -33,3 +33,4 @@ pycparser==2.20
 six==1.15.0
 Flask-JWT-Extended==4.1.0
 PyJWT==2.0.1
+waitress==2.0.0

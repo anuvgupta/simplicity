@@ -1,18 +1,59 @@
-.formBorder{
-    border: .2rem solid #ececec;
+.formBorder {
+    border: 1px solid rgba(50, 50, 5, 0.04);
+    box-shadow: 2px 5px 10px 0 rgba(0, 0, 0, 0.05);
     border-radius: 8px;
-    padding: 100px;
+    padding: 70px 120px;
 }
-.test{
+.cardContainer {
     /* background-color: black; */
-    height: 100px;
+    height: auto;
 }
-.rightSide{
+.rightSide {
     width: 85% !important;
     margin-left: 15vw;
 }
-.card{
+.card {
     max-width: 330px !important;
     min-width: 300px;
     margin-top: 30px;
+}
+.mt9px {
+    margin-top: 10px;
+}
+.green {
+    color: green;
+}
+.red {
+    color: red;
+}
+.halfWidth {
+    width: 80%;
+    margin-right: auto;
+    margin-left: auto;
+}
+.vCenter {
+    margin-top: 18vh;
+    margin-bottom: auto;
+}
+div .projectMain {
+    width: calc(100% - 14.3vw);
+    margin: 30px auto 0 14.3vw;
+}
+
+div .projectSpacer {
+    width: calc(100% - 14.3vw);
+    margin: 40px auto 0 14.3vw;
+}
+
+div .spacerAlt {
+    display: block;
+    /* padding-bottom: 80px; */
+    height: auto;
+    width: 80%;
+    margin: 0 auto;
+    border-bottom: 1px solid #e6e6e6;
+    width: 100%;
+    height: 100%;
+    display: table;
+    text-align: center;
 }

@@ -48,23 +48,6 @@ class LoginPage extends React.Component {
         });
     }
 
-    validateAlphanumeric(value) {
-        var alphaNumerics = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        for (var v in value) {
-            if (!alphaNumerics.includes(value[v])) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    hashPassword(value) {
-        // const hashSalt = bcryptjs.genSaltSync();
-        // const hashPassword = bcryptjs.hashSync(value, hashSalt);
-        // return hashPassword;
-        return global.util.sha256(value);
-    }
-
     updateErrorMsg(value) {
         this.setState({
             errorMsg: value
@@ -76,12 +59,18 @@ class LoginPage extends React.Component {
         var password = this.state.password;
         if (username && username.trim().length > 0) {
             if (password && password.trim().length > 0) {
-                if (this.validateAlphanumeric(username)) {
-                    password = this.hashPassword(password);
+                if (global.util.validateAlphanumeric(username)) {
+                    password = global.util.hashPassword(password);
                     if (sendRequest) this.requestSignIn(username, password);
                 } else this.updateErrorMsg('Invalid username (letters and numbers only).');
             } else this.updateErrorMsg('Empty password.');
         } else this.updateErrorMsg('Empty username.');
+    }
+
+    checkEnter(event) {
+        if (event && event.keyCode == 13) {
+            this.validateForm(true);
+        }
     }
 
     redirectPage() {
@@ -109,8 +98,7 @@ class LoginPage extends React.Component {
                     errorMsg: errorMessage
                 });
             } else if (accessToken) {
-                global.util.delete_cookie('token');
-                global.util.cookie('token', accessToken);
+                global.api.login(accessToken, false);
                 this.redirectPage();
             }
         };
@@ -136,11 +124,11 @@ class LoginPage extends React.Component {
         return (
             <div className="center h100">
                 <div className="centerTitle">
-                    <h1 className="loginTitle">Sign In</h1>
+                    <h1 className="loginTitle titleFont">Sign In</h1>
                 </div>
                 <form>
-                    Username: <input type="text" id="username" placeholder="username" onChange={this.updateUsername.bind(this)}></input><br />
-                    Password: <input type="password" id="password" placeholder="password" onChange={this.updatePassword.bind(this)}></input><br />
+                    Username: <input type="text" id="username" placeholder="username" onChange={this.updateUsername.bind(this)} onKeyUp={this.checkEnter.bind(this)}></input><br />
+                    Password: <input type="password" id="password" placeholder="password" onChange={this.updatePassword.bind(this)} onKeyUp={this.checkEnter.bind(this)}></input><br />
                     <Button style={{ marginTop: '8px' }} onClick={this.validateForm.bind(this, true)}> Sign In </Button>
                 </form>
                 <span className="errorMessage">{this.state.errorMsg}</span>

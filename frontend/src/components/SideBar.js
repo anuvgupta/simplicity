@@ -15,20 +15,23 @@ export default class SideBar extends React.Component {
         this.state = {
             isVisible: true,
             fluid: true,
-
+            activeBG: 'rgba(1, 1, 1, 0.07)',
+            inactiveBG: 'rgba(1, 1, 1, 0)'
         };
     }
 
     render() {
+        var active = this.props.active;
+        console.log(`SideBar.active: ${active}`);
         return (
             <div>
-                <div class="sidenav">
-                    <NavLink to="/account"><img className="profileImg"></img>Overview </NavLink>
-                    <NavLink to="/project">Projects </NavLink>
-                    <NavLink to="/hardware">Hardware </NavLink>
-                    <NavLink to="/datasets">Datasets </NavLink>
+                <div className="sidenav">
+                    <NavLink to="/account" style={{ backgroundColor: (active == 'overview' ? this.state.activeBG : this.state.inactiveBG) }}><img className="profileImg"></img>Overview </NavLink>
+                    <NavLink to="/project" style={{ backgroundColor: (active == 'project' ? this.state.activeBG : this.state.inactiveBG) }}> Projects </NavLink>
+                    <NavLink to="/hardware" style={{ backgroundColor: (active == 'hardware' ? this.state.activeBG : this.state.inactiveBG) }}> Hardware </NavLink>
+                    <NavLink to="/datasets" style={{ backgroundColor: (active == 'datasets' ? this.state.activeBG : this.state.inactiveBG) }}> Datasets </NavLink>
                 </div>
-                <div class="main">
+                <div className="main">
                 </div>
             </div>
 

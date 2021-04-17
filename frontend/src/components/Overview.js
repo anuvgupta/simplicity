@@ -22,7 +22,9 @@ class Overview extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: ""
+            username: "",
+            projectList: [],
+            totalHW: "",
         };
     }
 
@@ -41,47 +43,31 @@ class Overview extends React.Component {
     }
 
     setupPage(user) {
-        console.log('loading user ' + user.username);
-        console.log("list is "+ user.email);
-        var handleResponse = response => {
-            var errorMessage = 'Unknown error.';
-            if (response && response.hasOwnProperty('success')) {
-                if (response.success === true) {
-                    if (response.hasOwnProperty('data')) {
-                        errorMessage = null;
-                    }
-                } else {
-                    if (response.hasOwnProperty('message') && typeof response.message === 'string') {
-                        errorMessage = response.message;
-                    }
-                }
-            }
-            if (errorMessage) {
-                this.setState({
-                    errorMsg: errorMessage
-                });
-            } else {
-                console.log("here");
-            }
-        };
-        axios.post(`${global.config.api_url}/user`, {
-            username: `${user.username}`,
+        console.log('Overview: loading user ' + user.username);
+        // console.log("list is " + user.email);
+        axios.get(`${global.config.api_url}/user?username=${user.username}`, {
+            headers: { Authorization: `Bearer ${user.token}` }
         }).then(response => {
             var resp_data = null;
             if (response && response.data)
                 resp_data = response.data;
-            console.log(resp_data);
+            // console.log('resp_data', resp_data);
+            if (resp_data && resp_data.success && resp_data.success === true && resp_data.data && resp_data.data.username && resp_data.data.projectList) {
+                var totalCheckedout = resp_data.data.hwSet1 + resp_data.data.hwSet2
+                this.setState({
+                    username: resp_data.data.username,
+                    projectList: resp_data.data.projectList,
+                    totalHW: totalCheckedout
+                });
+            } else console.log('Invalid response: ', resp_data);
         }).catch(error => {
             if (error) {
                 var resp_data = null;
                 if (error.response && error.response.data)
                     resp_data = error.response.data;
-                handleResponse(resp_data);
+                console.log(error);
             }
         });
-        // this.state.username = user.username;
-        // this.state.projectIds = user.projectList;
-        // TODO: load user data/info
     }
 
     updateUsername(event) {
@@ -93,31 +79,35 @@ class Overview extends React.Component {
     render() {
         return (
             <div>
-                <div className="center">
-                    <div className="rightSide">
+                <div className="center overviewMain">
+                    <div className="rightSideAlt">
                         <div className="centerTitle">
-                            <h1> Welcome back User</h1>
+                            <h1 style={{ fontSize: '3em', marginBottom: "3.5vh" }}> Welcome back @{this.state.username}</h1>
                         </div>
                         <div className="topPanel">
                             <div className="leftOverview">
                                 <div className="overviewCard">
-                                    <h1>You have X projects</h1>
+                                    <h1 className="top" style={{ fontSize: '1.5em' }}> You have </h1>
+                                    <h1 className="num"> {this.state.projectList.length} </h1>
+                                    <h1 className="bottom" style={{ fontSize: '1.9em' }}> projects </h1>
                                 </div>
                             </div>
                             <div className="rightOverView">
                                 <div className="overviewCard">
-                                    <h1> You have checked out X hardware</h1>
+                                    <h1 className="top" style={{ fontSize: '1.4em' }}> You have checked out </h1>
+                                    <h1 class="num"> {this.state.totalHW} GB </h1>
+                                    <h1 className="bottom" style={{ fontSize: '1.9em' }}> of hardware </h1>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <Project></Project>
-                <div className="rightSide spacer">
-
+                <Project mainView="false" hideButtons="true"></Project>
+                <div className="rightSideAlt projectSpacer">
+                    <div className="spacerAlt"></div>
                 </div>
-                <Hardware></Hardware>
-            </div>
+                <Hardware mainView="false" ></Hardware>
+            </div >
 
         );
     }

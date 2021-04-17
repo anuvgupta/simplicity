@@ -1,41 +1,48 @@
 .sidenav {
     height: 100%; /* Full-height: remove this if you want "auto" height */
-    width: 15vw; /* Set the width of the sidebar */
+    width: 14.3vw; /* Set the width of the sidebar */
     position: fixed; /* Fixed Sidebar (stay in place on scroll) */
     z-index: 1; /* Stay on top */
     top: 0; /* Stay at the top */
     left: 0;
     color: #111; /* Black */
     overflow-x: hidden; /* Disable horizontal scroll */
-    padding-top: 20px;
-    border-right: 1px solid #111;
+    padding-top: 82px;
+    /* border-right: 1px solid #111; */
+    border-right: 1px solid #e4e4e4;
     text-align: left;
-    padding-left: 2vw;
-  }
-  
-  /* The navigation menu links */
-  .sidenav a {
+    /* padding-left: 2vw; */
+}
+
+/* The navigation menu links */
+.sidenav a {
     padding: 16px 8px 16px 16px;
     text-decoration: none;
-    font-size: 25px;
+    font-size: 23px;
     color: #111;
     display: block;
     margin: auto;
-  }
-  
-  /* When you mouse over the navigation links, change their color */
-  .sidenav a:hover {
-    color: #111;
-  }
-  
-  /* Style page content */
-  .main {
+    padding-left: 2vw;
+    background-color: rgba(1, 1, 1, 0);
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+    background-color: rgba(1, 1, 1, 1);
+}
+
+/* Style page content */
+.main {
     margin-left: 160px; /* Same as the width of the sidebar */
     padding: 0px 10px;
-  }
-  
-  /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
-  @media screen and (max-height: 450px) {
-    .sidenav {padding-top: 15px;}
-    .sidenav a {font-size: 18px;}
-  }
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+    .sidenav {
+        padding-top: 15px;
+    }
+    .sidenav a {
+        font-size: 18px;
+    }
+}

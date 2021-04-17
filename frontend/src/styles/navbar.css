@@ -1,0 +1,22 @@
+#navbar {
+    /* background-color: rgba(70, 70, 70, 0.976); */
+    transition: top 0.2s ease, opacity 0.15s ease;
+    top: 0;
+    opacity: 0.998;
+}
+
+#navbar .MuiToolbar-root {
+    /* min-height: 68px; */
+}
+
+#navbar #logoutButton {
+    position: absolute;
+    right: 29px;
+    top: 12px;
+    font-weight: 500;
+    font-size: 14.5px;
+    padding-left: 21px;
+    padding-right: 21px;
+    opacity: 0.98;
+    background-color: white;
+}

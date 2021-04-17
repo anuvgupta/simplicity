@@ -2,16 +2,21 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Form, Container, CardDeck, Card } from 'react-bootstrap';
 import axios from 'axios'
+import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
 import '../styles/project.css'
 
 
-const MyCard = ({ name, id, desc }) => (
+const MyCard = ({ name, id, desc, hideButtons }) => (
     <Card>
         <Card.Body>
             <Card.Title>{name}</Card.Title>
             <Card.Text>
                 {desc}
             </Card.Text>
+            <Button href={"/editProject/" + id} style={{ display: (hideButtons === 'true' ? 'none' : 'inline-block') }}>
+                Edit Project
+            </Button>
         </Card.Body>
         <Card.Footer>
             <small className="text-muted">{id}</small>
@@ -21,116 +26,137 @@ const MyCard = ({ name, id, desc }) => (
 
 class Projects extends React.Component {
 
+    static propTypes = {
+        location: PropTypes.object.isRequired,
+        history: PropTypes.object.isRequired
+    };
+
     constructor(props) {
         super(props);
         this.state = {
-            username: "",
-            password: "",
-            isLoaded: true,
-            posts: [
-                {
-                    projectName: "test1",
-                    projectId: "1",
-                    desc: " Lorem impsum ldeokdeosjdoisejdis"
-                },
-                {
-                    projectName: "test2",
-                    projectId: "2",
-                    desc: " Lorem impsum ldeokdeosjdoisejdis"
-                },
-                {
-                    projectName: "test1",
-                    projectId: "1",
-                    desc: " Lorem impsum ldeokdeosjdoisejdis"
-                },
-                {
-                    projectName: "test2",
-                    projectId: "2",
-                    desc: " Lorem impsum ldeokdeosjdoisejdis"
-                },
-                {
-                    projectName: "test1",
-                    projectId: "1",
-                    desc: " Lorem impsum ldeokdeosjdoisejdis"
-                },
-                {
-                    projectName: "test2",
-                    projectId: "2",
-                    desc: " Lorem impsum ldeokdeosjdoisejdis"
-                },
-            ],
+            projectList: [],
+            projectsArr: [],
+            userToken: "",
         };
     }
 
 
     componentDidMount() {
-
+        global.api.authenticated((user => {
+            if (user === false) this.redirectPage();
+            else this.setupPage(user);
+        }).bind(this));
     }
     componentWillUnmount() {
 
     }
 
-    updateUsername(event) {
-        this.setState({
-            username: event.target.value
-        });
+    redirectPage(page = 'home') {
+        this.props.history.push(`/${page}`);
     }
 
-    updatePassword(event) {
-        this.setState({
-            password: event.target.value
-        });
-    }
-
-    requestSignIn() {
-        var username = this.state.username;
-        var password = this.state.password;
-        if (username && password && username.trim().length > 0 && password.trim().length > 0) {
-            console.log(username, password);
+    createCards(projectList, token) {
+        // console.log("starting vcreate cards " + projectList[0]);
+        var projects = [];
+        for (var i = 0; i < projectList.length; i++) {
+            // console.log("curr project id is " + projectList[i]);s
+            axios.get(`${global.config.api_url}/projects?id=${projectList[i]}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            }).then(response => {
+                var resp_data = null;
+                if (response && response.data)
+                    resp_data = response.data;
+                // console.log(resp_data);
+                projects.push(resp_data);
+                this.setState({
+                    projectsArr: projects
+                });
+            }).catch(error => {
+                if (error) {
+                    var resp_data = null;
+                    if (error.response && error.response.data)
+                        resp_data = error.response.data;
+                    console.log(error);
+                }
+            });
         }
+
+        // console.log(projects);
+        return projects;
     }
 
-    render() {
-        const { error, isLoaded, posts } = this.state;
+    setupPage(user) {
+        var username = user.username;
+        username = username.toString();
+        console.log("Project: loading user " + username);
+        axios.get(`${global.config.api_url}/user?username=` + username, {
+            headers: { Authorization: `Bearer ${user.token}` }
+        }).then(response => {
+            var resp_data = null;
+            if (response && response.data)
+                resp_data = response.data;
+            // console.log(resp_data);
 
-        if (error) {
-            return <div>Error in loading</div>
-        } else if (!isLoaded) {
-            return <div>Loading ...</div>
-        } else {
-            console.log(this.state.posts);
-            return (
-                <div className="center">
-                    <div className="rightSide">
-                        <div className="centerTitle">
-                            <h1> My Projects </h1>
-                        </div>
-                        {/* An area where users can create new project, by providing project name, description, and projectID. */}
-                        <Container fluid className=" test">
-                            <CardDeck>
-                                {this.state.posts.map((info) => (
-                                    <MyCard name={info.projectName}
-                                        desc={info.desc}
-                                        id={info.projectId} />
-                                ))}
-                                {/* <Card className="bg-dark text-white">
+            /*var projects =*/
+            this.createCards(resp_data.data.projectList, user.token);
+            // console.log(projects);
+
+            this.setState({
+                projectList: resp_data.data.projectList,
+                userToken: user.token,
+                // projectsArr: projects
+            });
+        }).catch(error => {
+            if (error) {
+                var resp_data = null;
+                if (error.response && error.response.data)
+                    resp_data = error.response.data;
+                console.log("Error " + resp_data);
+            }
+        });
+    }
+    render() {
+        // console.log(this.state);
+        return (
+            <div className="center projectMain" style={{ marginTop: (this.props.mainView == 'true' ? '100px' : '40px') }}>
+                <div className="rightSideAlt">
+                    <div className="centerTitle" style={{ marginBottom: '11px', textAlign: 'center' }}>
+                        <h1> Projects </h1>
+                    </div>
+                    {/* An area where users can create new project, by providing project name, description, and projectID. */}
+                    <Container fluid className="cardContainer">
+                        <CardDeck>
+                            {
+                                this.state.projectList.length > 0 ?
+                                    this.state.projectsArr.map((info, i) => (
+                                        // need to avtually parse here
+                                        <MyCard name={info.projectName}
+                                            desc={info.description}
+                                            id={info.id} key={i}
+                                            hideButtons={this.props.hideButtons} />
+                                    ))
+                                    : <div style={{ textAlign: 'center', width: '100%', marginTop: '10px' }}><h3 style={{ opacity: '0.8' }}> No projects found. </h3></div>
+                            }
+                            {/* <Card className="bg-dark text-white">
                                 <Card.ImgOverlay>
                                     <Card.Text>New Project</Card.Text>
                                 </Card.ImgOverlay>
                             </Card> */}
-                            </CardDeck>
-                            
-                            <Button href="/createProject">
-                                New Project
-                            </Button>
-                        </Container>
-                    </div>
-
-
+                        </CardDeck>
+                        <div style={{ height: '22px' }}></div>
+                        <Button className="mt9px" onClick={this.redirectPage.bind(this, 'createProject')} style={{ display: (this.props.hideButtons === 'true' ? 'none' : 'inline-block') }}>
+                            New Project
+                        </Button> {' '}
+                        <Button className="mt9px" onClick={this.redirectPage.bind(this, 'joinProject')} style={{ display: (this.props.hideButtons === 'true' ? 'none' : 'inline-block') }}>
+                            Join Project
+                        </Button>
+                    </Container>
                 </div>
-            );
-        }
+
+
+            </div>
+        );
     }
 }
 
-export default Projects;
+export default withRouter(Projects);

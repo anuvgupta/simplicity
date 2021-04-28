@@ -133,8 +133,7 @@ def user():
                         'username': user.username,
                         'email': user.email,
                         'projectList': get_project_ids(),
-                        'hwSet1': user.hw_sets["hwSet1"],
-                        'hwSet2': user.hw_sets["hwSet2"]
+                        'hw_sets': user.hw_sets
                     }
                 }), 200)
                 else: 
@@ -311,13 +310,12 @@ def editProject():
 @jwt_required()
 def checkHardware():
     current_username = get_jwt_identity()
-    print("here?")
     if not current_username:
         return (jsonify({
             'success': False,
             'message': 'Invalid token.'
         }), 401)
-    print("here?")
+
     hardware_dict = dict()
     query_hardware = Hardware.objects()
 
@@ -328,7 +326,12 @@ def checkHardware():
         }), 404)
     else: 
         for hw in query_hardware:
-            hardware_dict[hw.name] = hw.available
+            hardware_dict[hw.hardware_id] = {
+                'hardware_id': hw.hardware_id,
+                'available': hw.available,
+                'name': hw.name
+            }
+        print(hardware_dict)
         return (jsonify({
             'success': True,
             'data': hardware_dict
@@ -343,7 +346,11 @@ def checkHardware():
 def checkInHardware():
     hw_response_400 = lambda : jsonify({
         'success': False,
-        'message': 'Checking in more than capacity'
+        'message': 'Bad request.'
+    })
+    hw_response_400_alt = lambda : jsonify({
+        'success': False,
+        'message': 'Invalid check-in quantity.'
     })
     hw_response_404 = lambda : jsonify({
         'success': False,
@@ -364,13 +371,22 @@ def checkInHardware():
     except BadRequest:
         return (hw_response_400(), 400)
     else:
-        hardware_name = hardware_json.get('name')
-        checkin_quantity = int(hardware_json.get('quantity'))
-        if not does_hw_set_exist(hardware_name):
+        hardware_id = hardware_json.get('id')
+        checkin_quantity = hardware_json.get('quantity')
+        if checkin_quantity:
+            checkin_quantity = int(checkin_quantity)
+            if checkin_quantity <= 0:
+                return (hw_response_400_alt(), 400)
+        else:
+            return (hw_response_400_alt(), 400)
+        if not does_hw_set_exist(hardware_id):
             return (hw_response_404(), 404)
-        ret_val = check_in(hardware_name, checkin_quantity, current_username)
+        ret_val = check_in(hardware_id, checkin_quantity, current_username)
         if ret_val == 400:
-            return (hw_response_400(), 400)
+            return (jsonify({
+                'success': False,
+                'message': 'Checking in more than you have.'
+            }), 400)
         elif ret_val == 404:
             return (hw_response_404(), 404)
         elif ret_val == 500:
@@ -386,7 +402,11 @@ def checkInHardware():
 def checkOutHardware():
     hw_response_400 = lambda : jsonify({
         'success': False,
-        'message': 'Checking out more than possible '
+        'message': 'Bad request.'
+    })
+    hw_response_400_alt = lambda : jsonify({
+        'success': False,
+        'message': 'Invalid check-out quantity.'
     })
     hw_response_404 = lambda : jsonify({
         'success': False,
@@ -407,13 +427,22 @@ def checkOutHardware():
     except BadRequest:
         return (hw_response_400(), 400)
     else:
-        hardware_name = hardware_json.get('name')
-        checkout_quantity = int(hardware_json.get('quantity'))
-        if not does_hw_set_exist(hardware_name):
+        hardware_id = hardware_json.get('id')
+        checkout_quantity = hardware_json.get('quantity')
+        if checkout_quantity:
+            checkout_quantity = int(checkout_quantity)
+            if checkout_quantity <= 0:
+                return (hw_response_400_alt(), 400)
+        else:
+            return (hw_response_400_alt(), 400)
+        if not does_hw_set_exist(hardware_id):
             return (hw_response_404(), 404)
-        ret_val = check_out(hardware_name, checkout_quantity, current_username)
+        ret_val = check_out(hardware_id, checkout_quantity, current_username)
         if ret_val == 400:
-            return (hw_response_400(), 400)
+            return (jsonify({
+                'success': False,
+                'message': 'Checking out more than available.'
+            }), 400)
         elif ret_val == 404:
             return (hw_response_404(), 404)
         elif ret_val == 500:

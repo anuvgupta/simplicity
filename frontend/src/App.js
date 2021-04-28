@@ -71,7 +71,7 @@ function App() {
             <NavigationBar></NavigationBar>
             <SideBar active="hardware"></SideBar>
             <Hardware mainView="true" ></Hardware>
-            <div className="rightSide" style={{ marginBottom: '45px' }}>
+            <div className="rightSide" style={{ marginBottom: '60px', marginTop: '55px' }}>
               <HardwareForm></HardwareForm>
             </div>
           </Route>

@@ -21,22 +21,22 @@ def _not_empty(val):
 
 # defines fields for hardware sets
 class Hardware(me.Document):
-    name = me.StringField(max_length=20, required=True,
-                          unique=True, validation=_not_empty)
+    hardware_id = me.StringField(max_length=20, required=True, unique=True, validation=_not_empty)
+    name = me.StringField(max_length=40, required=True, unique=False, validation=_not_empty)
     capacity = me.IntField(min_value=0)
     available = me.IntField(min_value=0, max_value=1024)
 
 
 def init_hardware():
-    query = Hardware.objects(name="hwSet1")
+    query = Hardware.objects(hardware_id="hwSet1")
     hwSet1 = query.first()
     if not hwSet1:
-        hw1 = Hardware(name="hwSet1", capacity=512, available=512)
+        hw1 = Hardware(hardware_id="hwSet1", name="Hardware Set 1", capacity=512, available=512)
         hw1.save(force_insert=True)
-    query = Hardware.objects(name="hwSet2")
+    query = Hardware.objects(hardware_id="hwSet2")
     hwSet2 = query.first()
     if not hwSet2:
-        hw2 = Hardware(name="hwSet2", capacity=1024, available=1024)
+        hw2 = Hardware(hardware_id="hwSet2", name="Hardware Set 2", capacity=1024, available=1024)
         hw2.save(force_insert=True)
     # creates a new document, doesn't allow for updates if this document already exists
 
@@ -95,26 +95,26 @@ def init_godmin():
 def create_user(username, email, pwd, project_list, is_admin, is_godmin):
     # TODO: implement bcrypt hashing for pwd
     hw_set = {}
-    hw1 = Hardware.objects(name="hwSet1")
+    hw1 = Hardware.objects(hardware_id="hwSet1")
     if len(hw1) != 1:
         return False  # not found
     hwSet1 = hw1.first()
     if not hwSet1:
         return False  # not found
-    if hwSet1.name != "hwSet1":
+    if hwSet1.hardware_id != "hwSet1":
         return False
 
-    hw2 = Hardware.objects(name="hwSet2")
+    hw2 = Hardware.objects(hardware_id="hwSet2")
     if len(hw2) != 1:
         return False  # not found
     hwSet2 = hw2.first()
     if not hwSet2:
         return False  # not found
-    if hwSet2.name != "hwSet2":
+    if hwSet2.hardware_id != "hwSet2":
         return False
 
-    hw_set[hwSet1.name] = 0
-    hw_set[hwSet2.name] = 0
+    hw_set[hwSet1.hardware_id] = 0
+    hw_set[hwSet2.hardware_id] = 0
 
     projectList = []
     if project_list:
@@ -281,8 +281,8 @@ def get_project_ids() -> []:
 """ HARDWARE SET RELATED FUNCTIONS """
 
 
-def check_in(hw_set_name, checkin_quantity, username) -> int:
-    queryA = Hardware.objects(name__exact=hw_set_name)
+def check_in(hw_set_id, checkin_quantity, username) -> int:
+    queryA = Hardware.objects(hardware_id__exact=hw_set_id)
     if len(queryA) != 1:
         return 404
     hw_set = queryA.first()
@@ -296,7 +296,7 @@ def check_in(hw_set_name, checkin_quantity, username) -> int:
         return 404
     # check if requested quantity is valid
     print(hw_set.capacity)
-    if checkin_quantity > int(user.hw_sets[hw_set_name]): 
+    if checkin_quantity > int(user.hw_sets[hw_set_id]): 
         #this is if the user tries to check in more than they've checked out
         return 400
     if checkin_quantity > int(hw_set.capacity):
@@ -304,13 +304,13 @@ def check_in(hw_set_name, checkin_quantity, username) -> int:
         return 400
     hw_set.available += checkin_quantity
     hw_set.save()     # since the hardware set already existed, this saves the document with the new available quantity
-    user.hw_sets[hw_set_name] -= checkin_quantity
+    user.hw_sets[hw_set_id] -= checkin_quantity
     user.save()
     return 1
 
 
-def check_out(hw_set_name, checkout_quantity, username):
-    queryA = Hardware.objects(name__exact=hw_set_name)
+def check_out(hw_set_id, checkout_quantity, username):
+    queryA = Hardware.objects(hardware_id__exact=hw_set_id)
     if len(queryA) != 1:
         return 404
     hw_set = queryA.first()
@@ -327,7 +327,7 @@ def check_out(hw_set_name, checkout_quantity, username):
         return 400
     hw_set.available -= checkout_quantity
     hw_set.save()
-    user.hw_sets[hw_set_name] += checkout_quantity
+    user.hw_sets[hw_set_id] += checkout_quantity
     user.save()
     return 1
 
@@ -336,13 +336,13 @@ def get_capacity_and_available(hw_set):
     return jsonify(capacity=hw_set.capacity, available=hw_set.available)
 
 
-def does_hw_set_exist(hw_set_name) -> bool:
-    query = Hardware.objects(name__exact=hw_set_name)
+def does_hw_set_exist(hw_set_id) -> bool:
+    query = Hardware.objects(hardware_id__exact=hw_set_id)
     if len(query) < 1:
         return False  # not found
     hardware_set = query.first()
     if not hardware_set:
         return False  # not found
-    if hw_set_name != hardware_set.name:
+    if hw_set_id != hardware_set.hardware_id:
         return False  # incorrect id
     return True

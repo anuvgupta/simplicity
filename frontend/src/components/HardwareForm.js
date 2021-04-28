@@ -20,12 +20,13 @@ class HardwareForm extends React.Component {
             username: "",
             password: "",
             token: "",
-            hwSetName: "hwSet1",
+            hwSetID: "hwSet1",
             respData: {},
             amount: "",
             quantity: "",
             msg: "",
-            color: ""
+            color: "",
+            hwList: {}
         };
     }
 
@@ -44,47 +45,47 @@ class HardwareForm extends React.Component {
     }
     getHardwareInfo(token, resolve) {
         axios.post(`${global.config.api_url}/checkHardware`, {},
-            {
-                headers: { Authorization: `Bearer ${token}` }
-            }).then(response => {
+            { headers: { Authorization: `Bearer ${token}` } }
+        ).then(response => {
+            var resp_data = null;
+            if (response && response.data)
+                resp_data = response.data;
+            // console.log(this.state);
+            // console.log(resp_data);
+            resolve(resp_data);
+        }).catch(error => {
+            if (error) {
                 var resp_data = null;
-                if (response && response.data)
-                    resp_data = response.data;
-                // console.log(this.state);
-                // console.log(resp_data);
-                resolve(resp_data);
-            }).catch(error => {
-                if (error) {
-                    var resp_data = null;
-                    if (error.response && error.response.data)
-                        resp_data = error.response.data;
-                    console.log(error, resp_data);
-                    // console.log("here");
-                    resolve(false, resp_data);
-                }
-            });
+                if (error.response && error.response.data)
+                    resp_data = error.response.data;
+                console.log(error, resp_data);
+                // console.log("here");
+                resolve(false, resp_data);
+            }
+        });
     }
 
 
     setupPage(user) {
-        console.log('HardwareForm: loading user ' + user.token);
+        console.log('HardwareForm: loading user ' + user.username);
         this.setState({
             token: user.token
         });
-        var resp = this.getHardwareInfo(user.token, (response, error = null) => {
-            if (response) {
-                var hwSetName = this.state.hwSetName;
-                // console.log(hwSetName);
-                // console.log(response.data[hwSetName]);
+        this.getHardwareInfo(user.token, (resp, error = null) => {
+            if (resp) {
+                var hwSetID = this.state.hwSetID;
+                // console.log(hwSetID);
+                // console.log(resp.data[hwSetID]);
                 this.setState({
-                    amount: response.data[hwSetName]
+                    amount: resp.data[hwSetID].available,
+                    hwList: resp.data
                 })
             } else {
                 console.log(error);
             }
         });
 
-        // this.updateSetName(user.token, "hwSet1");
+        // this.updateSetID(user.token, "hwSet1");
         // console.log("this is what im looking for: " + resp);
 
         // TODO: load user data/info
@@ -92,19 +93,20 @@ class HardwareForm extends React.Component {
 
 
 
-    updateSetName(event) {
+    updateSetID(event) {
         // console.log(event.target.value);
         // console.log(this.state.token)
         this.setState({
-            hwSetName: event.target.value
+            hwSetID: event.target.value
         });
-        var resp = this.getHardwareInfo(this.state.token, (response, error = null) => {
-            if (response) {
-                var hwSetName = this.state.hwSetName;
-                // console.log(hwSetName);
-                // console.log(response.data[hwSetName]);
+        this.getHardwareInfo(this.state.token, (resp, error = null) => {
+            if (resp) {
+                var hwSetID = this.state.hwSetID;
+                // console.log(hwSetID);
+                // console.log(resp.data[hwSetID]);
+                console.log(resp);
                 this.setState({
-                    amount: response.data[hwSetName]
+                    amount: resp.data[hwSetID].available
                 });
             } else {
                 console.log(error);
@@ -123,7 +125,7 @@ class HardwareForm extends React.Component {
         if (isCheckin) {
             //TODO: POST checkin
             axios.post(`${global.config.api_url}/checkInHardware`, {
-                name: `${this.state.hwSetName}`,
+                id: `${this.state.hwSetID}`,
                 quantity: `${this.state.quantity}`
             },
                 {
@@ -134,11 +136,11 @@ class HardwareForm extends React.Component {
                         resp_data = response.data;
                     // console.log(this.state);
                     // console.log(resp_data);
-                    var resp = this.getHardwareInfo(this.state.token, (response, error = null) => {
-                        if (response) {
-                            var hwSetName = this.state.hwSetName;
+                    this.getHardwareInfo(this.state.token, (resp, error = null) => {
+                        if (resp) {
+                            var hwSetID = this.state.hwSetID;
                             this.setState({
-                                amount: response.data[hwSetName],
+                                amount: resp.data[hwSetID].available,
                                 msg: "Success!",
                                 color: "green"
                             });
@@ -170,7 +172,7 @@ class HardwareForm extends React.Component {
         else {
             //TODO: POST checkout
             axios.post(`${global.config.api_url}/checkOutHardware`, {
-                name: `${this.state.hwSetName}`,
+                id: `${this.state.hwSetID}`,
                 quantity: `${this.state.quantity}`
             },
                 {
@@ -179,11 +181,11 @@ class HardwareForm extends React.Component {
                     var resp_data = null;
                     if (response && response.data)
                         resp_data = response.data;
-                    var resp = this.getHardwareInfo(this.state.token, (response, error = null) => {
-                        if (response) {
-                            var hwSetName = this.state.hwSetName;
+                    this.getHardwareInfo(this.state.token, (resp, error = null) => {
+                        if (resp) {
+                            var hwSetID = this.state.hwSetID;
                             this.setState({
-                                amount: response.data[hwSetName],
+                                amount: resp.data[hwSetID].available,
                                 msg: "Success!",
                                 color: "green"
                             });
@@ -217,14 +219,19 @@ class HardwareForm extends React.Component {
 
     render() {
         return (
-            <div className="formCard">
+            <div className="formCard" style={{ padding: '60px 40px 40px 40px' }}>
                 <div className="formCenter">
-                    <Form>
+                    <div className="centerTitle" style={{ marginBottom: '10px' }}>
+                        <h1 style={{ fontSize: '2.2em' }}> Check In/Out Hardware </h1>
+                    </div>
+                    <Form style={{ marginBottom: '15px' }}>
                         <Form.Group controlId="projectName">
                             <Form.Label style={{ marginTop: '1em' }}> Hardware Set </Form.Label>
-                            <Form.Control as="select" onChange={this.updateSetName.bind(this)}>
-                                <option>hwSet1</option>
-                                <option>hwSet2</option>
+                            <Form.Control as="select" onChange={this.updateSetID.bind(this)}>
+                                {Object.keys(this.state.hwList).length > 0 ?
+                                    Object.values(this.state.hwList).map((hw_set, i) => (
+                                        <option value={hw_set.hardware_id} key={i}>{hw_set.name}</option>
+                                    )) : ''}
                             </Form.Control>
                             <Form.Label style={{ marginTop: '1em' }}> Request Capacity </Form.Label>
                             <Form.Control type="name" placeholder="1 GB" onChange={this.updateQuantity.bind(this)} />
@@ -234,12 +241,13 @@ class HardwareForm extends React.Component {
                             <Form.Control as="textarea" rows={3} /> */}
                         </Form.Group>
                     </Form>
-                    <Button className="mt9px" onClick={this.checkHardware.bind(this, true)} >
-                        Check In
-                        </Button> {' '}
-                    <Button className="mt9px" onClick={this.checkHardware.bind(this, false)}>
+                    <Button style={{ marginRight: '3px' }} className="mt9px" onClick={this.checkHardware.bind(this, false)}>
                         Check Out
-                        </Button>
+                    </Button>
+                    {' '}
+                    <Button style={{ marginLeft: '3px' }} className="mt9px" onClick={this.checkHardware.bind(this, true)} >
+                        Check In
+                    </Button>
                     <div style={{ marginTop: '30px' }}>
                         <span className={this.state.color}>{this.state.msg}</span>
                     </div>

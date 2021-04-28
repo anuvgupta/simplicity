@@ -24,7 +24,7 @@ class Overview extends React.Component {
         this.state = {
             username: "",
             projectList: [],
-            totalHW: "",
+            totalHW: "0",
         };
     }
 
@@ -53,7 +53,10 @@ class Overview extends React.Component {
                 resp_data = response.data;
             // console.log('resp_data', resp_data);
             if (resp_data && resp_data.success && resp_data.success === true && resp_data.data && resp_data.data.username && resp_data.data.projectList) {
-                var totalCheckedout = resp_data.data.hwSet1 + resp_data.data.hwSet2
+                var totalCheckedout = 0;
+                for (var s in resp_data.data.hw_sets) {
+                    totalCheckedout += resp_data.data.hw_sets[s];
+                }
                 this.setState({
                     username: resp_data.data.username,
                     projectList: resp_data.data.projectList,
@@ -67,12 +70,6 @@ class Overview extends React.Component {
                     resp_data = error.response.data;
                 console.log(error);
             }
-        });
-    }
-
-    updateUsername(event) {
-        this.setState({
-            username: event.target.value
         });
     }
 

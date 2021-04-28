@@ -129,7 +129,7 @@ class Projects extends React.Component {
                             {
                                 this.state.projectList.length > 0 ?
                                     this.state.projectsArr.map((info, i) => (
-                                        // need to avtually parse here
+                                        // need to actually parse here
                                         <MyCard name={info.projectName}
                                             desc={info.description}
                                             id={info.id} key={i}
@@ -146,7 +146,8 @@ class Projects extends React.Component {
                         <div style={{ height: '22px' }}></div>
                         <Button className="mt9px" onClick={this.redirectPage.bind(this, 'createProject')} style={{ display: (this.props.hideButtons === 'true' ? 'none' : 'inline-block') }}>
                             New Project
-                        </Button> {' '}
+                        </Button>
+                        {' '}
                         <Button className="mt9px" onClick={this.redirectPage.bind(this, 'joinProject')} style={{ display: (this.props.hideButtons === 'true' ? 'none' : 'inline-block') }}>
                             Join Project
                         </Button>

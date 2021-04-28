@@ -112,6 +112,10 @@ class Admin extends React.Component {
                                         <Form.Control type="text" placeholder="username" style={{ marginBottom: '10px' }} />
                                     </Form.Group>
                                     <Form.Group>
+                                        <Form.Label style={{ marginTop: '0.5em' }}>Email</Form.Label>
+                                        <Form.Control type="text" placeholder="test@example.com" style={{ marginBottom: '10px' }} />
+                                    </Form.Group>
+                                    <Form.Group>
                                         <Form.Label style={{ marginTop: '0.5em' }}>Password</Form.Label>
                                         <Form.Control type="text" placeholder="password" style={{ marginBottom: '10px' }} />
                                     </Form.Group>                                    
@@ -125,15 +129,38 @@ class Admin extends React.Component {
                             </Form>
                         </div>
                     </div>
-
-
-
-
                 </div>
                 <div className="rightSideAlt projectSpacer">
                     <div className="spacerAlt"></div>
                 </div>
-                <Hardware mainView="false" ></Hardware>
+                <div className="rightSide" style={{ marginBottom: '60px', marginTop: '55px' }}>
+                    <div className="formCard" style={{ padding: '60px 40px 40px 40px' }}>
+                        <div className="formCenter">
+                            <div className="centerTitle" style={{ marginBottom: '10px' }}>
+                                <h1 style={{ fontSize: '2.2em' }}> Create Hardware Set </h1>
+                            </div>
+                            <Form>
+                                <Form.Group controlId="adminUserFrom">
+                                    <Form.Group>
+                                        <Form.Label style={{ marginTop: '0.5em' }}>Hardware Set ID</Form.Label>
+                                        <Form.Control type="text" placeholder="hwSetX" style={{ marginBottom: '10px' }} />
+                                    </Form.Group>
+                                    <Form.Group>
+                                        <Form.Label style={{ marginTop: '0.5em' }}>Hardware Set Name</Form.Label>
+                                        <Form.Control type="text" placeholder="Hardware Set 1" style={{ marginBottom: '10px' }} />
+                                    </Form.Group>
+                                    <Form.Group>
+                                        <Form.Label style={{ marginTop: '0.5em' }}>Capacity</Form.Label>
+                                        <Form.Control type="text" placeholder="512 GB" style={{ marginBottom: '10px' }} />
+                                    </Form.Group>                                    
+                                    
+                                    <Button style={{ marginTop: '20px' }}> Create Hardware Set </Button>
+                                </Form.Group>
+                                <span className="errorMessage" style={{ paddingTop: '15px' }}>{this.state.errorMsg}</span>
+                            </Form>
+                        </div>
+                    </div>
+                </div>
             </div >
 
         );

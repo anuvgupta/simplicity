@@ -36,6 +36,7 @@ from .routes import *
 from .models import init_hardware
 
 init_hardware()
+init_godmin()
 
 # defines fields for hardware sets
 

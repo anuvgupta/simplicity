@@ -15,3 +15,59 @@
     border: 1px solid rgba(50, 50, 50, 0.04);
     max-width: 40em;
 }
+
+.hwTopPanel {
+    /* border-bottom: 1px solid #e6e6e6; */
+    height: 100%;
+    width: 100%;
+    /* display: flex; */
+    margin-bottom: 5vh;
+
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 11px;
+}
+
+.hwOverviewMain {
+    margin: 100px 0 0 14.3vw;
+    padding-bottom: 10px;
+    box-sizing: border-box;
+    width: calc(100% - 14.3vw);
+    border-bottom: 1px solid #e6e6e6;
+    height: 100%;
+}
+
+.hwLeftOverview {
+    width: 100%;
+    display: block;
+    float: left;
+    max-width: 400px;
+    margin-left: 5px;
+    margin-right: 10px;
+}
+
+.hwRightOverview {
+    width: 100%;
+    display: block;
+    float: right;
+    max-width: 400px;
+    margin-left: 10px;
+    margin-right: 5px;
+}
+@media screen and (max-width: 1195px) {
+    .hwRightOverview {
+        float: left;
+    }
+}
+
+.hwOverviewCard {
+    background-color: white;
+    height: 100%;
+    max-height: 490px;
+    width: 400px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.09);
+    transition: 0.3s;
+    margin-bottom: 50px;
+    border-radius: 3px;
+    padding: 30px;
+}

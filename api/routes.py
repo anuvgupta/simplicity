@@ -132,8 +132,7 @@ def user():
                         'username': user.username,
                         'email': user.email,
                         'projectList': user.projectList,
-                        'hwSet1': user.hw_sets["hwSet1"],
-                        'hwSet2': user.hw_sets["hwSet2"]
+                        'hw_sets': user.hw_sets
                     }
                 }), 200)
             return (jsonify({
@@ -299,13 +298,12 @@ def editProject():
 @jwt_required()
 def checkHardware():
     current_username = get_jwt_identity()
-    print("here?")
     if not current_username:
         return (jsonify({
             'success': False,
             'message': 'Invalid token.'
         }), 401)
-    print("here?")
+
     hardware_dict = dict()
     query_hardware = Hardware.objects()
 
@@ -316,7 +314,12 @@ def checkHardware():
         }), 404)
     else: 
         for hw in query_hardware:
-            hardware_dict[hw.name] = hw.available
+            hardware_dict[hw.hardware_id] = {
+                'hardware_id': hw.hardware_id,
+                'available': hw.available,
+                'name': hw.name
+            }
+        print(hardware_dict)
         return (jsonify({
             'success': True,
             'data': hardware_dict
@@ -356,7 +359,7 @@ def checkInHardware():
     except BadRequest:
         return (hw_response_400(), 400)
     else:
-        hardware_name = hardware_json.get('name')
+        hardware_id = hardware_json.get('id')
         checkin_quantity = hardware_json.get('quantity')
         if checkin_quantity:
             checkin_quantity = int(checkin_quantity)
@@ -364,9 +367,9 @@ def checkInHardware():
                 return (hw_response_400_alt(), 400)
         else:
             return (hw_response_400_alt(), 400)
-        if not does_hw_set_exist(hardware_name):
+        if not does_hw_set_exist(hardware_id):
             return (hw_response_404(), 404)
-        ret_val = check_in(hardware_name, checkin_quantity, current_username)
+        ret_val = check_in(hardware_id, checkin_quantity, current_username)
         if ret_val == 400:
             return (jsonify({
                 'success': False,
@@ -412,7 +415,7 @@ def checkOutHardware():
     except BadRequest:
         return (hw_response_400(), 400)
     else:
-        hardware_name = hardware_json.get('name')
+        hardware_id = hardware_json.get('id')
         checkout_quantity = hardware_json.get('quantity')
         if checkout_quantity:
             checkout_quantity = int(checkout_quantity)
@@ -420,9 +423,9 @@ def checkOutHardware():
                 return (hw_response_400_alt(), 400)
         else:
             return (hw_response_400_alt(), 400)
-        if not does_hw_set_exist(hardware_name):
+        if not does_hw_set_exist(hardware_id):
             return (hw_response_404(), 404)
-        ret_val = check_out(hardware_name, checkout_quantity, current_username)
+        ret_val = check_out(hardware_id, checkout_quantity, current_username)
         if ret_val == 400:
             return (jsonify({
                 'success': False,

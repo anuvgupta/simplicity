@@ -133,7 +133,9 @@ def user():
                         'username': user.username,
                         'email': user.email,
                         'projectList': get_project_ids(),
-                        'hw_sets': user.hw_sets
+                        'hw_sets': user.hw_sets,
+                        'is_admin': user.is_admin,
+                        'is_godmin': user.is_godmin
                     }
                 }), 200)
                 else: 
@@ -143,8 +145,9 @@ def user():
                             'username': user.username,
                             'email': user.email,
                             'projectList': user.projectList,
-                            'hwSet1': user.hw_sets["hwSet1"],
-                            'hwSet2': user.hw_sets["hwSet2"]
+                            'hw_sets': user.hw_sets,
+                            'is_admin': user.is_admin,
+                            'is_godmin': user.is_godmin
                         }
                     }), 200)
             return (jsonify({

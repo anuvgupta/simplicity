@@ -26,6 +26,7 @@ import Datasets from "./components/Datasets";
 import Overview from "./components/Overview";
 import NavigationBar from "./components/NavBar";
 import JoinProject from './components/JoinProject.js';
+import Admin from './components/Admin.js';
 
 function App() {
   return (
@@ -42,6 +43,11 @@ function App() {
             <NavigationBar></NavigationBar>
             <SideBar active="overview"></SideBar>
             <Overview></Overview>
+          </Route>
+          <Route path="/admin">
+            <NavigationBar></NavigationBar>
+            <SideBar active="admin"></SideBar>
+            <Admin mainView="false"></Admin>
           </Route>
           <Route path="/createProject">
             <NavigationBar></NavigationBar>

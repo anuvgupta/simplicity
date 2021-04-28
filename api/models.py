@@ -70,8 +70,8 @@ class User(me.Document):
 
 def init_godmin():
     projectList = []
-    for user in User.objects:
-        for id in user.projectList:
+    for project in Project.objects:
+        for id in project.project_id:
             if id not in projectList:
                 print(id)
                 projectList.append(id)
@@ -225,12 +225,6 @@ def create_project(name, proj_id, desc, username=""):
             return
         user.projectList.append(proj_id)
         user.save()
-        #Add project to admin project list as well
-        query = User.objects(is_admin=True)
-        for admin in query:
-            proj_list = admin.projectList
-            proj_list.append(proj_id)
-            admin.update(set__projectList=proj_list)
     return
 
 
@@ -274,6 +268,14 @@ def does_project_id_exist(p_id) -> bool:
     if p_id != project.project_id:
         return False  # incorrect id
     return True
+
+def get_project_ids() -> []:
+    projectIds = []
+    query = Project.objects()
+    for project in query:
+        if project.project_id not in projectIds:
+            projectIds.append(project.project_id)
+    return projectIds
 
 
 """ HARDWARE SET RELATED FUNCTIONS """

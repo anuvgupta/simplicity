@@ -126,16 +126,28 @@ def user():
         if current_username and username == current_username:
             user = get_user_obj(username)
             if user:
-                return (jsonify({
+                if user.is_admin:
+                    return (jsonify({
                     'success': True,
                     'data': {
                         'username': user.username,
                         'email': user.email,
-                        'projectList': user.projectList,
+                        'projectList': get_project_ids(),
                         'hwSet1': user.hw_sets["hwSet1"],
                         'hwSet2': user.hw_sets["hwSet2"]
                     }
                 }), 200)
+                else: 
+                    return (jsonify({
+                        'success': True,
+                        'data': {
+                            'username': user.username,
+                            'email': user.email,
+                            'projectList': user.projectList,
+                            'hwSet1': user.hw_sets["hwSet1"],
+                            'hwSet2': user.hw_sets["hwSet2"]
+                        }
+                    }), 200)
             return (jsonify({
                 'success': False,
                 'message': 'User not found.'

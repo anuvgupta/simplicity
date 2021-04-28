@@ -73,7 +73,7 @@ class JoinProject extends React.Component {
                     color: "green"
                 })
                 setTimeout((_ => {
-                    this.redirectPage('project');
+                    this.redirectPage('projects');
                 }).bind(this), 550);
             }).catch(error => {
                 if (error) {

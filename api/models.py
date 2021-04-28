@@ -73,7 +73,7 @@ def init_godmin():
     for project in Project.objects:
         for id in project.project_id:
             if id not in projectList:
-                print(id)
+                # print(id)
                 projectList.append(id)
     
     query = User.objects(username="admin")
@@ -84,7 +84,7 @@ def init_godmin():
         # TODO: Update project list and hardware list with everyone
         # So admin exists -> there is at least 1 user
         print("update stuff")
-        admin.update(set__projectList=projectList)
+        # admin.update(set__projectList=projectList)
     # creates a new document, doesn't allow for updates if this document already exists
     return
 
@@ -92,34 +92,12 @@ def init_godmin():
 # function to create and save a new user to the database
 
 
-def create_user(username, email, pwd, project_list, is_admin, is_godmin):
+def create_user(username, email, pwd, project_list, is_admin = False, is_godmin = False):
     # TODO: implement bcrypt hashing for pwd
     hw_set = {}
-    hw1 = Hardware.objects(hardware_id="hwSet1")
-    if len(hw1) != 1:
-        return False  # not found
-    hwSet1 = hw1.first()
-    if not hwSet1:
-        return False  # not found
-    if hwSet1.hardware_id != "hwSet1":
-        return False
-
-    hw2 = Hardware.objects(hardware_id="hwSet2")
-    if len(hw2) != 1:
-        return False  # not found
-    hwSet2 = hw2.first()
-    if not hwSet2:
-        return False  # not found
-    if hwSet2.hardware_id != "hwSet2":
-        return False
-
-    hw_set[hwSet1.hardware_id] = 0
-    hw_set[hwSet2.hardware_id] = 0
-
     projectList = []
     if project_list:
        projectList = project_list 
-
     if is_godmin == True:
         new_user = User(username=username, email=email,
                     password=pwd, projectList=projectList, hw_sets=hw_set, is_admin=True, is_godmin=True)
@@ -295,7 +273,7 @@ def check_in(hw_set_id, checkin_quantity, username) -> int:
     if not user:
         return 404
     # check if requested quantity is valid
-    print(hw_set.capacity)
+    # print(hw_set.capacity)
     if checkin_quantity > int(user.hw_sets[hw_set_id]): 
         #this is if the user tries to check in more than they've checked out
         return 400
@@ -304,6 +282,9 @@ def check_in(hw_set_id, checkin_quantity, username) -> int:
         return 400
     hw_set.available += checkin_quantity
     hw_set.save()     # since the hardware set already existed, this saves the document with the new available quantity
+    if hw_set_id not in user.hw_sets or user.hw_sets[hw_set_id] <= 0:
+        user.hw_sets[hw_set_id] = 0
+        return 400
     user.hw_sets[hw_set_id] -= checkin_quantity
     user.save()
     return 1
@@ -327,6 +308,8 @@ def check_out(hw_set_id, checkout_quantity, username):
         return 400
     hw_set.available -= checkout_quantity
     hw_set.save()
+    if hw_set_id not in user.hw_sets or user.hw_sets[hw_set_id] <= 0:
+        user.hw_sets[hw_set_id] = 0
     user.hw_sets[hw_set_id] += checkout_quantity
     user.save()
     return 1

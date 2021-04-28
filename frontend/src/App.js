@@ -38,29 +38,29 @@ function App() {
           <Route path="/register">
             <RegisterPage></RegisterPage>
           </Route>
-          <Route path="/account">
+          <Route path="/home">
             <NavigationBar></NavigationBar>
             <SideBar active="overview"></SideBar>
             <Overview></Overview>
           </Route>
           <Route path="/createProject">
             <NavigationBar></NavigationBar>
-            <SideBar active="project"></SideBar>
+            <SideBar active="projects"></SideBar>
             <ProjectForm action="create"></ProjectForm>
           </Route>
           <Route path="/editProject/:id">
             <NavigationBar></NavigationBar>
-            <SideBar active="project"></SideBar>
+            <SideBar active="projects"></SideBar>
             <ProjectForm action="edit"></ProjectForm>
           </Route>
           <Route path="/joinProject">
             <NavigationBar></NavigationBar>
-            <SideBar active="project"></SideBar>
+            <SideBar active="projects"></SideBar>
             <JoinProject></JoinProject>
           </Route>
-          <Route path="/project">
+          <Route path="/projects">
             <NavigationBar></NavigationBar>
-            <SideBar active="project"></SideBar>
+            <SideBar active="projects"></SideBar>
             <Projects mainView="true" hideButtons="false"></Projects>
           </Route>
           <Route path="/checkHardware">

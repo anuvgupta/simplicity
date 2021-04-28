@@ -28,7 +28,7 @@ class HomePage extends React.Component {
     }
 
     redirectPage() {
-        this.props.history.push('/account');
+        this.props.history.push('/home');
     }
 
     render() {

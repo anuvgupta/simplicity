@@ -63,7 +63,7 @@ def register():
             access_token = create_access_token(identity=new_username)
             return (jsonify({
                 'success': True,
-                'data': {'token': access_token}
+                'data': {'token': access_token, 'username': new_username, 'first': True }
             }), 200)
 
 
@@ -84,8 +84,8 @@ def login():
             access_token = create_access_token(identity=username)
             return (jsonify({
                 'success': True,
-                'data': {'token': access_token, 'username': username}
-            }), 200)  # after the access token has been sent out, front end should redirect to '/account'
+                'data': {'token': access_token, 'username': username, 'first': False }
+            }), 200)  # after the access token has been sent out, front end should redirect to '/account' or '/home'
         elif verify_code == 404:
             return (jsonify({
                 'success': False,
@@ -143,8 +143,7 @@ def user():
                             'username': user.username,
                             'email': user.email,
                             'projectList': user.projectList,
-                            'hwSet1': user.hw_sets["hwSet1"],
-                            'hwSet2': user.hw_sets["hwSet2"]
+                            'hw_sets': user.hw_sets
                         }
                     }), 200)
             return (jsonify({

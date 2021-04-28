@@ -52,7 +52,7 @@ global.api = {
     login: (accessToken, redirect = true) => {
         global.util.delete_cookie('token');
         global.util.cookie('token', accessToken);
-        if (redirect) window.location = `${global.config.home_url}/account`;
+        if (redirect) window.location = `${global.config.home_url}/home`;
     },
     get_token: _ => {
         var cookie = global.util.cookie('token');

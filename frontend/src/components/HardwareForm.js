@@ -217,14 +217,17 @@ class HardwareForm extends React.Component {
 
     render() {
         return (
-            <div className="formCard">
+            <div className="formCard" style={{ padding: '60px 40px 40px 40px' }}>
                 <div className="formCenter">
+                    <div className="centerTitle" style={{ marginBottom: '15px' }}>
+                        <h1> Check In/Out Hardware </h1>
+                    </div>
                     <Form>
                         <Form.Group controlId="projectName">
                             <Form.Label style={{ marginTop: '1em' }}> Hardware Set </Form.Label>
                             <Form.Control as="select" onChange={this.updateSetName.bind(this)}>
-                                <option>hwSet1</option>
-                                <option>hwSet2</option>
+                                <option>Hardware Set 1</option>
+                                <option>Hardware Set 2</option>
                             </Form.Control>
                             <Form.Label style={{ marginTop: '1em' }}> Request Capacity </Form.Label>
                             <Form.Control type="name" placeholder="1 GB" onChange={this.updateQuantity.bind(this)} />
@@ -234,12 +237,13 @@ class HardwareForm extends React.Component {
                             <Form.Control as="textarea" rows={3} /> */}
                         </Form.Group>
                     </Form>
-                    <Button className="mt9px" onClick={this.checkHardware.bind(this, true)} >
-                        Check In
-                        </Button> {' '}
-                    <Button className="mt9px" onClick={this.checkHardware.bind(this, false)}>
+                    <Button style={{ marginRight: '3px' }} className="mt9px" onClick={this.checkHardware.bind(this, false)}>
                         Check Out
-                        </Button>
+                    </Button>
+                    {' '}
+                    <Button style={{ marginLeft: '3px' }} className="mt9px" onClick={this.checkHardware.bind(this, true)} >
+                        Check In
+                    </Button>
                     <div style={{ marginTop: '30px' }}>
                         <span className={this.state.color}>{this.state.msg}</span>
                     </div>

@@ -95,7 +95,7 @@ class Overview extends React.Component {
                             <div className="rightOverView">
                                 <div className="overviewCard">
                                     <h1 className="top" style={{ fontSize: '1.4em' }}> You have checked out </h1>
-                                    <h1 class="num"> {this.state.totalHW} GB </h1>
+                                    <h1 className="num"> {this.state.totalHW} GB </h1>
                                     <h1 className="bottom" style={{ fontSize: '1.9em' }}> of hardware </h1>
                                 </div>
                             </div>

@@ -85,8 +85,12 @@ class RegisterPage extends React.Component {
         }
     }
 
-    redirectPage() {
-        this.props.history.push('/account');
+    redirectPage(force = false) {
+        if (!force) {
+            this.props.history.push('/home');
+        } else {
+            window.location = String(`${window.location.origin}/home?first=true`);
+        }
     }
 
     requestSignUp(username, email, password) {
@@ -111,7 +115,7 @@ class RegisterPage extends React.Component {
                 });
             } else if (accessToken) {
                 global.api.login(accessToken, false);
-                this.redirectPage();
+                this.redirectPage(true);
             }
         };
         axios.post(`${global.config.api_url}/register`, {

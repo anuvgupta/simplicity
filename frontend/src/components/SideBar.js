@@ -63,8 +63,8 @@ export default class SideBar extends React.Component {
         return (
             <div>
                 <div className="sidenav">
-                    <NavLink to="/account" style={{ backgroundColor: (active == 'overview' ? this.state.activeBG : this.state.inactiveBG) }}><img className="profileImg"></img>Home </NavLink>
-                    <NavLink to="/project" style={{ backgroundColor: (active == 'project' ? this.state.activeBG : this.state.inactiveBG) }}> Projects </NavLink>
+                    <NavLink to="/home" style={{ backgroundColor: (active == 'overview' ? this.state.activeBG : this.state.inactiveBG) }}><img className="profileImg"></img>Home </NavLink>
+                    <NavLink to="/projects" style={{ backgroundColor: (active == 'projects' ? this.state.activeBG : this.state.inactiveBG) }}> Projects </NavLink>
                     <NavLink to="/hardware" style={{ backgroundColor: (active == 'hardware' ? this.state.activeBG : this.state.inactiveBG) }}> Hardware </NavLink>
                     <NavLink to="/datasets" style={{ backgroundColor: (active == 'datasets' ? this.state.activeBG : this.state.inactiveBG) }}> Datasets </NavLink>
                     <NavLink to="/admin" style={{ backgroundColor: (active == 'admin' ? this.state.activeBG : this.state.inactiveBG), display: (this.state.isVisible ? "auto" : "none") }}> Admin </NavLink>

@@ -65,13 +65,34 @@ class User(me.Document):
     projectList = me.ListField()
     # will map hardware-set names to the quantity checked out for this project
     hw_sets = me.DictField()
+    is_admin = me.BooleanField(required=True, default=False) # admins (second level, users created by godmin)
+    is_godmin = me.BooleanField(required=True, default=False) #Original admin (highest level, can create other admin)
 
+def init_godmin():
+    projectList = []
+    for project in Project.objects:
+        for id in project.project_id:
+            if id not in projectList:
+                print(id)
+                projectList.append(id)
+    
+    query = User.objects(username="admin")
+    admin = query.first()
+    if not admin:
+        create_user("admin", "admin@admin", "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08", projectList, True, True)
+    else:
+        # TODO: Update project list and hardware list with everyone
+        # So admin exists -> there is at least 1 user
+        print("update stuff")
+        admin.update(set__projectList=projectList)
+    # creates a new document, doesn't allow for updates if this document already exists
+    return
 
 """ USER-RELATED FUNCTIONS """
 # function to create and save a new user to the database
 
 
-def create_user(username, email, pwd):
+def create_user(username, email, pwd, project_list, is_admin, is_godmin):
     # TODO: implement bcrypt hashing for pwd
     hw_set = {}
     hw1 = Hardware.objects(hardware_id="hwSet1")
@@ -95,11 +116,27 @@ def create_user(username, email, pwd):
     hw_set[hwSet1.hardware_id] = 0
     hw_set[hwSet2.hardware_id] = 0
 
-    new_user = User(username=username, email=email,
-                    password=pwd, projectList=[], hw_sets=hw_set)
-    # creates a new document, doesn't allow for updates if this document already exists
-    new_user.save(force_insert=True)
-    return
+    projectList = []
+    if project_list:
+       projectList = project_list 
+
+    if is_godmin == True:
+        new_user = User(username=username, email=email,
+                    password=pwd, projectList=projectList, hw_sets=hw_set, is_admin=True, is_godmin=True)
+        new_user.save(force_insert=True)
+        return
+    else:
+        if is_admin == True:
+            new_user = User(username=username, email=email,
+                    password=pwd, projectList=projectList, hw_sets=hw_set, is_admin=is_admin)
+            new_user.save(force_insert=True)
+            return
+        else:
+            new_user = User(username=username, email=email,
+                        password=pwd, projectList=projectList, hw_sets=hw_set)
+            # creates a new document, doesn't allow for updates if this document already exists
+            new_user.save(force_insert=True)
+            return
 
 
 # check if the username already exists in the database
@@ -231,6 +268,14 @@ def does_project_id_exist(p_id) -> bool:
     if p_id != project.project_id:
         return False  # incorrect id
     return True
+
+def get_project_ids() -> []:
+    projectIds = []
+    query = Project.objects()
+    for project in query:
+        if project.project_id not in projectIds:
+            projectIds.append(project.project_id)
+    return projectIds
 
 
 """ HARDWARE SET RELATED FUNCTIONS """

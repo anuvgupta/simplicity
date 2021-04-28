@@ -33,7 +33,7 @@ jwt = JWTManager(app)
 CORS(app)
 
 from .routes import *
-from .models import init_hardware
+from .models import init_hardware, init_godmin
 
 init_hardware()
 init_godmin()

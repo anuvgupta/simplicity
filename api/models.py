@@ -225,6 +225,12 @@ def create_project(name, proj_id, desc, username=""):
             return
         user.projectList.append(proj_id)
         user.save()
+        #Add project to admin project list as well
+        query = User.objects(is_admin=True)
+        for admin in query:
+            proj_list = admin.projectList
+            proj_list.append(proj_id)
+            admin.update(set__projectList=proj_list)
     return
 
 

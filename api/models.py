@@ -56,7 +56,7 @@ class Project(me.Document):
         max_length=20, required=True, unique=True, validation=_not_empty)
     description = me.StringField(max_length=200)
     members = me.ListField()    # store members by username
-    hw_list = me.DictField()    # map hwset names to quantity checked out
+    hw_dict = me.DictField()    # map hwset names to quantity checked out
 
 
 class Bill(me.EmbeddedDocument):
@@ -232,7 +232,8 @@ def update_user(currName, currPwd, username, email, password, is_admin):
 # create a new project and save to database
 def create_project(name, proj_id, desc, username=""):
     new_project = Project(name=name, project_id=proj_id,
-                          description=desc, owner=username)
+                          description=desc, owner=username, 
+                          members=[], hw_dict={})
     new_project.save(force_insert=True)
     if username != "":
         query = User.objects(username__exact=username)
@@ -243,6 +244,10 @@ def create_project(name, proj_id, desc, username=""):
             return
         user.projectList.append(proj_id)
         user.save()
+        members_list = []
+        members_list.append(username)
+        new_project.members = members_list
+        new_project.save()
     return
 
 def delete_project_from_users(proj_id):
@@ -405,13 +410,13 @@ def project_check_in(hw_set_name, checkin_quantity, p_id):
     if not project:
         return 404
     # see if check in quantity is greater than capacity checked out to project
-    if checkin_quantity > int(project.hw_list[hw_set]):
+    if checkin_quantity > int(project.hw_dict[hw_set]):
         return 400
     if checkin_quantity > int(hw_set.capacity):
         return 400
     hw_set.available += checkin_quantity
     hw_set.save()
-    project.hw_list[hw_set] -= checkin_quantity
+    project.hw_dict[hw_set] -= checkin_quantity
     project.save()
     # TODO: generate bill for each project member
     return 1
@@ -459,11 +464,11 @@ def project_check_out(hw_set_name, checkout_quantity, p_id):
         return 400
     hw_set.available -= checkout_quantity
     hw_set.save()
-    if hw_set_name in project.hw_list.keys():
-        project.hw_list[hw_set_name] += checkout_quantity
+    if hw_set_name in project.hw_dict.keys():
+        project.hw_dict[hw_set_name] += checkout_quantity
         project.save()
     else:
-        project.hw_list[hw_set_name] = checkout_quantity
+        project.hw_dict[hw_set_name] = checkout_quantity
         project.save()
     return 1
     

@@ -37,3 +37,7 @@
         transform: rotate(360deg);
     }
 }
+
+.datasets .MuiButtonBase-root {
+    padding: 7px 15px;
+}

@@ -5,6 +5,7 @@
     display: flex;
     margin-bottom: 5vh;
 }
+
 .stack {
     flex-direction: column;
 }
@@ -41,7 +42,8 @@
     border-radius: 3px;
     padding: 30px;
 }
-.leftOverview .overviewCard {
+
+/* .leftOverview .overviewCard {
     margin-left: auto;
     margin-right: 35px;
 }
@@ -49,6 +51,10 @@
     margin-right: auto;
     margin-left: 35px;
 }
+.hwLeftOverview .overviewCard {
+    margin-left: auto;
+    margin-right: 35px;
+} */
 .formCenter {
     width: 75%;
     margin-left: auto;

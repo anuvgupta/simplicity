@@ -73,7 +73,7 @@ class JoinProject extends React.Component {
                     color: "green"
                 })
                 setTimeout((_ => {
-                    this.redirectPage('project');
+                    this.redirectPage('projects');
                 }).bind(this), 550);
             }).catch(error => {
                 if (error) {
@@ -89,6 +89,13 @@ class JoinProject extends React.Component {
             });
     }
 
+    keyUpListener(event) {
+        if (event && event.keyCode == 13) {
+            event.preventDefault();
+            this.addProject();
+        }
+    }
+
 
     render() {
         return (
@@ -98,14 +105,12 @@ class JoinProject extends React.Component {
                         <h1> Join Project</h1>
                     </div>
                     {/* An area where users can create new project, by providing project name, description, and projectID. */}
-                    <Form>
-                        <Form.Group controlId="projectName">
-                            <Form.Label>Project ID</Form.Label>
-                            <Form.Control onChange={this.updateProjectId.bind(this)} type="name" placeholder="1" />
-                        </Form.Group>
-                    </Form>
-                    <Button onClick={this.addProject.bind(this)}>
-                        Join
+                    <Form.Group controlId="projectName">
+                        <Form.Label style={{ marginTop: '18px' }}>Project ID</Form.Label>
+                        <Form.Control style={{ marginTop: '8px' }} onChange={this.updateProjectId.bind(this)} type="name" placeholder="1" onKeyUp={this.keyUpListener.bind(this)} />
+                    </Form.Group>
+                    <Button style={{ marginTop: '14px' }} onClick={this.addProject.bind(this)}>
+                        Join Project
                     </Button>
                     <div style={{ marginTop: '30px' }}>
                         <span className={this.state.color}>{this.state.msg}</span>

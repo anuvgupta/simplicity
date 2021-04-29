@@ -27,6 +27,7 @@ class ProjectForm extends React.Component {
             initialProjectDescription: "",
             errorMsg: "",
             token: "",
+            nextPage: "projects"
         };
     }
 
@@ -40,7 +41,7 @@ class ProjectForm extends React.Component {
 
     }
 
-    redirectPage(page = 'home') {
+    redirectPage(page = '') {
         this.props.history.push(`/${page}`);
     }
 
@@ -50,16 +51,21 @@ class ProjectForm extends React.Component {
         var project_id = '';
         if (this.props.match.params.hasOwnProperty('id'))
             project_id = this.props.match.params.id;
+        let query = new URLSearchParams(this.props.location.search);
+        var next = 'projects';
+        if (query.has('next'))
+            next = query.get('next').trim();
         this.setState({
             token: user.token,
             projectID: `${project_id}`,
-            initialProjectID: `${project_id}`
+            initialProjectID: `${project_id}`,
+            nextPage: next
         });
         if (this.props.action == 'edit') {
             axios.get(`${global.config.api_url}/projects?id=${project_id}`, {
                 headers: { Authorization: `Bearer ${user.token}` }
-            }).then(response => {
-                console.log(response);
+            }).then((response => {
+                // console.log(response);
                 var resp_data = null;
                 if (response && response.data)
                     resp_data = response.data;
@@ -72,7 +78,7 @@ class ProjectForm extends React.Component {
                         initialProjectDescription: resp_data.description,
                     });
                 } else console.log('Invalid response: ', resp_data);
-            }).catch(error => {
+            }).bind(this)).catch(error => {
                 if (error) {
                     var resp_data = null;
                     if (error.response && error.response.data)
@@ -125,7 +131,7 @@ class ProjectForm extends React.Component {
                     errorMsg: errorMessage
                 });
             } else {
-                this.redirectPage('project');
+                this.redirectPage(this.state.nextPage);
             }
         };
         axios.post(`${global.config.api_url}/${action}Project`, {
@@ -183,7 +189,7 @@ class ProjectForm extends React.Component {
                             <Form.Control type="text" placeholder="Test Project" defaultValue={create ? '' : this.state.initialProjectName} onChange={this.updateProjectName.bind(this)} style={{ marginBottom: '10px' }} />
                             <Form.Label style={{ marginTop: '0.5em' }}>Project Description</Form.Label>
                             <Form.Control type="text" as="textarea" rows={3} defaultValue={create ? '' : this.state.initialProjectDescription} placeholder="Lorem ipsum dolor sit amet..." onChange={this.updateProjectDescription.bind(this)} style={{ marginBottom: '10px' }} />
-                            <Button onClick={this.validateForm.bind(this, true)} style={{ marginTop: '20px' }}>{action_title}</Button>
+                            <Button onClick={this.validateForm.bind(this, true)} style={{ marginTop: '20px' }}> {action_title} Project </Button>
                         </Form.Group>
                         <span className="errorMessage" style={{ paddingTop: '15px' }}>{this.state.errorMsg}</span>
                     </Form>

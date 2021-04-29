@@ -57,8 +57,48 @@ def register():
             access_token = create_access_token(identity=new_username)
             return (jsonify({
                 'success': True,
-                'data': {'token': access_token}
+                'data': {'token': access_token, 'username': new_username, 'first': True }
             }), 200)
+
+@app.route('/api/new_user', methods=['POST'])
+@jwt_required()
+def new_user():
+    current_username = get_jwt_identity()
+    user = get_user_obj(current_username)
+    if user.is_admin:
+        try:
+            # if parsing fails, BadRequest exception is raised
+            register_json = request.get_json()
+        except BadRequest:
+            return (jsonify({
+                'success': False,
+                'message': 'Invalid request input data.'
+            }), 400)
+        else:
+            new_username = register_json.get('username')
+            new_email = register_json.get('email')
+            new_password = register_json.get('password')
+            new_is_admin = register_json.get('is_admin')
+            if does_user_name_exist(new_username):
+                return (jsonify({
+                    'success': False,
+                    'message': 'Username already exists. Please choose a different one.'
+                }), 409)
+            elif does_user_email_exist(new_email):
+                return (jsonify({
+                    'success': False,
+                    'message': 'Email already exists. Please choose a different one.'
+                }), 409)
+            else:
+                if not user.is_godmin:
+                    print("User wasn't god user")
+                    new_is_admin = False
+                create_user(new_username, new_email, new_password, [], new_is_admin, False)
+                # access_token = create_access_token(identity=new_username)
+                return (jsonify({
+                    'success': True,
+                    'data': {'username': new_username, 'first': True , 'is_admin': new_is_admin}
+                }), 200)
 
 
 @app.route('/api/login', methods=['POST'])
@@ -78,8 +118,8 @@ def login():
             access_token = create_access_token(identity=username)
             return (jsonify({
                 'success': True,
-                'data': {'token': access_token, 'username': username}
-            }), 200)  # after the access token has been sent out, front end should redirect to '/account'
+                'data': {'token': access_token, 'username': username, 'first': False }
+            }), 200)  # after the access token has been sent out, front end should redirect to '/account' or '/home'
         elif verify_code == 404:
             return (jsonify({
                 'success': False,
@@ -120,14 +160,20 @@ def user():
         if current_username and username == current_username:
             user = get_user_obj(username)
             if user:
+                proj_list = user.projectList
+                if user.is_admin:
+                    proj_list = get_project_ids()
+                print(proj_list)
                 return (jsonify({
                     'success': True,
                     'data': {
                         'username': user.username,
                         'email': user.email,
-                        'projectList': user.projectList,
-                        'hwSet1': user.hw_sets["hwSet1"],
-                        'hwSet2': user.hw_sets["hwSet2"]
+                        'projectList': proj_list,
+                        'hw_sets': user.hw_sets,
+                        'is_admin': user.is_admin,
+                        'is_godmin': user.is_godmin,
+                        'navColor':  user.navColor
                     }
                 }), 200)
             return (jsonify({
@@ -143,18 +189,122 @@ def user():
         'message': 'Invalid request input data.'
     }), 400)
 
+@app.route('/api/getNumUsers', methods=['POST'])
+@jwt_required()
+def getNumUsers():
+    current_username = get_jwt_identity()
+    if not current_username:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid token.'
+        }), 401)
+
+    query = User.objects()
+
+    if not query:
+        return (jsonify({
+            'success': False,
+            'message': 'Users not found.'
+        }), 404)
+    else: 
+        print(query.count())
+        return (jsonify({
+            'success': True,
+            'data': query.count()
+        }), 200)
+    return (jsonify({
+        'success': False,
+        'message': 'Unknown error.'
+    }), 500)
+
+@app.route('/api/setUserTheme', methods=['POST'])
+@jwt_required()
+def setUserTheme():
+    current_username = get_jwt_identity()
+    if not current_username:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid token.'
+        }), 401)
+    user = get_user_obj(current_username)
+    if not user:
+        return (jsonify({
+            'success': False,
+            'message': 'Users not found.'
+        }), 404)
+    try:
+        color_json = request.get_json()
+    except BadRequest:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid request input data.'
+        }), 400)
+    else: 
+        print(color_json.get("color"))
+        set_user_theme(current_username, color_json.get("color"))
+        return (jsonify({
+            'success': True,
+            'data': color_json.get("color")
+        }), 200)
+    return (jsonify({
+        'success': False,
+        'message': 'Unknown error.'
+    }), 500)
+
+@app.route('/api/update_user', methods=['POST'])
+@jwt_required()
+def updateUser():
+    current_username = get_jwt_identity()
+    if not current_username:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid token.'
+        }), 401)
+    try:
+        new_user_json = request.get_json()
+    except BadRequest:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid request input data.'
+        }), 400)
+    else: 
+        new_username = new_user_json.get("username")
+        new_email = new_user_json.get("email")
+        new_password = new_user_json.get("password")
+        isAdmin = new_user_json.get("is_admin")
+        update_user(current_username, new_username, new_email, new_password, isAdmin)
+        return (jsonify({
+            'success': True,
+            'data': 'User sucessfully updated'
+        }), 200)
+    return (jsonify({
+        'success': False,
+        'message': 'Unknown error.'
+    }), 500)
 
 @ app.route('/api/projects', methods=['GET'])
 @jwt_required()
 def project():
+    current_username = get_jwt_identity()
     projectId = request.args.get('id')
+    deleteProject = request.args.get('delete')
     if projectId:
-        print(projectId)
-        project = get_project_json(projectId)
-        # user.projectList
-        # print(user['username'])
-        print(project)
-        return (project, 200)
+        if deleteProject and deleteProject == 'true':
+            result = delete_project(projectId, current_username)
+            success = result[0]
+            message = result[1]
+            return (jsonify({
+                'success': success,
+                'message': 'Project deleted.' if success else ('Failed to delete project. ' + message)
+            }), 200)
+            # return (True, 200)
+        else:
+            # print(projectId)
+            project = get_project_json(projectId)
+            # user.projectList
+            # print(user['username'])
+            # print(project)
+            return (project, 200)
     return (jsonify({
         'success': False,
         'message': 'Username not provided.'
@@ -304,13 +454,12 @@ def editProject():
 @jwt_required()
 def checkHardware():
     current_username = get_jwt_identity()
-    print("here?")
     if not current_username:
         return (jsonify({
             'success': False,
             'message': 'Invalid token.'
         }), 401)
-    print("here?")
+
     hardware_dict = dict()
     query_hardware = Hardware.objects()
 
@@ -321,7 +470,13 @@ def checkHardware():
         }), 404)
     else: 
         for hw in query_hardware:
-            hardware_dict[hw.name] = hw.available
+            hardware_dict[hw.hardware_id] = {
+                'hardware_id': hw.hardware_id,
+                'available': hw.available,
+                'name': hw.name,
+                'capacity': hw.capacity
+            }
+        print(hardware_dict)
         return (jsonify({
             'success': True,
             'data': hardware_dict
@@ -331,13 +486,55 @@ def checkHardware():
         'message': 'Unknown error.'
     }), 500)
 
+@app.route('/api/createHW', methods=['POST'])
+@jwt_required()
+def createHW():
+    current_username = get_jwt_identity()
+    if not current_username:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid token.'
+        }), 401)
+    try:
+        hw_set_json = request.get_json()
+    except BadRequest:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid request input data.'
+        }), 400)
+    else:
+        hw_set_id = hw_set_json.get('id')
+        hw_set_name = hw_set_json.get('name')
+        hw_set_capacity = hw_set_json.get('capacity')
+        if does_hw_set_exist(hw_set_id):
+            return (jsonify({
+                'success': False,
+                'message': 'Hardware Set already exists.'
+            }), 409)
+        else:
+            create_hw_set(hw_set_id, hw_set_name, hw_set_capacity)
+            return (jsonify({
+                'success': True,
+                'data': {
+                    'name': hw_set_name,
+                    'id': hw_set_id
+                }
+            }), 200)
+    return (jsonify({
+        'success': False,
+        'message': 'Unknown error.'
+    }), 500)
 
 @app.route('/api/checkInHardware', methods=['POST'])
 @jwt_required()
 def checkInHardware():
     hw_response_400 = lambda : jsonify({
         'success': False,
-        'message': 'Checking in more than capacity'
+        'message': 'Bad request.'
+    })
+    hw_response_400_alt = lambda : jsonify({
+        'success': False,
+        'message': 'Invalid check-in quantity.'
     })
     hw_response_404 = lambda : jsonify({
         'success': False,
@@ -358,9 +555,15 @@ def checkInHardware():
     except BadRequest:
         return (hw_response_400(), 400)
     else:
-        hardware_name = hardware_json.get('name')
-        checkin_quantity = int(hardware_json.get('quantity'))
-        if not does_hw_set_exist(hardware_name):
+        hardware_id = hardware_json.get('id')
+        checkin_quantity = hardware_json.get('quantity')
+        if checkin_quantity:
+            checkin_quantity = int(checkin_quantity)
+            if checkin_quantity <= 0:
+                return (hw_response_400_alt(), 400)
+        else:
+            return (hw_response_400_alt(), 400)
+        if not does_hw_set_exist(hardware_id):
             return (hw_response_404(), 404)
         # check in from project
         if hardware_json.get('project_id') != 'n/a':
@@ -370,12 +573,15 @@ def checkInHardware():
                     'success': False,
                     'message': 'Project does not exist.'
                 }), 404)
-            ret_val = project_check_in(hardware_name, checkin_quantity, project_id)
+            ret_val = project_check_in(hardware_id, checkin_quantity, project_id)
         # check in from user
         elif hardware_json.get('project_id') == 'n/a':
-            ret_val = user_check_in(hardware_name, checkin_quantity, current_username)
+            ret_val = user_check_in(hardware_id, checkin_quantity, current_username)
         if ret_val == 400:
-            return (hw_response_400(), 400)
+            return (jsonify({
+                'success': False,
+                'message': 'Checking in more than you have.'
+            }), 400)
         elif ret_val == 404:
             return (hw_response_404(), 404)
         elif ret_val == 500:
@@ -392,7 +598,11 @@ def checkInHardware():
 def checkOutHardware():
     hw_response_400 = lambda : jsonify({
         'success': False,
-        'message': 'Checking out more than possible '
+        'message': 'Bad request.'
+    })
+    hw_response_400_alt = lambda : jsonify({
+        'success': False,
+        'message': 'Invalid check-out quantity.'
     })
     hw_response_404 = lambda : jsonify({
         'success': False,
@@ -413,9 +623,15 @@ def checkOutHardware():
     except BadRequest:
         return (hw_response_400(), 400)
     else:
-        hardware_name = hardware_json.get('name')
-        checkout_quantity = int(hardware_json.get('quantity'))
-        if not does_hw_set_exist(hardware_name):
+        hardware_id = hardware_json.get('id')
+        checkout_quantity = hardware_json.get('quantity')
+        if checkout_quantity:
+            checkout_quantity = int(checkout_quantity)
+            if checkout_quantity <= 0:
+                return (hw_response_400_alt(), 400)
+        else:
+            return (hw_response_400_alt(), 400)
+        if not does_hw_set_exist(hardware_id):
             return (hw_response_404(), 404)
         # checkout to project
         if hardware_json.get('project_id') != 'n/a':        
@@ -428,9 +644,12 @@ def checkOutHardware():
             ret_val = project_check_out(hardware_name, checkout_quantity, project_id)
         # checkout to user
         elif hardware_json.get('project_id') == 'n/a':        # TODO: find out what is gonna get sent when checkout is personal
-            ret_val = user_check_out(hardware_name, checkout_quantity, current_username)
+            ret_val = user_check_out(hardware_id, checkout_quantity, current_username)
         if ret_val == 400:
-            return (hw_response_400(), 400)
+            return (jsonify({
+                'success': False,
+                'message': 'Checking out more than available.'
+            }), 400)
         elif ret_val == 404:
             return (hw_response_404(), 404)
         elif ret_val == 500:

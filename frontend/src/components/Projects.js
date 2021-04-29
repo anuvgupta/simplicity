@@ -1,29 +1,161 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Form, Container, CardDeck, Card } from 'react-bootstrap';
-import axios from 'axios'
+import { Form, Container, CardDeck, Card } from 'react-bootstrap';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import axios from 'axios';
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
-import '../styles/project.css'
+import '../styles/project.css';
 
 
-const MyCard = ({ name, id, desc, hideButtons }) => (
-    <Card>
-        <Card.Body>
-            <Card.Title>{name}</Card.Title>
-            <Card.Text>
-                {desc}
-            </Card.Text>
-            <Button href={"/editProject/" + id} style={{ display: (hideButtons === 'true' ? 'none' : 'inline-block') }}>
-                Edit Project
-            </Button>
-        </Card.Body>
-        <Card.Footer>
-            <small className="text-muted">{id}</small>
-        </Card.Footer>
-    </Card>
-);
 
+class ProjectCard extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            name: this.props.name,
+            id: this.props.id,
+            desc: this.props.desc,
+            token: this.props.token,
+            hideButtons: this.props.hideButtons === 'true',
+            menuFade: 0.12,
+            menuShowing: false,
+            triggerDisplay: 'none',
+            triggerOpacity: '0'
+        };
+    }
+
+
+    componentDidMount() {
+
+    }
+    componentWillUnmount() {
+
+    }
+
+    menuShow() {
+        if (!this.state.menuShowing && !this.state.hideButtons) {
+            this.setState({ triggerDisplay: 'block' });
+            setTimeout((_ => {
+                this.setState({ triggerOpacity: '1' });
+                setTimeout((_ => {
+                    this.setState({ menuShowing: true });
+                }).bind(this), this.state.menuFade * 1000)
+            }).bind(this), 10);
+        }
+    }
+    menuHide() {
+        if (this.state.menuShowing && !this.state.hideButtons) {
+            this.setState({ triggerOpacity: '0' });
+            setTimeout((_ => {
+                this.setState({ triggerDisplay: 'none' });
+                setTimeout((_ => {
+                    this.setState({ menuShowing: false });
+                }).bind(this), 10)
+            }).bind(this), this.state.menuFade * 1000);
+        }
+    }
+    menuClick() {
+        if (!this.state.hideButtons) {
+            if (this.state.menuShowing) {
+                this.menuHide();
+            } else {
+                this.menuShow();
+            }
+        }
+    }
+
+    deleteClick() {
+        if (!this.state.hideButtons) {
+            // console.log(`delete ${this.state.id}`);
+            var confirmation = window.confirm(`Delete project "${this.state.id}"?`);
+            if (!confirmation) return;
+            axios.get(`${global.config.api_url}/projects?id=${this.state.id}&delete=true`, {
+                headers: { Authorization: `Bearer ${this.state.token}` }
+            }).then((response => {
+                var resp_data = null;
+                if (response && response.data)
+                    resp_data = response.data;
+                if (resp_data && resp_data.success && resp_data.success === true) {
+                    if (resp_data.message) console.log(resp_data.message);
+                    window.location.reload();
+                } else {
+                    console.log(resp_data);
+                }
+            }).bind(this)).catch(error => {
+                if (error) {
+                    var resp_data = null;
+                    if (error.response && error.response.data)
+                        resp_data = error.response.data;
+                    console.log(error);
+                }
+            });
+        }
+    }
+
+    editClick() {
+        if (!this.state.hideButtons) {
+            window.location = String(window.location.origin + "/editProject/" + this.state.id);
+        }
+    }
+
+    render() {
+        return (<Card>
+            <Card.Body style={{ position: 'relative' }}>
+                <Card.Title>{this.state.name}</Card.Title>
+                <Card.Text>
+                    {this.state.desc}
+                </Card.Text>
+                <Button href={"/project/" + this.state.id} style={{ display: (this.state.hideButtons ? 'none' : 'inline-block'), color: 'black' }} variant="outlined" color="default">
+                    Manage
+                </Button>
+                <div style={{
+                    position: 'absolute',
+                    top: '5px',
+                    right: '4px',
+                    width: '37px',
+                    height: '37px',
+                    display: (this.state.hideButtons ? 'none' : 'inline-block'),
+                    zIndex: '9'
+                }}>
+                    <IconButton style={{ width: '36px', height: '36px' }} onClick={this.menuClick.bind(this)}>
+                        <MoreVertIcon style={{ width: '24px', height: '24px' }}></MoreVertIcon>
+                    </IconButton>
+                </div>
+                <div style={{
+                    position: 'absolute',
+                    top: '-1px',
+                    right: '-71px',
+                    display: `${this.state.triggerDisplay}`,
+                    width: '70px',
+                    height: 'auto',
+                    minHeight: '30px',
+                    border: '1px solid #ececec',
+                    borderRadius: '2px',
+                    transition: `opacity ${this.state.menuFade}s ease`,
+                    opacity: `${this.state.triggerOpacity}`,
+                    zIndex: '10',
+                    backgroundColor: 'white',
+                    boxShadow: '0.5px 1px 3px 2px rgba(0,0,0,0.035)',
+                    WebkitBoxShadow: '0.5px 1px 3px 2px rgba(0,0,0,0.035)'
+                }}>
+                    <div className="projectCardMenuItem" onClick={this.editClick.bind(this)}>
+                        Edit
+                    </div>
+                    <div className="projectCardMenuItem" onClick={this.deleteClick.bind(this)}>
+                        Delete
+                    </div>
+                </div>
+            </Card.Body>
+            <Card.Footer>
+                <small className="text-muted">{this.state.id}</small>
+            </Card.Footer>
+        </Card>);
+    }
+}
 class Projects extends React.Component {
 
     static propTypes = {
@@ -129,10 +261,11 @@ class Projects extends React.Component {
                             {
                                 this.state.projectList.length > 0 ?
                                     this.state.projectsArr.map((info, i) => (
-                                        // need to avtually parse here
-                                        <MyCard name={info.projectName}
+                                        // need to actually parse here
+                                        <ProjectCard name={info.projectName}
                                             desc={info.description}
                                             id={info.id} key={i}
+                                            token={this.state.userToken}
                                             hideButtons={this.props.hideButtons} />
                                     ))
                                     : <div style={{ textAlign: 'center', width: '100%', marginTop: '10px' }}><h3 style={{ opacity: '0.8' }}> No projects found. </h3></div>
@@ -144,10 +277,11 @@ class Projects extends React.Component {
                             </Card> */}
                         </CardDeck>
                         <div style={{ height: '22px' }}></div>
-                        <Button className="mt9px" onClick={this.redirectPage.bind(this, 'createProject')} style={{ display: (this.props.hideButtons === 'true' ? 'none' : 'inline-block') }}>
+                        <Button variant="outlined" color="default" className="mt9px" onClick={this.redirectPage.bind(this, 'createProject')} style={{ display: (this.props.hideButtons === 'true' ? 'none' : 'inline-block') }}>
                             New Project
-                        </Button> {' '}
-                        <Button className="mt9px" onClick={this.redirectPage.bind(this, 'joinProject')} style={{ display: (this.props.hideButtons === 'true' ? 'none' : 'inline-block') }}>
+                        </Button>
+                        {' '}
+                        <Button variant="outlined" color="default" className="mt9px" onClick={this.redirectPage.bind(this, 'joinProject')} style={{ display: (this.props.hideButtons === 'true' ? 'none' : 'inline-block') }}>
                             Join Project
                         </Button>
                     </Container>

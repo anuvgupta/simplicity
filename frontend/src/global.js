@@ -52,7 +52,7 @@ global.api = {
     login: (accessToken, redirect = true) => {
         global.util.delete_cookie('token');
         global.util.cookie('token', accessToken);
-        if (redirect) window.location = `${global.config.home_url}/account`;
+        if (redirect) window.location = `${global.config.home_url}/home`;
     },
     get_token: _ => {
         var cookie = global.util.cookie('token');
@@ -115,4 +115,32 @@ global.util = {
         // return hashPassword;
         return global.util.sha256(value);
     },
+    resizeQueries: [],
+    resizeQueriesInit: false,
+    resizeQueryInterval: 15,
+    resizeQueryLastCalled: 0,
+    resizeQueryListener: _ => {
+        var now = Date.now();
+        var diff = now - global.util.resizeQueryLastCalled;
+        if (diff > global.util.resizeQueryInterval) {
+            global.util.resizeQuery();
+        }
+    },
+    resizeQuery: (callback = null) => {
+        if (!global.util.resizeQueriesInit) {
+            global.util.resizeQueriesInit = true;
+            window.addEventListener('resize', global.util.resizeQueryListener);
+        }
+        if (callback) {
+            global.util.resizeQueries.push(callback);
+        } else {
+            for (var i in global.util.resizeQueries)
+                global.util.resizeQueries[i]();
+        }
+    },
+    resizeSchedule: (ms_delay) => {
+        setTimeout(_ => {
+            global.util.resizeQuery();
+        }, ms_delay);
+    }
 };

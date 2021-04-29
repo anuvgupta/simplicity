@@ -10,8 +10,6 @@ import Project from "../components/Projects";
 import Hardware from "../components/Hardware";
 import "../styles/overview.css";
 
-
-
 class Overview extends React.Component {
 
     static propTypes = {
@@ -24,11 +22,13 @@ class Overview extends React.Component {
         this.state = {
             username: "",
             projectList: [],
-            totalHW: "",
+            totalHW: "0",
+            first: false
         };
     }
 
     componentDidMount() {
+        this.parseURL();
         global.api.authenticated((user => {
             if (user === false) this.redirectPage();
             else this.setupPage(user);
@@ -38,8 +38,15 @@ class Overview extends React.Component {
 
     }
 
+    parseURL() {
+        let query = new URLSearchParams(this.props.location.search);
+        if (query.has('first') && query.get('first') === 'true') {
+            this.setState({ first: true });
+        }
+    }
+
     redirectPage() {
-        this.props.history.push('/home');
+        this.props.history.push('/');
     }
 
     setupPage(user) {
@@ -53,7 +60,10 @@ class Overview extends React.Component {
                 resp_data = response.data;
             // console.log('resp_data', resp_data);
             if (resp_data && resp_data.success && resp_data.success === true && resp_data.data && resp_data.data.username && resp_data.data.projectList) {
-                var totalCheckedout = resp_data.data.hwSet1 + resp_data.data.hwSet2
+                var totalCheckedout = 0;
+                for (var s in resp_data.data.hw_sets) {
+                    totalCheckedout += resp_data.data.hw_sets[s];
+                }
                 this.setState({
                     username: resp_data.data.username,
                     projectList: resp_data.data.projectList,
@@ -70,19 +80,13 @@ class Overview extends React.Component {
         });
     }
 
-    updateUsername(event) {
-        this.setState({
-            username: event.target.value
-        });
-    }
-
     render() {
         return (
             <div>
                 <div className="center overviewMain">
                     <div className="rightSideAlt">
                         <div className="centerTitle">
-                            <h1 style={{ fontSize: '3em', marginBottom: "3.5vh" }}> Welcome back @{this.state.username}</h1>
+                            <h1 style={{ fontSize: '3em', marginBottom: "3.5vh" }}> Welcome{(this.state.first === false ? ' back' : '')} @{this.state.username}</h1>
                         </div>
                         <div className="topPanel">
                             <div className="leftOverview">
@@ -95,7 +99,7 @@ class Overview extends React.Component {
                             <div className="rightOverView">
                                 <div className="overviewCard">
                                     <h1 className="top" style={{ fontSize: '1.4em' }}> You have checked out </h1>
-                                    <h1 class="num"> {this.state.totalHW} GB </h1>
+                                    <h1 className="num"> {this.state.totalHW} GB </h1>
                                     <h1 className="bottom" style={{ fontSize: '1.9em' }}> of hardware </h1>
                                 </div>
                             </div>

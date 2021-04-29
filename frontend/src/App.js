@@ -22,10 +22,13 @@ import HardwareForm from './components/HardwareForm';
 import Hardware from './components/Hardware';
 import HomePage from "./components/HomePage";
 import Projects from './components/Projects';
+import Project from './components/Project';
 import Datasets from "./components/Datasets";
 import Overview from "./components/Overview";
 import NavigationBar from "./components/NavBar";
 import JoinProject from './components/JoinProject.js';
+import SettingsPage from './components/SettingsPage.js';
+import Admin from './components/Admin.js';
 
 function App() {
   return (
@@ -38,29 +41,39 @@ function App() {
           <Route path="/register">
             <RegisterPage></RegisterPage>
           </Route>
-          <Route path="/account">
+          <Route path="/home">
             <NavigationBar></NavigationBar>
             <SideBar active="overview"></SideBar>
             <Overview></Overview>
           </Route>
+          <Route path="/admin">
+            <NavigationBar></NavigationBar>
+            <SideBar active="admin"></SideBar>
+            <Admin mainView="false"></Admin>
+          </Route>
           <Route path="/createProject">
             <NavigationBar></NavigationBar>
-            <SideBar active="project"></SideBar>
+            <SideBar active="projects"></SideBar>
             <ProjectForm action="create"></ProjectForm>
           </Route>
           <Route path="/editProject/:id">
             <NavigationBar></NavigationBar>
-            <SideBar active="project"></SideBar>
+            <SideBar active="projects"></SideBar>
             <ProjectForm action="edit"></ProjectForm>
           </Route>
           <Route path="/joinProject">
             <NavigationBar></NavigationBar>
-            <SideBar active="project"></SideBar>
+            <SideBar active="projects"></SideBar>
             <JoinProject></JoinProject>
           </Route>
-          <Route path="/project">
+          <Route path="/project/:id">
             <NavigationBar></NavigationBar>
-            <SideBar active="project"></SideBar>
+            <SideBar active="projects"></SideBar>
+            <Project></Project>
+          </Route>
+          <Route path="/projects">
+            <NavigationBar></NavigationBar>
+            <SideBar active="projects"></SideBar>
             <Projects mainView="true" hideButtons="false"></Projects>
           </Route>
           <Route path="/checkHardware">
@@ -71,7 +84,7 @@ function App() {
             <NavigationBar></NavigationBar>
             <SideBar active="hardware"></SideBar>
             <Hardware mainView="true" ></Hardware>
-            <div className="rightSide" style={{ marginBottom: '45px' }}>
+            <div className="rightSide" style={{ marginBottom: '60px', marginTop: '55px' }}>
               <HardwareForm></HardwareForm>
             </div>
           </Route>
@@ -79,6 +92,11 @@ function App() {
             <NavigationBar></NavigationBar>
             <SideBar active="datasets"></SideBar>
             <Datasets></Datasets>
+          </Route>
+          <Route path="/settings">
+            <NavigationBar></NavigationBar>
+            <SideBar active="settings"></SideBar>
+            <SettingsPage></SettingsPage>
           </Route>
           <Route path="/">
             <HomePage></HomePage>

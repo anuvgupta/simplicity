@@ -74,7 +74,7 @@ class LoginPage extends React.Component {
     }
 
     redirectPage() {
-        this.props.history.push('/account');
+        this.props.history.push('/home');
     }
 
     requestSignIn(username, password) {

@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import Project from "../components/Projects";
 import Hardware from "../components/Hardware";
-import "../styles/overview.css";
+import "../styles/admin.css";
 
 
 
@@ -22,11 +22,54 @@ class Admin extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            token: "",
             username: "",
+            password: "",
+            email: "",
+            is_admin: false,
+            is_godmin: false,
             projectList: [],
-            totalHW: "0",
+            respMsg: "",
+            color: ""
         };
     }
+    updateUsername(event) {
+        this.setState({
+            username: event.target.value
+        });
+    }
+
+    updateEmail(event) {
+        this.setState({
+            email: event.target.value
+        });
+    }
+
+    updatePassword(event) {
+        this.setState({
+            password: event.target.value
+        });
+    }
+
+    updateAdmin(event) {
+        console.log(event.target.checked);
+        this.setState({
+            is_admin: event.target.checked
+        });
+    }
+
+    updateResponseMsg(value) {
+        this.setState({
+            respMsg: value
+        });
+    }
+
+    checkEnter(event) {
+        if (event && event.keyCode == 13) {
+            this.validateForm(true);
+        }
+    }
+
 
     componentDidMount() {
         global.api.authenticated((user => {
@@ -43,8 +86,7 @@ class Admin extends React.Component {
     }
 
     setupPage(user) {
-        console.log('Overview: loading user ' + user.username);
-        // console.log("list is " + user.email);
+        console.log(user);
         axios.get(`${global.config.api_url}/user?username=${user.username}`, {
             headers: { Authorization: `Bearer ${user.token}` }
         }).then(response => {
@@ -52,13 +94,12 @@ class Admin extends React.Component {
             if (response && response.data)
                 resp_data = response.data;
             // console.log('resp_data', resp_data);
-            if (resp_data && resp_data.success && resp_data.success === true && resp_data.data && resp_data.data.username && resp_data.data.projectList) {
-
-                // this.setState({
-                //     username: resp_data.data.username,
-                //     projectList: resp_data.data.projectList,
-                //     totalHW: totalCheckedout
-                // });
+            if (resp_data && resp_data.success && resp_data.success === true && resp_data.data && resp_data.data.is_godmin) {
+                console.log(resp_data);
+                this.setState({
+                    is_godmin: resp_data.data.is_godmin,
+                    token: user.token
+                });
             } else console.log('Invalid response: ', resp_data);
         }).catch(error => {
             if (error) {
@@ -69,11 +110,79 @@ class Admin extends React.Component {
             }
         });
     }
+    validateForm(sendRequest = false) {
+        var username = this.state.username;
+        var password = this.state.password;
+        var email = this.state.email;
+        var is_admin = this.state.is_admin;
+        var is_godmin = this.state.is_godmin;
+        if (username && username.trim().length > 0) {
+            if (password && password.trim().length > 0) {
+                if (global.util.validateAlphanumeric(username)) {
+                    password = global.util.hashPassword(password);
+                    if (sendRequest) this.createNewUser(username, email, password, is_admin, is_godmin);
+                } else this.updateResponseMsg('Invalid username (letters and numbers only).');
+            } else this.updateResponseMsg('Empty password.');
+        } else this.updateResponseMsg('Empty username.');
+    }
+    // create_user(username, email, pwd, project_list, is_admin = False, is_godmin = False):
+    createNewUser(username, email, password, is_admin, is_godmin) {
+        var handleResponse = response => {
+            var rMsg = "";
+            var color = "";
+            if (response && response.hasOwnProperty('success')) {
+                if (response.success === true) {
+                    rMsg = "User created successfully";
+                    color = "successMessage";
+                    // console.log("we need to put a success message here")
+                } else {
+                    if (response.hasOwnProperty('message') && typeof response.message === 'string') {
+                        rMsg = response.message;
+                        color = "red";
+                    }
+                }
+            }
+            if (color == "successMessage") {
+                this.setState({
+                    respMsg: rMsg,
+                    color: "successMessage"
+                });
+            } else {
+                // this.redirectPage('admin');
+                this.setState({
+                    respMsg: "Something went wrong",
+                    color: "errorMessage"
+                });
+                console.log("hit this");
+            }
+        };
+        axios.post(`${global.config.api_url}/new_user`, {
+            username: `${username}`,
+            email: `${email}`,
+            password: `${password}`,
+            is_admin: is_admin,
+            is_godmin: is_godmin
+        }, {
+            headers: { Authorization: `Bearer ${this.state.token}` }
+        }).then(response => {
+            var resp_data = null;
+            if (response && response.data)
+                resp_data = response.data;
+            handleResponse(resp_data);
+        }).catch(error => {
+            if (error) {
+                var resp_data = null;
+                if (error.response && error.response.data)
+                    resp_data = error.response.data;
+                handleResponse(resp_data);
+            }
+        });
+    }
+
+
     /* TODO: Create User form, create hardware set form  */
     render() {
-        const action = this.props.action;
-        // const action_title = (`${action[0]}`).toUpperCase() + (`${action.substring(1)}`);
-        const create = action == 'create';
+        const color = this.state.color;
         return (
             <div>
                 <div className="center overviewMain">
@@ -109,23 +218,24 @@ class Admin extends React.Component {
                                 <Form.Group controlId="adminUserFrom">
                                     <Form.Group>
                                         <Form.Label style={{ marginTop: '0.5em' }}>Username</Form.Label>
-                                        <Form.Control type="text" placeholder="username" style={{ marginBottom: '10px' }} />
+                                        <Form.Control type="text" placeholder="username" style={{ marginBottom: '10px' }} onChange={this.updateUsername.bind(this)} onKeyUp={this.checkEnter.bind(this)} />
                                     </Form.Group>
                                     <Form.Group>
                                         <Form.Label style={{ marginTop: '0.5em' }}>Email</Form.Label>
-                                        <Form.Control type="text" placeholder="test@example.com" style={{ marginBottom: '10px' }} />
+                                        <Form.Control type="text" placeholder="test@example.com" style={{ marginBottom: '10px' }} onChange={this.updateEmail.bind(this)} onKeyUp={this.checkEnter.bind(this)} />
                                     </Form.Group>
                                     <Form.Group>
                                         <Form.Label style={{ marginTop: '0.5em' }}>Password</Form.Label>
-                                        <Form.Control type="text" placeholder="password" style={{ marginBottom: '10px' }} />
-                                    </Form.Group>                                    
+                                        <Form.Control type="text" placeholder="password" style={{ marginBottom: '10px' }} onChange={this.updatePassword.bind(this)} onKeyUp={this.checkEnter.bind(this)} />
+                                    </Form.Group>
                                     <Form.Group>
                                         {/* <Form.Label style={{ marginTop: '0.5em' }}>Permissions </Form.Label> */}
-                                        <Form.Check type="checkbox" label="Is user admin?" />
+                                        <Form.Check type="checkbox" label="Is user admin?" disabled={!this.state.is_godmin} onChange={this.updateAdmin.bind(this)} onKeyUp={this.checkEnter.bind(this)} />
                                     </Form.Group>
-                                    <Button style={{ marginTop: '20px' }}> Create user </Button>
+                                    <Button style={{ marginTop: '20px' }} onClick={this.validateForm.bind(this,true)}> Create user </Button>
                                 </Form.Group>
-                                <span className="errorMessage" style={{ paddingTop: '15px' }}>{this.state.errorMsg}</span>
+                                <span className="errorMessage" style={{ paddingTop: '15px' }}>{this.state.respMsg}</span>
+                                {/* <span className="successMessage" style={{ paddingTop: '15px' }}>{this.state.successMsg}</span> */}
                             </Form>
                         </div>
                     </div>
@@ -152,11 +262,11 @@ class Admin extends React.Component {
                                     <Form.Group>
                                         <Form.Label style={{ marginTop: '0.5em' }}>Capacity</Form.Label>
                                         <Form.Control type="text" placeholder="512 GB" style={{ marginBottom: '10px' }} />
-                                    </Form.Group>                                    
-                                    
+                                    </Form.Group>
+
                                     <Button style={{ marginTop: '20px' }}> Create Hardware Set </Button>
                                 </Form.Group>
-                                <span className="errorMessage" style={{ paddingTop: '15px' }}>{this.state.errorMsg}</span>
+                                <span className={color} style={{ paddingTop: '15px' }}>{this.state.errorMsg}</span>
                             </Form>
                         </div>
                     </div>

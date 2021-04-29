@@ -66,6 +66,45 @@ def register():
                 'data': {'token': access_token, 'username': new_username, 'first': True }
             }), 200)
 
+@app.route('/api/new_user', methods=['POST'])
+@jwt_required()
+def new_user():
+    current_username = get_jwt_identity()
+    user = get_user_obj(current_username)
+    if user.is_admin:
+        try:
+            # if parsing fails, BadRequest exception is raised
+            register_json = request.get_json()
+        except BadRequest:
+            return (jsonify({
+                'success': False,
+                'message': 'Invalid request input data.'
+            }), 400)
+        else:
+            new_username = register_json.get('username')
+            new_email = register_json.get('email')
+            new_password = register_json.get('password')
+            new_is_admin = register_json.get('is_admin')
+            if does_user_name_exist(new_username):
+                return (jsonify({
+                    'success': False,
+                    'message': 'Username already exists. Please choose a different one.'
+                }), 409)
+            elif does_user_email_exist(new_email):
+                return (jsonify({
+                    'success': False,
+                    'message': 'Email already exists. Please choose a different one.'
+                }), 409)
+            else:
+                if not user.is_godmin:
+                    new_is_admin = False
+                create_user(new_username, new_email, new_password, new_is_admin, False)
+                # access_token = create_access_token(identity=new_username)
+                return (jsonify({
+                    'success': True,
+                    'data': {'username': new_username, 'first': True , 'is_admin': new_is_admin}
+                }), 200)
+
 
 @app.route('/api/login', methods=['POST'])
 def login():

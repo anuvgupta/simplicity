@@ -146,6 +146,10 @@ def does_user_email_exist(email) -> bool:
     return True
 
 
+def compare_passwords(password_A, password_B) -> bool:
+    # TODO: implement bcrypt hashing for password
+    return password_A == password_B
+
 # find document with exact username (they all should be unique so only one should be found if it exists)
 # see if password is correct
 def verify_login(username, password) -> int:
@@ -155,8 +159,7 @@ def verify_login(username, password) -> int:
     current_user = query.first()
     if not current_user:
         return 404  # not found
-    # TODO: implement bcrypt hashing for password
-    if current_user.password == password:
+    if compare_passwords(current_user.password, password):
         return 1
     return 401
 
@@ -197,17 +200,24 @@ def set_user_theme(username, theme):
     current_user.update(set__navColor=theme)
     return
 
-def update_user(currName, username, email, password, is_admin):
+def update_user(currName, currPwd, username, email, password, is_admin):
     query = User.objects(username__exact=currName)
     if len(query) != 1:
-        return None
+        return (False, "User not found.")
     current_user = query.first()
     if not current_user:
-        return None
-    current_user.update(set__username=username)
-    return
+        return (False, "User not found.")
+    if not compare_passwords(currPwd, current_user.password):
+        return (False, "Incorrect password.")
+    # current_user.update(set__username=username)
     # current_user.update(set__email=email)
     # current_user.update(set__password=password)
+    current_user.username = username
+    current_user.email = email
+    current_user.password = password
+    current_user.is_admin = is_admin
+    current_user.save()
+    return (True, "")
 
 
 """ PROJECT-RELATION FUNCTIONS """

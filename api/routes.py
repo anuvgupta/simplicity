@@ -277,12 +277,18 @@ def updateUser():
         new_username = new_user_json.get("username")
         new_email = new_user_json.get("email")
         new_password = new_user_json.get("password")
+        current_password = new_user_json.get("curPassword")
         isAdmin = new_user_json.get("is_admin")
-        update_user(current_username, new_username, new_email, new_password, isAdmin)
+        result = update_user(current_username, current_password, new_username, new_email, new_password, isAdmin)
+        if result[0] == True:
+            return (jsonify({
+                'success': True,
+                'message': 'User successfully updated'
+            }), 200)
         return (jsonify({
-            'success': True,
-            'data': 'User sucessfully updated'
-        }), 200)
+            'success': False,
+            'message': 'Database update error. ' + result[1]
+        }), 500)
     return (jsonify({
         'success': False,
         'message': 'Unknown error.'

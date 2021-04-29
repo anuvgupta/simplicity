@@ -27,6 +27,8 @@ class SettingsPage extends React.Component {
         this.state = {
             username: "",
             password: "",
+            curPassword: "",
+            email: "",
             is_admin: "",
             navColor: "",
             token: "",
@@ -64,17 +66,18 @@ class SettingsPage extends React.Component {
             if (resp_data && resp_data.success && resp_data.success === true && resp_data.data && resp_data.data.username) {
                 console.log('Settings: setup user', user);
                 var color = resp_data.data.navColor;
-                console.log(color);
+                // console.log(color);
                 if (color === null || color == "") {
                     color = "#010101";
-                    console.log("color is null");
+                    // console.log("color is null");
                 }
                 // TODO: setup settings with user
                 this.setState({
                     username: resp_data.data.username,
                     password: resp_data.data.password,
-                    token: user.token,
+                    email: resp_data.data.email,
                     is_admin: resp_data.data.is_admin,
+                    token: user.token,
                     color: color
                 });
             } else console.log('Invalid response: ', resp_data);
@@ -99,9 +102,19 @@ class SettingsPage extends React.Component {
             username: event.target.value
         });
     }
+    updateEmail(event) {
+        this.setState({
+            email: event.target.value
+        });
+    }
     updatePassword(event) {
         this.setState({
             password: event.target.value
+        });
+    }
+    updateCurPassword(event) {
+        this.setState({
+            curPassword: event.target.value
         });
     }
 
@@ -141,27 +154,35 @@ class SettingsPage extends React.Component {
     validateForm(sendRequest = false) {
         var username = this.state.username;
         var password = this.state.password;
+        var curPassword = this.state.curPassword;
         var email = this.state.email;
         var is_admin = this.state.is_admin;
         if (username && username.trim().length > 0) {
             if (password && password.trim().length > 0) {
-                if (global.util.validateAlphanumeric(username)) {
-                    password = global.util.hashPassword(password);
-                    if (sendRequest) {
-                        this.updateUser(username, email, password, is_admin);
-                    }
-                } else this.updateResponseMsg('Invalid username (letters and numbers only).', true);
-            } else this.updateResponseMsg('Empty password.', true);
+                if (curPassword && curPassword.trim().length > 0) {
+                    if (global.util.validateAlphanumeric(username)) {
+                        console.log(password);
+                        password = global.util.hashPassword(password);
+                        console.log(password);
+                        console.log(curPassword);
+                        curPassword = global.util.hashPassword(curPassword);
+                        console.log(curPassword);
+                        if (sendRequest) {
+                            this.updateUser(username, email, password, is_admin, curPassword);
+                        }
+                    } else this.updateResponseMsg('Invalid username (letters and numbers only).', true);
+                } else this.updateResponseMsg('Empty current password.', true);
+            } else this.updateResponseMsg('Empty new password.', true);
         } else this.updateResponseMsg('Empty username.', true);
     }
 
-    updateUser(username, email, password, is_admin) {
+    updateUser(username, email, password, is_admin, curPassword) {
         var handleResponse = response => {
             var rMsg = "";
             var color = "";
             if (response && response.hasOwnProperty('success')) {
                 if (response.success == true) {
-                    rMsg = "User created successfully";
+                    rMsg = "User updated successfully.";
                     color = "successMessage";
                     // console.log("we need to put a success message here")
                 } else {
@@ -174,7 +195,7 @@ class SettingsPage extends React.Component {
                     respMsg: rMsg,
                     msgColor: "successMessage"
                 });
-                console.log("Why am i not getting css right");
+                // console.log("Why am i not getting css right");
             } else {
                 // this.redirectPage('admin');
                 this.setState({
@@ -182,12 +203,14 @@ class SettingsPage extends React.Component {
                     msgColor: "errorMessage"
                 });
                 console.log("hit this");
+                console.log(response);
             }
         };
         axios.post(`${global.config.api_url}/update_user`, {
             username: `${username}`,
             email: `${email}`,
             password: `${password}`,
+            curPassword: `${curPassword}`,
             is_admin: is_admin
         }, {
             headers: { Authorization: `Bearer ${this.state.token}` }
@@ -248,52 +271,69 @@ class SettingsPage extends React.Component {
 
                 </div>
                 <div className="overviewMain borderNone marginTopSmaller centerWidth60">
-                    <Form>
-                        <Form.Group as={Row} controlId="formSettings">
-                            <Form.Label column sm={2}>
-                                Username
+                    <Form.Group as={Row} controlId="formSettings">
+                        <Form.Label column sm={3}>
+                            Username
                             </Form.Label>
-                            <Col sm={10}>
-                                <Form.Control type="text" placeholder="username" defaultValue={this.state.username} onChange={this.updateUsername.bind(this)} />
-                            </Col>
-                        </Form.Group>
-                        <Form.Group as={Row} controlId="formHorizontalPassword">
-                            <Form.Label column sm={2}>
-                                Password
+                        <Col sm={9}>
+                            <Form.Control type="text" placeholder="username" defaultValue={this.state.username} onChange={this.updateUsername.bind(this)} />
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} controlId="formSettings">
+                        <Form.Label column sm={3}>
+                            Email
                             </Form.Label>
-                            <Col sm={10}>
-                                <Form.Control type="password" placeholder="********" onChange={this.updatePassword.bind(this)} />
-                            </Col>
-                        </Form.Group>
-
-                        <Form.Group as={Row} controlId="formHorizontalCheck">
-                            <Col sm={{ span: 6 }}>
-                                <Form.Check label="&nbsp;Admin" disabled checked={this.state.is_admin} />
-                            </Col>
-                            <Col sm={{ span: 2, offset: 4 }} style={{ marginTop: '5px' }}>
-                                <Button variant="outlined" color="default" type="submit" onClick={this.validateForm.bind(this, true)}>Update Info</Button>
-                            </Col>
-                        </Form.Group>
-                        <span className={this.state.msgColor} style={{ paddingTop: '15px' }}>{this.state.respMsg}</span>
-
-                        <Form.Group as={Row} style={{ marginTop: '35px' }}>
-                            <Form.Label column sm={2}>
-                                Theme
+                        <Col sm={9}>
+                            <Form.Control type="text" placeholder="name@email.com" defaultValue={this.state.email} onChange={this.updateEmail.bind(this)} />
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} controlId="formHorizontalPassword">
+                        <Form.Label column sm={3}>
+                            Password
                             </Form.Label>
-                            <Col sm={10}>
+                        <Col sm={9}>
+                            <Form.Control type="password" placeholder="********" onChange={this.updatePassword.bind(this)} />
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} controlId="formHorizontalPassword">
+                        <Form.Label column sm={3}>
+                            Current Password
+                            </Form.Label>
+                        <Col sm={9}>
+                            <Form.Control type="password" placeholder="********" onChange={this.updateCurPassword.bind(this)} />
+                        </Col>
+                    </Form.Group>
 
-                                <div style={styles.swatch} onClick={this.handleClick}>
-                                    <div style={styles.color} />
+                    <Form.Group as={Row} controlId="formHorizontalCheck">
+                        <Form.Label column sm={3}>
+                            Admin
+                            </Form.Label>
+                        <Col sm={{ span: 3 }}>
+                            <Form.Check style={{ fontSize: '15px', marginTop: '7px' }} label="&nbsp;Administrator Status" disabled checked={this.state.is_admin} />
+                        </Col>
+                        <Col sm={{ span: 3, offset: 3 }} style={{ marginTop: '5px' }}>
+                            <Button variant="outlined" color="default" type="submit" onClick={this.validateForm.bind(this, true)}>Update Info</Button>
+                        </Col>
+                    </Form.Group>
+                    <span className={this.state.msgColor} style={{ paddingTop: '15px' }}>{this.state.respMsg}</span>
+
+                    <Form.Group as={Row} style={{ marginTop: '35px' }}>
+                        <Form.Label column sm={3}>
+                            Theme
+                            </Form.Label>
+                        <Col sm={9}>
+
+                            <div style={styles.swatch} onClick={this.handleClick}>
+                                <div style={styles.color} />
+                            </div>
+                            {this.state.displayColorPicker ?
+                                <div style={styles.popover}>
+                                    <div style={styles.cover} onClick={this.handleClose} />
+                                    <SketchPicker color={this.state.color} onChange={this.handleChange} />
                                 </div>
-                                {this.state.displayColorPicker ?
-                                    <div style={styles.popover}>
-                                        <div style={styles.cover} onClick={this.handleClose} />
-                                        <SketchPicker color={this.state.color} onChange={this.handleChange} />
-                                    </div>
-                                    : null}
-                            </Col>
-                        </Form.Group>
-                    </Form>
+                                : null}
+                        </Col>
+                    </Form.Group>
                 </div>
             </div>
         );

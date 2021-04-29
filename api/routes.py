@@ -392,6 +392,45 @@ def checkHardware():
         'message': 'Unknown error.'
     }), 500)
 
+@app.route('/api/createHW', methods=['POST'])
+@jwt_required()
+def createHW():
+    current_username = get_jwt_identity()
+    if not current_username:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid token.'
+        }), 401)
+    try:
+        hw_set_json = request.get_json()
+    except BadRequest:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid request input data.'
+        }), 400)
+    else:
+        hw_set_id = hw_set_json.get('id')
+        hw_set_name = hw_set_json.get('name')
+        hw_set_capacity = hw_set_json.get('capacity')
+        if does_hw_set_exist(hw_set_id):
+            return (jsonify({
+                'success': False,
+                'message': 'Hardware Set already exists.'
+            }), 409)
+        else:
+            create_hw_set(hw_set_id, hw_set_name, hw_set_capacity)
+            return (jsonify({
+                'success': True,
+                'data': {
+                    'name': hw_set_name,
+                    'id': hw_set_id
+                }
+            }), 200)
+    return (jsonify({
+        'success': False,
+        'message': 'Unknown error.'
+    }), 500)
+
 @app.route('/api/checkInHardware', methods=['POST'])
 @jwt_required()
 def checkInHardware():

@@ -24,11 +24,14 @@ class Admin extends React.Component {
         this.state = {
             token: "",
             username: "",
+            numUsers: "",
             password: "",
             email: "",
             is_admin: false,
             is_godmin: false,
             projectList: [],
+            hw_sets: {},
+            usedHw: "",
             respMsg: "",
             hwRespMsg: "",
             h_id: "",
@@ -63,21 +66,21 @@ class Admin extends React.Component {
     }
 
     updateResponseMsg(value, isUserForm) {
-        if(isUserForm){
+        if (isUserForm) {
             this.setState({
                 respMsg: value
             });
-        } else{
+        } else {
             this.setState({
                 hwRespMsg: value
             });
         }
-        
+
     }
     updateH_ID(event) {
         console.log(event.target.value);
         this.setState({
-            h_id: event.target.value 
+            h_id: event.target.value
         });
     }
     updateHName(event) {
@@ -111,6 +114,9 @@ class Admin extends React.Component {
     redirectPage() {
         this.props.history.push('/home');
     }
+    getAdminStats(){
+        console.log("test");
+    }
 
     setupPage(user) {
         console.log(user);
@@ -121,11 +127,14 @@ class Admin extends React.Component {
             if (response && response.data)
                 resp_data = response.data;
             // console.log('resp_data', resp_data);
-            if (resp_data && resp_data.success && resp_data.success === true && resp_data.data && resp_data.data.is_godmin) {
+            if (resp_data && resp_data.success && resp_data.success === true && resp_data.data) {
                 console.log(resp_data);
+                // var adminStats = this.getAdminStats();
                 this.setState({
                     is_godmin: resp_data.data.is_godmin,
-                    token: user.token
+                    token: user.token,
+                    projectList: resp_data.data.projectList,
+                    hwSet: resp_data.data.hw_sets
                 });
             } else console.log('Invalid response: ', resp_data);
         }).bind(this)).catch(error => {
@@ -133,6 +142,33 @@ class Admin extends React.Component {
                 var resp_data = null;
                 if (error.response && error.response.data)
                     resp_data = error.response.data;
+                console.log(error);
+            }
+        });
+        this.getUserInfo(user.token, (resp, error = null) => {
+            if (resp){
+                console.log(resp.data);
+                this.setState({
+                    numUsers: resp.data
+                });
+            } else{
+                console.log(error);
+            }
+        });
+        this.getHardwareInfo(user.token, (resp, error = null) => {
+            if (resp) {
+                console.log(resp.data);
+                var checkoutAmount = 0;
+                for(let entry in resp.data){
+                    // console.log(resp.data[entry].capacity);
+                    checkoutAmount += resp.data[entry].capacity - resp.data[entry].available;
+                }
+                this.setState({
+                    hw_sets: resp.data,
+                    usedHw: checkoutAmount
+                });
+
+            } else {
                 console.log(error);
             }
         });
@@ -147,7 +183,13 @@ class Admin extends React.Component {
             if (password && password.trim().length > 0) {
                 if (global.util.validateAlphanumeric(username)) {
                     password = global.util.hashPassword(password);
-                    if (sendRequest) this.createNewUser(username, email, password, is_admin, is_godmin);
+                    if (sendRequest) {
+                        this.createNewUser(username, email, password, is_admin, is_godmin);
+                        global.api.authenticated((user => {
+                            if (user === false) this.redirectPage();
+                            else this.setupPage(user);
+                        }).bind(this));
+                    }
                 } else this.updateResponseMsg('Invalid username (letters and numbers only).', true);
             } else this.updateResponseMsg('Empty password.', true);
         } else this.updateResponseMsg('Empty username.', true);
@@ -212,7 +254,13 @@ class Admin extends React.Component {
         if (hw_id && hw_id.trim().length > 0) {
             if (hw_name && hw_name.trim().length > 0) {
                 if (global.util.validateAlphanumeric(hw_id)) {
-                    if (sendRequest) this.createNewHwSet(hw_id, hw_name, hw_capacity);
+                    if (sendRequest) {
+                        this.createNewHwSet(hw_id, hw_name, hw_capacity);
+                        global.api.authenticated((user => {
+                            if (user === false) this.redirectPage();
+                            else this.setupPage(user);
+                        }).bind(this));
+                    }
                 } else this.updateResponseMsg('Invalid hardware id (letters and numbers only).', false);
             } else this.updateResponseMsg('Empty name', false);
         } else this.updateResponseMsg('Empty id.', false);
@@ -237,14 +285,12 @@ class Admin extends React.Component {
                     hwRespMsg: rMsg,
                     color: "successMessage"
                 });
-                console.log("Why am i not getting css right");
             } else {
                 // this.redirectPage('admin');
                 this.setState({
                     hwRespMsg: response.message,
                     color: "errorMessage"
                 });
-                console.log("hit this");
             }
         };
         axios.post(`${global.config.api_url}/createHW`, {
@@ -268,6 +314,50 @@ class Admin extends React.Component {
         });
     }
 
+    getUserInfo(token, resolve) {
+        axios.post(`${global.config.api_url}/getNumUsers`, {},
+            { headers: { Authorization: `Bearer ${token}` } }
+        ).then(response => {
+            var resp_data = null;
+            if (response && response.data)
+                resp_data = response.data;
+            // console.log(this.state);
+            // console.log(resp_data);
+            resolve(resp_data);
+        }).catch(error => {
+            if (error) {
+                var resp_data = null;
+                if (error.response && error.response.data)
+                    resp_data = error.response.data;
+                console.log(error, resp_data);
+                // console.log("here");
+                resolve(false, resp_data);
+            }
+        });
+    }
+
+    getHardwareInfo(token, resolve) {
+        axios.post(`${global.config.api_url}/checkHardware`, {},
+            { headers: { Authorization: `Bearer ${token}` } }
+        ).then(response => {
+            var resp_data = null;
+            if (response && response.data)
+                resp_data = response.data;
+            // console.log(this.state);
+            // console.log(resp_data);
+            resolve(resp_data);
+        }).catch(error => {
+            if (error) {
+                var resp_data = null;
+                if (error.response && error.response.data)
+                    resp_data = error.response.data;
+                console.log(error, resp_data);
+                // console.log("here");
+                resolve(false, resp_data);
+            }
+        });
+    }
+
 
     /* TODO: Create User form, create hardware set form  */
     render() {
@@ -282,11 +372,11 @@ class Admin extends React.Component {
                         <div className="topPanel">
 
                             <div className="centerCard overviewCard">
-                                <h1 className="top" style={{ fontSize: '1.5em' }}> You have: <span className=""></span> users</h1>
-                                <h1 className="top" style={{ fontSize: '1.5em' }}> You have: <span className=""></span> projects</h1>
-                                <h1 className="top" style={{ fontSize: '1.5em' }}> You have: <span className=""></span> hardware sets</h1>
-                                <h1 className="top" style={{ fontSize: '1.5em' }}> Users have checked out: <span className=""></span> GB </h1>
-                                
+                                <h1 className="top" style={{ fontSize: '1.5em' }}> You have: <span className="">{this.state.numUsers}</span> users</h1>
+                                <h1 className="top" style={{ fontSize: '1.5em' }}> You have: <span className="">{this.state.projectList.length} </span> projects</h1>
+                                <h1 className="top" style={{ fontSize: '1.5em' }}> You have: <span className="">{Object.keys(this.state.hw_sets).length}</span> hardware sets</h1>
+                                <h1 className="top" style={{ fontSize: '1.5em' }}> Users have checked out: <span className="">{this.state.usedHw}</span> GB </h1>
+
                             </div>
 
 

@@ -1,0 +1,11 @@
+.borderNone{
+    border: none !important;
+}
+.marginTopSmaller{
+    margin-top: 25px  !important;
+}
+.centerWidth60{
+    margin-left: 25%;
+    margin-right: auto;
+    width: 60%;
+}

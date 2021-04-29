@@ -67,6 +67,7 @@ class User(me.Document):
     hw_sets = me.DictField()
     is_admin = me.BooleanField(required=True, default=False) # admins (second level, users created by godmin)
     is_godmin = me.BooleanField(required=True, default=False) #Original admin (highest level, can create other admin)
+    navColor = me.StringField()
 
 def init_godmin():
     # projectList = []
@@ -185,6 +186,28 @@ def get_user_obj(username):
     if not current_user:
         return None
     return current_user
+
+def set_user_theme(username, theme):
+    query = User.objects(username__exact=username)
+    if len(query) != 1:
+        return None
+    current_user = query.first()
+    if not current_user:
+        return None
+    current_user.update(set__navColor=theme)
+    return
+
+def update_user(currName, username, email, password, is_admin):
+    query = User.objects(username__exact=currName)
+    if len(query) != 1:
+        return None
+    current_user = query.first()
+    if not current_user:
+        return None
+    current_user.update(set__username=username)
+    return
+    # current_user.update(set__email=email)
+    # current_user.update(set__password=password)
 
 
 """ PROJECT-RELATION FUNCTIONS """

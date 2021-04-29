@@ -90,7 +90,7 @@ class SettingsPage extends React.Component {
 
     handleClose = () => {
         this.setState({ displayColorPicker: false })
-        window.location.reload();
+        // window.location.reload();
     };
 
     handleChange = (color) => {
@@ -113,6 +113,8 @@ class SettingsPage extends React.Component {
                 console.log("Error: " + resp_data);
             }
         });
+        var nav = document.querySelector("header");
+        nav.setAttribute("style", "background-color: " + color.hex+";");
     };
 
     render() {

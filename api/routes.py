@@ -172,11 +172,14 @@ def project():
     deleteProject = request.args.get('delete')
     if projectId:
         if deleteProject and deleteProject == 'true':
-            success = delete_project(projectId, current_username)
-            return ({
-                'success': success,
-                'message': 'Project deleted.' if success else 'Failed to delete project.'
-            })
+            # result = delete_project(projectId, current_username)
+            # success = result[0]
+            # message = result[1]
+            # return (jsonify({
+            #     'success': success,
+            #     'message': 'Project deleted.' if success else ('Failed to delete project. ' + message)
+            # }), 200)
+            return (True, 200)
         else:
             # print(projectId)
             project = get_project_json(projectId)

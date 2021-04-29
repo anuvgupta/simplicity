@@ -70,6 +70,8 @@ class ProjectCard extends React.Component {
     deleteClick() {
         if (!this.state.hideButtons) {
             // console.log(`delete ${this.state.id}`);
+            var confirmation = window.confirm(`Delete project "${this.state.id}"?`);
+            if (!confirmation) return;
             axios.get(`${global.config.api_url}/projects?id=${this.state.id}&delete=true`, {
                 headers: { Authorization: `Bearer ${this.state.token}` }
             }).then(response => {

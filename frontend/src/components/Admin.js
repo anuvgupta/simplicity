@@ -37,7 +37,7 @@ class Admin extends React.Component {
             hwRespMsg: "",
             h_id: "",
             h_name: "",
-            h_capacity: "",
+            h_capacity: 512,
             color: ""
         };
     }
@@ -262,9 +262,9 @@ class Admin extends React.Component {
                             else this.setupPage(user);
                         }).bind(this));
                     }
-                } else this.updateResponseMsg('Invalid hardware id (letters and numbers only).', false);
-            } else this.updateResponseMsg('Empty name', false);
-        } else this.updateResponseMsg('Empty id.', false);
+                } else this.updateResponseMsg('Invalid hardware set ID (letters and numbers only).', false);
+            } else this.updateResponseMsg('Empty hardware set name', false);
+        } else this.updateResponseMsg('Empty hardware set ID.', false);
     }
 
     createNewHwSet(hw_id, hw_name, hw_capacity) {
@@ -368,15 +368,15 @@ class Admin extends React.Component {
                 <div className="center overviewMain">
                     <div className="rightSideAlt">
                         <div className="centerTitle">
-                            <h1 style={{ fontSize: '3em', marginBottom: "3.5vh" }}>Admin:  @{this.state.username}</h1>
+                            <h1 style={{ fontSize: '3em', marginBottom: "3.5vh" }}> Admin </h1>
                         </div>
                         <div className="topPanel">
 
                             <div className="centerCard overviewCard">
-                                <h1 className="top" style={{ fontSize: '1.5em' }}> You have: <span className="">{this.state.numUsers}</span> users</h1>
-                                <h1 className="top" style={{ fontSize: '1.5em' }}> You have: <span className="">{this.state.projectList.length} </span> projects</h1>
-                                <h1 className="top" style={{ fontSize: '1.5em' }}> You have: <span className="">{Object.keys(this.state.hw_sets).length}</span> hardware sets</h1>
-                                <h1 className="top" style={{ fontSize: '1.5em' }}> Users have checked out: <span className="">{this.state.usedHw}</span> GB </h1>
+                                <h1 className="top" style={{ fontSize: '1.5em' }}> <span className="">{this.state.numUsers}</span> user{(this.state.numUsers == 1 ? '' : 's')} </h1>
+                                <h1 className="top" style={{ fontSize: '1.5em' }}> <span className="">{this.state.projectList.length} </span> project{(this.state.projectList.length == 1 ? '' : 's')} </h1>
+                                <h1 className="top" style={{ fontSize: '1.5em' }}> <span className="">{Object.keys(this.state.hw_sets).length}</span> hardware set{(Object.keys(this.state.hw_sets).length == 1 ? '' : 's')} </h1>
+                                <h1 className="top" style={{ fontSize: '1.5em' }}> <span className="">{this.state.usedHw}</span> GB checked out </h1>
 
                             </div>
 
@@ -388,7 +388,7 @@ class Admin extends React.Component {
                     <div className="formCard" style={{ padding: '60px 40px 40px 40px' }}>
                         <div className="formCenter">
                             <div className="centerTitle" style={{ marginBottom: '23px' }}>
-                                <h1 style={{ fontSize: '2.2em' }}> Create Admin Users </h1>
+                                <h1 style={{ fontSize: '2.2em' }}> Create User </h1>
                             </div>
                             <Form.Group controlId="adminUserFrom">
                                 <Form.Group>

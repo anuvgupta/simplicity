@@ -29,7 +29,8 @@ class SettingsPage extends React.Component {
             password: "",
             curPassword: "",
             email: "",
-            is_admin: "",
+            is_admin: false,
+            is_godmin: false,
             navColor: "",
             token: "",
             displayColorPicker: false,
@@ -77,6 +78,7 @@ class SettingsPage extends React.Component {
                     password: resp_data.data.password,
                     email: resp_data.data.email,
                     is_admin: resp_data.data.is_admin,
+                    is_godmin: resp_data.data.is_godmin,
                     token: user.token,
                     color: color
                 });
@@ -161,12 +163,8 @@ class SettingsPage extends React.Component {
             if (password && password.trim().length > 0) {
                 if (curPassword && curPassword.trim().length > 0) {
                     if (global.util.validateAlphanumeric(username)) {
-                        console.log(password);
                         password = global.util.hashPassword(password);
-                        console.log(password);
-                        console.log(curPassword);
                         curPassword = global.util.hashPassword(curPassword);
-                        console.log(curPassword);
                         if (sendRequest) {
                             this.updateUser(username, email, password, is_admin, curPassword);
                         }
@@ -309,7 +307,7 @@ class SettingsPage extends React.Component {
                             Admin
                             </Form.Label>
                         <Col sm={{ span: 3 }}>
-                            <Form.Check style={{ fontSize: '15px', marginTop: '7px' }} label="&nbsp;Administrator Status" disabled checked={this.state.is_admin} />
+                            <Form.Check style={{ fontSize: '15px', marginTop: '7px' }} label={"Administrator Status" + (this.state.is_godmin ? ' (Godmin)' : '')} disabled checked={this.state.is_admin} />
                         </Col>
                         <Col sm={{ span: 3, offset: 3 }} style={{ marginTop: '5px' }}>
                             <Button variant="outlined" color="default" type="submit" onClick={this.validateForm.bind(this, true)}>Update Info</Button>

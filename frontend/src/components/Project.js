@@ -178,12 +178,12 @@ class Project extends React.Component {
                 <div className="rightSideAlt" style={{ position: 'relative' }}>
                     <div className="centerTitle" style={{ marginBottom: '11px', textAlign: 'center' }}>
                         <h1> {this.state.projectName} </h1>
-                        <h3> {this.state.projectID} </h3>
+                        <h4 style={{ color: '#444', fontSize: '22px' }}> {this.state.projectID} </h4>
                     </div>
-                    <div style={{ marginTop: '25px' }}>
+                    <div style={{ marginTop: '35px' }}>
                         <p> {this.state.projectDescription} </p>
                     </div>
-                    <div style={{ marginTop: '40px' }}>
+                    <div style={{ marginTop: '45px' }}>
                         <h3>Hardware</h3>
                         <Table className="halfWidth" striped bordered hover style={{ marginTop: '10px' }}>
                             <tbody>

@@ -1,12 +1,13 @@
 
-import '../global.js'
+import '../global.js';
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Form } from 'react-bootstrap';
-import axios from 'axios'
+import { Form } from 'react-bootstrap';
+import axios from 'axios';
+import Button from '@material-ui/core/Button';
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
-import '../styles/project.css'
+import '../styles/project.css';
 
 
 class ProjectForm extends React.Component {
@@ -189,7 +190,7 @@ class ProjectForm extends React.Component {
                             <Form.Control type="text" placeholder="Test Project" defaultValue={create ? '' : this.state.initialProjectName} onChange={this.updateProjectName.bind(this)} style={{ marginBottom: '10px' }} />
                             <Form.Label style={{ marginTop: '0.5em' }}>Project Description</Form.Label>
                             <Form.Control type="text" as="textarea" rows={3} defaultValue={create ? '' : this.state.initialProjectDescription} placeholder="Lorem ipsum dolor sit amet..." onChange={this.updateProjectDescription.bind(this)} style={{ marginBottom: '10px' }} />
-                            <Button onClick={this.validateForm.bind(this, true)} style={{ marginTop: '20px' }}> {action_title} Project </Button>
+                            <Button variant="outlined" color="default" onClick={this.validateForm.bind(this, true)} style={{ marginTop: '20px' }}> {action_title} Project </Button>
                         </Form.Group>
                         <span className="errorMessage" style={{ paddingTop: '15px' }}>{this.state.errorMsg}</span>
                     </Form>

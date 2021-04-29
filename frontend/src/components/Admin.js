@@ -30,6 +30,10 @@ class Admin extends React.Component {
             is_godmin: false,
             projectList: [],
             respMsg: "",
+            hwRespMsg: "",
+            h_id: "",
+            h_name: "",
+            h_capacity: "",
             color: ""
         };
     }
@@ -58,9 +62,32 @@ class Admin extends React.Component {
         });
     }
 
-    updateResponseMsg(value) {
+    updateResponseMsg(value, isUserForm) {
+        if(isUserForm){
+            this.setState({
+                respMsg: value
+            });
+        } else{
+            this.setState({
+                hwRespMsg: value
+            });
+        }
+        
+    }
+    updateH_ID(event) {
+        console.log(event.target.value);
         this.setState({
-            respMsg: value
+            h_id: event.target.value 
+        });
+    }
+    updateHName(event) {
+        this.setState({
+            h_name: event.target.value
+        });
+    }
+    updateHCapacity(event) {
+        this.setState({
+            h_capacity: event.target.value
         });
     }
 
@@ -121,9 +148,9 @@ class Admin extends React.Component {
                 if (global.util.validateAlphanumeric(username)) {
                     password = global.util.hashPassword(password);
                     if (sendRequest) this.createNewUser(username, email, password, is_admin, is_godmin);
-                } else this.updateResponseMsg('Invalid username (letters and numbers only).');
-            } else this.updateResponseMsg('Empty password.');
-        } else this.updateResponseMsg('Empty username.');
+                } else this.updateResponseMsg('Invalid username (letters and numbers only).', true);
+            } else this.updateResponseMsg('Empty password.', true);
+        } else this.updateResponseMsg('Empty username.', true);
     }
     // create_user(username, email, pwd, project_list, is_admin = False, is_godmin = False):
     createNewUser(username, email, password, is_admin, is_godmin) {
@@ -178,6 +205,69 @@ class Admin extends React.Component {
         });
     }
 
+    validateHForm(sendRequest = false) {
+        var hw_id = this.state.h_id;
+        var hw_name = this.state.h_name;
+        var hw_capacity = this.state.h_capacity;
+        if (hw_id && hw_id.trim().length > 0) {
+            if (hw_name && hw_name.trim().length > 0) {
+                if (global.util.validateAlphanumeric(hw_id)) {
+                    if (sendRequest) this.createNewHwSet(hw_id, hw_name, hw_capacity);
+                } else this.updateResponseMsg('Invalid hardware id (letters and numbers only).', false);
+            } else this.updateResponseMsg('Empty name', false);
+        } else this.updateResponseMsg('Empty id.', false);
+    }
+
+    createNewHwSet(hw_id, hw_name, hw_capacity) {
+        var handleResponse = response => {
+            var rMsg = "";
+            var color = "";
+            if (response && response.hasOwnProperty('success')) {
+                if (response.success == true) {
+                    rMsg = "Hardware Set created successfully";
+                    color = "successMessage";
+                    // console.log("we need to put a success message here")
+                } else {
+                    rMsg = response.message;
+                    color = "red";
+                }
+            }
+            if (color == "successMessage") {
+                this.setState({
+                    hwRespMsg: rMsg,
+                    color: "successMessage"
+                });
+                console.log("Why am i not getting css right");
+            } else {
+                // this.redirectPage('admin');
+                this.setState({
+                    hwRespMsg: response.message,
+                    color: "errorMessage"
+                });
+                console.log("hit this");
+            }
+        };
+        axios.post(`${global.config.api_url}/createHW`, {
+            id: `${hw_id}`,
+            name: `${hw_name}`,
+            h_capacity: `${hw_capacity}`
+        }, {
+            headers: { Authorization: `Bearer ${this.state.token}` }
+        }).then(response => {
+            var resp_data = null;
+            if (response && response.data)
+                resp_data = response.data;
+            handleResponse(resp_data);
+        }).catch(error => {
+            if (error) {
+                var resp_data = null;
+                if (error.response && error.response.data)
+                    resp_data = error.response.data;
+                handleResponse(resp_data);
+            }
+        });
+    }
+
 
     /* TODO: Create User form, create hardware set form  */
     render() {
@@ -190,20 +280,16 @@ class Admin extends React.Component {
                             <h1 style={{ fontSize: '3em', marginBottom: "3.5vh" }}>Admin:  @{this.state.username}</h1>
                         </div>
                         <div className="topPanel">
-                            <div className="leftOverview">
-                                <div className="overviewCard">
-                                    <h1 className="top" style={{ fontSize: '1.5em' }}> You have </h1>
-                                    <h1 className="num"> {this.state.projectList.length} </h1>
-                                    <h1 className="bottom" style={{ fontSize: '1.9em' }}> projects </h1>
-                                </div>
+
+                            <div className="centerCard overviewCard">
+                                <h1 className="top" style={{ fontSize: '1.5em' }}> You have: <span className=""></span> users</h1>
+                                <h1 className="top" style={{ fontSize: '1.5em' }}> You have: <span className=""></span> projects</h1>
+                                <h1 className="top" style={{ fontSize: '1.5em' }}> You have: <span className=""></span> hardware sets</h1>
+                                <h1 className="top" style={{ fontSize: '1.5em' }}> Users have checked out: <span className=""></span> GB </h1>
+                                
                             </div>
-                            <div className="rightOverView">
-                                <div className="overviewCard">
-                                    <h1 className="top" style={{ fontSize: '1.4em' }}> You have checked out </h1>
-                                    <h1 className="num"> {this.state.totalHW} GB </h1>
-                                    <h1 className="bottom" style={{ fontSize: '1.9em' }}> of hardware </h1>
-                                </div>
-                            </div>
+
+
                         </div>
                     </div>
                 </div>
@@ -249,23 +335,23 @@ class Admin extends React.Component {
                                 <h1 style={{ fontSize: '2.2em' }}> Create Hardware Set </h1>
                             </div>
                             <Form>
-                                <Form.Group controlId="adminUserFrom">
+                                <Form.Group controlId="hwSetForm">
                                     <Form.Group>
                                         <Form.Label style={{ marginTop: '0.5em' }}>Hardware Set ID</Form.Label>
-                                        <Form.Control type="text" placeholder="hwSetX" style={{ marginBottom: '10px' }} />
+                                        <Form.Control type="text" placeholder="hwSetX" style={{ marginBottom: '10px' }} onChange={this.updateH_ID.bind(this)} />
                                     </Form.Group>
                                     <Form.Group>
                                         <Form.Label style={{ marginTop: '0.5em' }}>Hardware Set Name</Form.Label>
-                                        <Form.Control type="text" placeholder="Hardware Set 1" style={{ marginBottom: '10px' }} />
+                                        <Form.Control type="text" placeholder="Hardware Set 1" style={{ marginBottom: '10px' }} onChange={this.updateHName.bind(this)} />
                                     </Form.Group>
                                     <Form.Group>
                                         <Form.Label style={{ marginTop: '0.5em' }}>Capacity</Form.Label>
-                                        <Form.Control type="text" placeholder="512 GB" style={{ marginBottom: '10px' }} />
+                                        <Form.Control type="text" placeholder="512 GB" style={{ marginBottom: '10px' }} onChange={this.updateHCapacity.bind(this)} />
                                     </Form.Group>
 
-                                    <Button style={{ marginTop: '20px' }}> Create Hardware Set </Button>
+                                    <Button style={{ marginTop: '20px' }} onClick={this.validateHForm.bind(this, true)}> Create Hardware Set </Button>
                                 </Form.Group>
-                                <span className={color} style={{ paddingTop: '15px' }}>{this.state.respMsg}</span>
+                                <span className={color} style={{ paddingTop: '15px' }}>{this.state.hwRespMsg}</span>
                             </Form>
                         </div>
                     </div>

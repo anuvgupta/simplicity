@@ -295,6 +295,11 @@ def get_project_ids() -> []:
 
 """ HARDWARE SET RELATED FUNCTIONS """
 
+def create_hw_set(h_id, name, capacity):
+    new_hw_set = Hardware(hardware_id=h_id, name=name,
+                          capacity=capacity, available=capacity)
+    new_hw_set.save(force_insert=True)
+    return
 
 def check_in(hw_set_id, checkin_quantity, username) -> int:
     queryA = Hardware.objects(hardware_id__exact=hw_set_id)

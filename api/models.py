@@ -205,6 +205,29 @@ def create_project(name, proj_id, desc, username=""):
         user.save()
     return
 
+def delete_project(proj_id, username) -> bool:
+    if not does_user_name_exist(username):
+        return False
+    queryA = User.objects(username__exact=username)
+    if len(queryA) != 1:
+        return False
+    user = queryA.first()
+    if not user:
+        return False
+    if not does_project_id_exist(proj_id):
+        return False
+    queryB = Project.objects(project_id__exact=proj_id)
+    if len(queryB) != 1:
+        return False
+    proj = queryB.first()
+    if not proj:
+        return False
+    if not proj_id in user.projectList:
+        return False
+    user.projectList.remove(proj_id)
+    user.save()
+    proj.delete()
+    return True
 
 def update_project(name, p_id, desc):
     # TODO: figure out how to update a single element in the DictField

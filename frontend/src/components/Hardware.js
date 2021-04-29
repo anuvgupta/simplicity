@@ -72,7 +72,7 @@ class Hardware extends React.Component {
             token: user.token
         });
         var _next = _ => {
-            global.util.resizeSchedule(100);
+            global.util.resizeQuery();
             axios.get(`${global.config.api_url}/user?username=${user.username}`, {
                 headers: { Authorization: `Bearer ${user.token}` }
             }).then(response => {
@@ -81,7 +81,7 @@ class Hardware extends React.Component {
                     resp_data = response.data;
                 // console.log('resp_data', resp_data);
                 if (resp_data && resp_data.success && resp_data.success === true && resp_data.data && resp_data.data.hw_sets) {
-                    console.log(resp_data);
+                    // console.log(resp_data);
                     this.setState({
                         hwAvailabilityList: resp_data.data.hw_sets
                     });

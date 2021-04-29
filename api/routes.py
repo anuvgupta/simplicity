@@ -163,14 +163,23 @@ def user():
 @ app.route('/api/projects', methods=['GET'])
 @jwt_required()
 def project():
+    current_username = get_jwt_identity()
     projectId = request.args.get('id')
+    deleteProject = request.args.get('delete')
     if projectId:
-        print(projectId)
-        project = get_project_json(projectId)
-        # user.projectList
-        # print(user['username'])
-        print(project)
-        return (project, 200)
+        if deleteProject and deleteProject == 'true':
+            success = delete_project(projectId, current_username)
+            return ({
+                'success': success,
+                'message': 'Project deleted.' if success else 'Failed to delete project.'
+            })
+        else:
+            # print(projectId)
+            project = get_project_json(projectId)
+            # user.projectList
+            # print(user['username'])
+            # print(project)
+            return (project, 200)
     return (jsonify({
         'success': False,
         'message': 'Username not provided.'

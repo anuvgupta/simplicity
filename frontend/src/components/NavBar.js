@@ -29,7 +29,7 @@ class NavigationBar extends React.Component {
     }
 
     redirectPage() {
-        this.props.history.push('/');
+        window.location = String(`${window.location.origin}/`);
     }
 
     setupPage(user) {
@@ -74,11 +74,11 @@ class NavigationBar extends React.Component {
                     </IconButton>
                     <Typography variant="h6" style={{ transform: 'scale(1.02)' }}>
                         Simplicity Cloud
-            </Typography>
+                    </Typography>
                     <Button variant="contained" color="default" id="logoutButton" onClick={global.api.logout} >
                         {/* <NavLink to="/music" className="menu_link">Music</NavLink> */}
-                Sign Out
-            </Button>
+                        Sign Out
+                    </Button>
                 </Toolbar>
             </AppBar>
         );

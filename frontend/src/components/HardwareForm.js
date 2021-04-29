@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
+import Button from '@material-ui/core/Button';
 import axios from 'axios'
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
@@ -241,11 +242,11 @@ class HardwareForm extends React.Component {
                             <Form.Control as="textarea" rows={3} /> */}
                         </Form.Group>
                     </Form>
-                    <Button style={{ marginRight: '3px' }} className="mt9px" onClick={this.checkHardware.bind(this, false)}>
+                    <Button variant="outlined" color="default" style={{ marginRight: '3px' }} className="mt9px" onClick={this.checkHardware.bind(this, false)}>
                         Check Out
                     </Button>
                     {' '}
-                    <Button style={{ marginLeft: '3px' }} className="mt9px" onClick={this.checkHardware.bind(this, true)} >
+                    <Button variant="outlined" color="default" style={{ marginLeft: '3px' }} className="mt9px" onClick={this.checkHardware.bind(this, true)} >
                         Check In
                     </Button>
                     <div style={{ marginTop: '30px' }}>

@@ -1,6 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Form, Container, CardDeck, Card } from 'react-bootstrap';
+import { Form, Container, CardDeck, Card } from 'react-bootstrap';
+import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import axios from 'axios';
@@ -108,7 +109,7 @@ class ProjectCard extends React.Component {
                 <Card.Text>
                     {this.state.desc}
                 </Card.Text>
-                <Button href={"/project/" + this.state.id} style={{ display: (this.state.hideButtons ? 'none' : 'inline-block') }}>
+                <Button href={"/project/" + this.state.id} style={{ display: (this.state.hideButtons ? 'none' : 'inline-block'), color: 'black' }} variant="outlined" color="default">
                     Manage
                 </Button>
                 <div style={{
@@ -276,11 +277,11 @@ class Projects extends React.Component {
                             </Card> */}
                         </CardDeck>
                         <div style={{ height: '22px' }}></div>
-                        <Button className="mt9px" onClick={this.redirectPage.bind(this, 'createProject')} style={{ display: (this.props.hideButtons === 'true' ? 'none' : 'inline-block') }}>
+                        <Button variant="outlined" color="default" className="mt9px" onClick={this.redirectPage.bind(this, 'createProject')} style={{ display: (this.props.hideButtons === 'true' ? 'none' : 'inline-block') }}>
                             New Project
                         </Button>
                         {' '}
-                        <Button className="mt9px" onClick={this.redirectPage.bind(this, 'joinProject')} style={{ display: (this.props.hideButtons === 'true' ? 'none' : 'inline-block') }}>
+                        <Button variant="outlined" color="default" className="mt9px" onClick={this.redirectPage.bind(this, 'joinProject')} style={{ display: (this.props.hideButtons === 'true' ? 'none' : 'inline-block') }}>
                             Join Project
                         </Button>
                     </Container>

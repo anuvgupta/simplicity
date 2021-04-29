@@ -3,7 +3,8 @@
 
 import axios from 'axios';
 import React from 'react';
-import { Button, Container, Form, Row, Col } from 'react-bootstrap';
+import { Container, Form, Row, Col } from 'react-bootstrap';
+import Button from '@material-ui/core/Button';
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -269,13 +270,13 @@ class SettingsPage extends React.Component {
                             <Col sm={{ span: 6 }}>
                                 <Form.Check label="&nbsp;Admin" disabled checked={this.state.is_admin} />
                             </Col>
-                            <Col sm={{ span: 2, offset: 4 }}>
-                                <Button type="submit" onClick={this.validateForm.bind(this, true)}>Update Info</Button>
+                            <Col sm={{ span: 2, offset: 4 }} style={{ marginTop: '5px' }}>
+                                <Button variant="outlined" color="default" type="submit" onClick={this.validateForm.bind(this, true)}>Update Info</Button>
                             </Col>
                         </Form.Group>
                         <span className={this.state.msgColor} style={{ paddingTop: '15px' }}>{this.state.respMsg}</span>
 
-                        <Form.Group as={Row}>
+                        <Form.Group as={Row} style={{ marginTop: '35px' }}>
                             <Form.Label column sm={2}>
                                 Theme
                             </Form.Label>

@@ -3,7 +3,7 @@
 import '../global.js';
 import axios from 'axios';
 import React from 'react';
-import { Form } from 'react-bootstrap';
+import { Form, Table } from 'react-bootstrap';
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
@@ -180,8 +180,25 @@ class Project extends React.Component {
                         <h1> {this.state.projectName} </h1>
                         <h3> {this.state.projectID} </h3>
                     </div>
-                    <div style={{ marginTop: '20px' }}>
+                    <div style={{ marginTop: '25px' }}>
                         <p> {this.state.projectDescription} </p>
+                    </div>
+                    <div style={{ marginTop: '40px' }}>
+                        <h3>Hardware</h3>
+                        <Table className="halfWidth" striped bordered hover style={{ marginTop: '10px' }}>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Abdominal and Direct Fetal ECG Database</td>
+                                    <td><Button href="https://physionet.org/static/published-projects/adfecgdb/abdominal-and-direct-fetal-ecg-database-1.0.0.zip" target="_blank"> Download ZIP </Button></td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>AF Termination Challenge Database</td>
+                                    <td><Button href="https://physionet.org/static/published-projects/aftdb/af-termination-challenge-database-1.0.0.zip" target="_blank"> Download ZIP </Button></td>
+                                </tr>
+                            </tbody>
+                        </Table>
                     </div>
 
                     <div style={{ position: 'absolute', top: '5px', left: '5px' }}>

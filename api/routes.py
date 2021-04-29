@@ -178,7 +178,8 @@ def user():
                         'projectList': proj_list,
                         'hw_sets': user.hw_sets,
                         'is_admin': user.is_admin,
-                        'is_godmin': user.is_godmin
+                        'is_godmin': user.is_godmin,
+                        'navColor':  user.navColor
                     }
                 }), 200)
             return (jsonify({
@@ -216,6 +217,40 @@ def getNumUsers():
         return (jsonify({
             'success': True,
             'data': query.count()
+        }), 200)
+    return (jsonify({
+        'success': False,
+        'message': 'Unknown error.'
+    }), 500)
+
+@app.route('/api/setUserTheme', methods=['POST'])
+@jwt_required()
+def setUserTheme():
+    current_username = get_jwt_identity()
+    if not current_username:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid token.'
+        }), 401)
+    user = get_user_obj(current_username)
+    if not user:
+        return (jsonify({
+            'success': False,
+            'message': 'Users not found.'
+        }), 404)
+    try:
+        color_json = request.get_json()
+    except BadRequest:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid request input data.'
+        }), 400)
+    else: 
+        print(color_json.get("color"))
+        set_user_theme(current_username, color_json.get("color"))
+        return (jsonify({
+            'success': True,
+            'data': color_json.get("color")
         }), 200)
     return (jsonify({
         'success': False,

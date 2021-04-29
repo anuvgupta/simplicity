@@ -40,13 +40,13 @@ class Hardware extends React.Component {
             global.util.resizeQuery((_ => {
                 if (this.mounted) {
                     if (window.innerWidth < 1195) {
-                        console.log('1');
+                        // console.log('1');
                         this.setState({ cardsPerColumn: 1 });
                     } else if (window.innerWidth < 1495) {
-                        console.log('2');
+                        // console.log('2');
                         this.setState({ cardsPerColumn: 2 });
                     } else {
-                        console.log('3');
+                        // console.log('3');
                         this.setState({ cardsPerColumn: 3 });
                     }
                 }
@@ -72,7 +72,7 @@ class Hardware extends React.Component {
             token: user.token
         });
         var _next = _ => {
-            global.util.resizeSchedule(100);
+            global.util.resizeQuery();
             axios.get(`${global.config.api_url}/user?username=${user.username}`, {
                 headers: { Authorization: `Bearer ${user.token}` }
             }).then(response => {
@@ -81,7 +81,7 @@ class Hardware extends React.Component {
                     resp_data = response.data;
                 // console.log('resp_data', resp_data);
                 if (resp_data && resp_data.success && resp_data.success === true && resp_data.data && resp_data.data.hw_sets) {
-                    console.log(resp_data);
+                    // console.log(resp_data);
                     this.setState({
                         hwAvailabilityList: resp_data.data.hw_sets
                     });
@@ -97,7 +97,7 @@ class Hardware extends React.Component {
         };
         this.getHardwareInfo(user.token, (resp, error = null) => {
             if (resp) {
-                console.log(resp.data);
+                // console.log(resp.data);
                 this.setState({
                     hwList: resp.data
                 })

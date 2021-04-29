@@ -89,7 +89,7 @@ class Admin extends React.Component {
         console.log(user);
         axios.get(`${global.config.api_url}/user?username=${user.username}`, {
             headers: { Authorization: `Bearer ${user.token}` }
-        }).then(response => {
+        }).then((response => {
             var resp_data = null;
             if (response && response.data)
                 resp_data = response.data;
@@ -101,7 +101,7 @@ class Admin extends React.Component {
                     token: user.token
                 });
             } else console.log('Invalid response: ', resp_data);
-        }).catch(error => {
+        }).bind(this)).catch(error => {
             if (error) {
                 var resp_data = null;
                 if (error.response && error.response.data)
@@ -232,7 +232,7 @@ class Admin extends React.Component {
                                         {/* <Form.Label style={{ marginTop: '0.5em' }}>Permissions </Form.Label> */}
                                         <Form.Check type="checkbox" label="Is user admin?" disabled={!this.state.is_godmin} onChange={this.updateAdmin.bind(this)} onKeyUp={this.checkEnter.bind(this)} />
                                     </Form.Group>
-                                    <Button style={{ marginTop: '20px' }} onClick={this.validateForm.bind(this,true)}> Create user </Button>
+                                    <Button style={{ marginTop: '20px' }} onClick={this.validateForm.bind(this, true)}> Create user </Button>
                                 </Form.Group>
                                 <span className="errorMessage" style={{ paddingTop: '15px' }}>{this.state.respMsg}</span>
                                 {/* <span className="successMessage" style={{ paddingTop: '15px' }}>{this.state.successMsg}</span> */}

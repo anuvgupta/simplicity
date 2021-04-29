@@ -69,22 +69,23 @@ class User(me.Document):
     is_godmin = me.BooleanField(required=True, default=False) #Original admin (highest level, can create other admin)
 
 def init_godmin():
-    projectList = []
-    for project in Project.objects:
-        for id in project.project_id:
-            if id not in projectList:
-                # print(id)
-                projectList.append(id)
+    # projectList = []
+    # for project in Project.objects:
+    #     for id in project.project_id:
+    #         if id not in projectList:
+    #             # print(id)
+    #             projectList.append(id)
     
     query = User.objects(username="admin")
     admin = query.first()
     if not admin:
-        create_user("admin", "admin@admin", "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08", projectList, True, True)
+        create_user("admin", "admin@admin", "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08", [], True, True)
     else:
         # TODO: Update project list and hardware list with everyone
         # So admin exists -> there is at least 1 user
-        print("update stuff")
+        # print("update stuff")
         # admin.update(set__projectList=projectList)
+        pass
     # creates a new document, doesn't allow for updates if this document already exists
     return
 
@@ -92,7 +93,7 @@ def init_godmin():
 # function to create and save a new user to the database
 
 
-def create_user(username, email, pwd, project_list, is_admin = False, is_godmin = False):
+def create_user(username, email, pwd, project_list = None, is_admin = False, is_godmin = False):
     # TODO: implement bcrypt hashing for pwd
     hw_set = {}
     projectList = []
@@ -205,6 +206,29 @@ def create_project(name, proj_id, desc, username=""):
         user.save()
     return
 
+def delete_project(proj_id, username) -> bool:
+    if not does_user_name_exist(username):
+        return False
+    queryA = User.objects(username__exact=username)
+    if len(queryA) != 1:
+        return False
+    user = queryA.first()
+    if not user:
+        return False
+    if not does_project_id_exist(proj_id):
+        return False
+    queryB = Project.objects(project_id__exact=proj_id)
+    if len(queryB) != 1:
+        return False
+    proj = queryB.first()
+    if not proj:
+        return False
+    if not proj_id in user.projectList:
+        return False
+    user.projectList.remove(proj_id)
+    user.save()
+    proj.delete()
+    return True
 
 def update_project(name, p_id, desc):
     # TODO: figure out how to update a single element in the DictField

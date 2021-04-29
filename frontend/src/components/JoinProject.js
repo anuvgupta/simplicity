@@ -105,7 +105,7 @@ class JoinProject extends React.Component {
                         </Form.Group>
                     </Form>
                     <Button onClick={this.addProject.bind(this)}>
-                        Join
+                        Join Project
                     </Button>
                     <div style={{ marginTop: '30px' }}>
                         <span className={this.state.color}>{this.state.msg}</span>

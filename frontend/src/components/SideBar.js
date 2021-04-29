@@ -32,7 +32,7 @@ export default class SideBar extends React.Component {
     }
 
     setupPage(user) {
-        console.log('Overview: loading user ' + user.username);
+        console.log('SideBar: loading user ' + user.username);
         // console.log("list is " + user.email);
         axios.get(`${global.config.api_url}/user?username=${user.username}`, {
             headers: { Authorization: `Bearer ${user.token}` }
@@ -41,8 +41,8 @@ export default class SideBar extends React.Component {
             if (response && response.data)
                 resp_data = response.data;
             // console.log('resp_data', resp_data);
-            if (resp_data && resp_data.success && resp_data.success === true && resp_data.data && resp_data.data.is_admin) {
-                console.log(resp_data);
+            if (resp_data && resp_data.success && resp_data.success === true && resp_data.data && resp_data.data.hasOwnProperty('is_admin')) {
+                // console.log(resp_data);
                 this.setState({
                     isVisible: resp_data.data.is_admin,
                 });

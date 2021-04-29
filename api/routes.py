@@ -838,14 +838,14 @@ def payBill():
 # after user confirms and submits bill payment
 @app.route('/api/authBillPayment', methods=['POST'])
 @jwt_required()
-def authBillPayment:
+def authBillPayment():
     current_username = get_jwt_identity()
     if not current_username:
         return (jsonify({
             'success': False,
             'message': 'Invalid token.'
         }), 401)
-     try:
+    try:
         bill_json = request.get_json()
     except BadRequest:
         return (jsonify({
@@ -854,7 +854,7 @@ def authBillPayment:
         }), 400)
     else:
         bill_id = bill_json.get('bill_id')
-        if does_bill_exist(bill_id)
+        if does_bill_exist(bill_id):
             curr_bill = get_bill_obj(bill_id)
             set_bill_paid(curr_bill)
             return (jsonify({

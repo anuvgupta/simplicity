@@ -83,12 +83,6 @@ class User(me.Document):
     payment_method = me.DictField()    # Keys: 'name_on_card', 'card_number', 'cvv', 'expiration', 'zipcode'
     payment_set = me.BooleanField(default=False)
     bills_list = me.EmbeddedDocumentListField(Bill)
-
-
-
-""" USER-RELATED FUNCTIONS """
-# function to create and save a new user to the database
-def create_user(username, email, pwd):
     is_admin = me.BooleanField(required=True, default=False) # admins (second level, users created by godmin)
     is_godmin = me.BooleanField(required=True, default=False) #Original admin (highest level, can create other admin)
     navColor = me.StringField()
@@ -116,8 +110,6 @@ def init_godmin():
 
 """ USER-RELATED FUNCTIONS """
 # function to create and save a new user to the database
-
-
 def create_user(username, email, pwd, project_list = None, is_admin = False, is_godmin = False):
     # TODO: implement bcrypt hashing for pwd
     hw_set = {}
@@ -584,7 +576,7 @@ def does_bill_exist(b_id) -> bool:
 
 def get_bill_obj(b_id):
     query_bill = Bill.objects(bill_id__exact=b_id)
-    elif len(query_bill) != 1:
+    if len(query_bill) != 1:
         return None
     bill = query_bill.first()
     if not bill:

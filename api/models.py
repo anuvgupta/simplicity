@@ -195,7 +195,7 @@ def create_project(name, proj_id, desc, username=""):
     new_project = Project(name=name, project_id=proj_id,
                           description=desc, owner=username)
     new_project.save(force_insert=True)
-    if username != "" and username != "admin":
+    if username != "":
         query = User.objects(username__exact=username)
         if len(query) != 1:
             return
@@ -204,6 +204,16 @@ def create_project(name, proj_id, desc, username=""):
             return
         user.projectList.append(proj_id)
         user.save()
+    return
+
+def delete_project_from_users(proj_id):
+    if not proj_id:
+        return
+    selected_users = User.objects(projectList=proj_id)
+    for user in selected_users:
+        if proj_id in user.projectList:
+            user.projectList.remove(proj_id)
+            user.save()
     return
 
 def delete_project(proj_id, username) -> bool:
@@ -223,11 +233,13 @@ def delete_project(proj_id, username) -> bool:
     proj = queryB.first()
     if not proj:
         return (False, "Project not found.")
-    if username != "admin":
-        if not (proj_id in user.projectList):
+    if not (proj_id in user.projectList):
+        if username != "admin":
             return (False, "Project does not belong to user.")
+    else:
         user.projectList.remove(proj_id)
         user.save()
+    delete_project_from_users(proj_id)
     proj.delete()
     return (True, "")
 

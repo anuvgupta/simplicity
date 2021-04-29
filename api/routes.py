@@ -165,30 +165,21 @@ def user():
         if current_username and username == current_username:
             user = get_user_obj(username)
             if user:
+                proj_list = user.projectList
                 if user.is_admin:
-                    return (jsonify({
+                    proj_list = get_project_ids()
+                print(proj_list)
+                return (jsonify({
                     'success': True,
                     'data': {
                         'username': user.username,
                         'email': user.email,
-                        'projectList': get_project_ids(),
+                        'projectList': proj_list,
                         'hw_sets': user.hw_sets,
                         'is_admin': user.is_admin,
                         'is_godmin': user.is_godmin
                     }
                 }), 200)
-                else: 
-                    return (jsonify({
-                        'success': True,
-                        'data': {
-                            'username': user.username,
-                            'email': user.email,
-                            'projectList': user.projectList,
-                            'hw_sets': user.hw_sets,
-                            'is_admin': user.is_admin,
-                            'is_godmin': user.is_godmin
-                        }
-                    }), 200)
             return (jsonify({
                 'success': False,
                 'message': 'User not found.'
@@ -211,14 +202,14 @@ def project():
     deleteProject = request.args.get('delete')
     if projectId:
         if deleteProject and deleteProject == 'true':
-            # result = delete_project(projectId, current_username)
-            # success = result[0]
-            # message = result[1]
-            # return (jsonify({
-            #     'success': success,
-            #     'message': 'Project deleted.' if success else ('Failed to delete project. ' + message)
-            # }), 200)
-            return (True, 200)
+            result = delete_project(projectId, current_username)
+            success = result[0]
+            message = result[1]
+            return (jsonify({
+                'success': success,
+                'message': 'Project deleted.' if success else ('Failed to delete project. ' + message)
+            }), 200)
+            # return (True, 200)
         else:
             # print(projectId)
             project = get_project_json(projectId)

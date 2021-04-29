@@ -2,10 +2,11 @@
 import '../global.js'
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import axios from 'axios'
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
+import Button from '@material-ui/core/Button';
 import '../styles/project.css'
 
 
@@ -109,7 +110,7 @@ class JoinProject extends React.Component {
                         <Form.Label style={{ marginTop: '18px' }}>Project ID</Form.Label>
                         <Form.Control style={{ marginTop: '8px' }} onChange={this.updateProjectId.bind(this)} type="name" placeholder="1" onKeyUp={this.keyUpListener.bind(this)} />
                     </Form.Group>
-                    <Button style={{ marginTop: '14px' }} onClick={this.addProject.bind(this)}>
+                    <Button variant="outlined" color="default" style={{ marginTop: '14px' }} onClick={this.addProject.bind(this)}>
                         Join Project
                     </Button>
                     <div style={{ marginTop: '30px' }}>

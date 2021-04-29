@@ -40,13 +40,13 @@ class Hardware extends React.Component {
             global.util.resizeQuery((_ => {
                 if (this.mounted) {
                     if (window.innerWidth < 1195) {
-                        console.log('1');
+                        // console.log('1');
                         this.setState({ cardsPerColumn: 1 });
                     } else if (window.innerWidth < 1495) {
-                        console.log('2');
+                        // console.log('2');
                         this.setState({ cardsPerColumn: 2 });
                     } else {
-                        console.log('3');
+                        // console.log('3');
                         this.setState({ cardsPerColumn: 3 });
                     }
                 }
@@ -97,7 +97,7 @@ class Hardware extends React.Component {
         };
         this.getHardwareInfo(user.token, (resp, error = null) => {
             if (resp) {
-                console.log(resp.data);
+                // console.log(resp.data);
                 this.setState({
                     hwList: resp.data
                 })

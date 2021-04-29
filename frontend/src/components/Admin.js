@@ -47,20 +47,22 @@ class Admin extends React.Component {
         // console.log("list is " + user.email);
         axios.get(`${global.config.api_url}/user?username=${user.username}`, {
             headers: { Authorization: `Bearer ${user.token}` }
-        }).then(response => {
+        }).then((response => {
             var resp_data = null;
             if (response && response.data)
                 resp_data = response.data;
             // console.log('resp_data', resp_data);
-            if (resp_data && resp_data.success && resp_data.success === true && resp_data.data && resp_data.data.username && resp_data.data.projectList) {
-
+            if (resp_data && resp_data.success && resp_data.success === true && resp_data.data && resp_data.data.username && resp_data.data.projectList && resp_data.data.hasOwnProperty('is_admin')) {
                 // this.setState({
                 //     username: resp_data.data.username,
                 //     projectList: resp_data.data.projectList,
                 //     totalHW: totalCheckedout
                 // });
+                if (resp_data.data.is_admin === false) {
+                    this.redirectPage();
+                }
             } else console.log('Invalid response: ', resp_data);
-        }).catch(error => {
+        }).bind(this)).catch(error => {
             if (error) {
                 var resp_data = null;
                 if (error.response && error.response.data)
@@ -118,7 +120,7 @@ class Admin extends React.Component {
                                     <Form.Group>
                                         <Form.Label style={{ marginTop: '0.5em' }}>Password</Form.Label>
                                         <Form.Control type="text" placeholder="password" style={{ marginBottom: '10px' }} />
-                                    </Form.Group>                                    
+                                    </Form.Group>
                                     <Form.Group>
                                         {/* <Form.Label style={{ marginTop: '0.5em' }}>Permissions </Form.Label> */}
                                         <Form.Check type="checkbox" label="Is user admin?" />
@@ -152,8 +154,8 @@ class Admin extends React.Component {
                                     <Form.Group>
                                         <Form.Label style={{ marginTop: '0.5em' }}>Capacity</Form.Label>
                                         <Form.Control type="text" placeholder="512 GB" style={{ marginBottom: '10px' }} />
-                                    </Form.Group>                                    
-                                    
+                                    </Form.Group>
+
                                     <Button style={{ marginTop: '20px' }}> Create Hardware Set </Button>
                                 </Form.Group>
                                 <span className="errorMessage" style={{ paddingTop: '15px' }}>{this.state.errorMsg}</span>

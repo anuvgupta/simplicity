@@ -185,10 +185,11 @@ class Admin extends React.Component {
                 if (global.util.validateAlphanumeric(username)) {
                     password = global.util.hashPassword(password);
                     if (sendRequest) {
-                        this.createNewUser(username, email, password, is_admin, is_godmin);
-                        global.api.authenticated((user => {
-                            if (user === false) this.redirectPage();
-                            else this.setupPage(user);
+                        this.createNewUser(username, email, password, is_admin, is_godmin, (_ => {
+                            global.api.authenticated((user => {
+                                if (user === false) this.redirectPage();
+                                else this.setupPage(user);
+                            }).bind(this));
                         }).bind(this));
                     }
                 } else this.updateResponseMsg('Invalid username (letters and numbers only).', true);
@@ -196,7 +197,7 @@ class Admin extends React.Component {
         } else this.updateResponseMsg('Empty username.', true);
     }
     // create_user(username, email, pwd, project_list, is_admin = False, is_godmin = False):
-    createNewUser(username, email, password, is_admin, is_godmin) {
+    createNewUser(username, email, password, is_admin, is_godmin, resolve = null) {
         var handleResponse = response => {
             var rMsg = "";
             var color = "";
@@ -224,6 +225,7 @@ class Admin extends React.Component {
                 });
                 console.log("hit this");
             }
+            if (resolve) resolve();
         };
         axios.post(`${global.config.api_url}/new_user`, {
             username: `${username}`,
@@ -256,10 +258,11 @@ class Admin extends React.Component {
             if (hw_name && hw_name.trim().length > 0) {
                 if (global.util.validateAlphanumeric(hw_id)) {
                     if (sendRequest) {
-                        this.createNewHwSet(hw_id, hw_name, hw_capacity);
-                        global.api.authenticated((user => {
-                            if (user === false) this.redirectPage();
-                            else this.setupPage(user);
+                        this.createNewHwSet(hw_id, hw_name, hw_capacity, (_ => {
+                            global.api.authenticated((user => {
+                                if (user === false) this.redirectPage();
+                                else this.setupPage(user);
+                            }).bind(this));
                         }).bind(this));
                     }
                 } else this.updateResponseMsg('Invalid hardware set ID (letters and numbers only).', false);
@@ -267,7 +270,8 @@ class Admin extends React.Component {
         } else this.updateResponseMsg('Empty hardware set ID.', false);
     }
 
-    createNewHwSet(hw_id, hw_name, hw_capacity) {
+    createNewHwSet(hw_id, hw_name, hw_capacity, resolve = null) {
+        console.log(hw_id, hw_name, hw_capacity);
         var handleResponse = response => {
             var rMsg = "";
             var color = "";
@@ -293,11 +297,12 @@ class Admin extends React.Component {
                     color: "errorMessage"
                 });
             }
+            if (resolve) resolve();
         };
         axios.post(`${global.config.api_url}/createHW`, {
             id: `${hw_id}`,
             name: `${hw_name}`,
-            h_capacity: `${hw_capacity}`
+            capacity: hw_capacity
         }, {
             headers: { Authorization: `Bearer ${this.state.token}` }
         }).then(response => {

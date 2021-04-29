@@ -131,15 +131,13 @@ class Admin extends React.Component {
             var rMsg = "";
             var color = "";
             if (response && response.hasOwnProperty('success')) {
-                if (response.success === true) {
+                if (response.success == true) {
                     rMsg = "User created successfully";
                     color = "successMessage";
                     // console.log("we need to put a success message here")
                 } else {
-                    if (response.hasOwnProperty('message') && typeof response.message === 'string') {
-                        rMsg = response.message;
-                        color = "red";
-                    }
+                    rMsg = response.message;
+                    color = "red";
                 }
             }
             if (color == "successMessage") {
@@ -147,10 +145,11 @@ class Admin extends React.Component {
                     respMsg: rMsg,
                     color: "successMessage"
                 });
+                console.log("Why am i not getting css right");
             } else {
                 // this.redirectPage('admin');
                 this.setState({
-                    respMsg: "Something went wrong",
+                    respMsg: response.message,
                     color: "errorMessage"
                 });
                 console.log("hit this");
@@ -234,7 +233,7 @@ class Admin extends React.Component {
                                     </Form.Group>
                                     <Button style={{ marginTop: '20px' }} onClick={this.validateForm.bind(this, true)}> Create user </Button>
                                 </Form.Group>
-                                <span className="errorMessage" style={{ paddingTop: '15px' }}>{this.state.respMsg}</span>
+                                <span className={color} style={{ paddingTop: '15px' }}>{this.state.respMsg}</span>
                                 {/* <span className="successMessage" style={{ paddingTop: '15px' }}>{this.state.successMsg}</span> */}
                             </Form>
                         </div>
@@ -266,7 +265,7 @@ class Admin extends React.Component {
 
                                     <Button style={{ marginTop: '20px' }}> Create Hardware Set </Button>
                                 </Form.Group>
-                                <span className={color} style={{ paddingTop: '15px' }}>{this.state.errorMsg}</span>
+                                <span className={color} style={{ paddingTop: '15px' }}>{this.state.respMsg}</span>
                             </Form>
                         </div>
                     </div>

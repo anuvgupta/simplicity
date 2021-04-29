@@ -257,6 +257,36 @@ def setUserTheme():
         'message': 'Unknown error.'
     }), 500)
 
+@app.route('/api/update_user', methods=['POST'])
+@jwt_required()
+def updateUser():
+    current_username = get_jwt_identity()
+    if not current_username:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid token.'
+        }), 401)
+    try:
+        new_user_json = request.get_json()
+    except BadRequest:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid request input data.'
+        }), 400)
+    else: 
+        new_username = new_user_json.get("username")
+        new_email = new_user_json.get("email")
+        new_password = new_user_json.get("password")
+        isAdmin = new_user_json.get("is_admin")
+        update_user(current_username, new_username, new_email, new_password, isAdmin)
+        return (jsonify({
+            'success': True,
+            'data': 'User sucessfully updated'
+        }), 200)
+    return (jsonify({
+        'success': False,
+        'message': 'Unknown error.'
+    }), 500)
 
 @ app.route('/api/projects', methods=['GET'])
 @jwt_required()

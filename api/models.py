@@ -197,6 +197,19 @@ def set_user_theme(username, theme):
     current_user.update(set__navColor=theme)
     return
 
+def update_user(currName, username, email, password, is_admin):
+    query = User.objects(username__exact=currName)
+    if len(query) != 1:
+        return None
+    current_user = query.first()
+    if not current_user:
+        return None
+    current_user.update(set__username=username)
+    return
+    # current_user.update(set__email=email)
+    # current_user.update(set__password=password)
+
+
 """ PROJECT-RELATION FUNCTIONS """
 # create a new project and save to database
 

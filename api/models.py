@@ -56,14 +56,14 @@ class Project(me.Document):
         max_length=20, required=True, unique=True, validation=_not_empty)
     description = me.StringField(max_length=200)
     members = me.ListField()    # store members by username
-    hw_dict = me.DictField()    # map hwset names to quantity checked out
+    hw_dict = me.DictField()    # map hwset id to quantity checked out
 
 
 class Bill(me.EmbeddedDocument):
     bill_id = me.StringField(max_length=20, required=True, unique=True, validation=_not_empty)    # randomly generated 6-digit number for now
     recipient_username = me.StringField(max_length=50, required=True, unique=False)    
     project_id = me.StringField(max_length=20, required=True, unique=True, validation=_not_empty)
-    hw_used = me.DictField()    # maps hw_set to quantity checked in
+    hw_used = me.DictField()    # maps hw_set_name to quantity checked in
     project_subtotal = me.DecimalField(min_value=0, force_string=True, precision=2)    # store as a string, can also force it to round a certain way if needed
     amount_due = me.DecimalField(min_value=0, force_string=True, precision=2)
     bill_paid = me.BooleanField(default=False)
@@ -366,7 +366,7 @@ def create_hw_set(h_id, name, capacity):
 
 
 def user_check_in(hw_set_id, checkin_quantity, username) -> int:
-    queryA = Hardware.objects(name__exact=hw_set_id)
+    queryA = Hardware.objects(hardware_id__exact=hw_set_id)
     if len(queryA) != 1:
         return 404
     hw_set = queryA.first()
@@ -396,8 +396,8 @@ def user_check_in(hw_set_id, checkin_quantity, username) -> int:
     return 1
 
 
-def project_check_in(hw_set_name, checkin_quantity, p_id):
-    queryA = Hardware.objects(name__exact=hw_set_name)
+def project_check_in(hw_set_id, checkin_quantity, p_id):
+    queryA = Hardware.objects(hardware_id__exact=hw_set_id)
     if len(queryA) != 1:
         return 404
     hw_set = queryA.first()
@@ -447,8 +447,8 @@ def user_check_out(hw_set_id, checkout_quantity, username):
     return 1
 
 
-def project_check_out(hw_set_name, checkout_quantity, p_id):
-    queryA = Hardware.objects(name__exact=hw_set_name)
+def project_check_out(hw_set_id, checkout_quantity, p_id):
+    queryA = Hardware.objects(hardware_id__exact=hw_set_id)
     if len(queryA) != 1:
         return 404
     hw_set = queryA.first()
@@ -465,10 +465,10 @@ def project_check_out(hw_set_name, checkout_quantity, p_id):
     hw_set.available -= checkout_quantity
     hw_set.save()
     if hw_set_name in project.hw_dict.keys():
-        project.hw_dict[hw_set_name] += checkout_quantity
+        project.hw_dict[hw_set_id] += checkout_quantity
         project.save()
     else:
-        project.hw_dict[hw_set_name] = checkout_quantity
+        project.hw_dict[hw_set_id] = checkout_quantity
         project.save()
     return 1
     
@@ -490,22 +490,39 @@ def does_hw_set_exist(hw_set_id) -> bool:
     return True
 
 
+def get_hw_obj(hw_set_id):
+    query_hw = Hardware.objects(hardware_id__exact=hw_set_id)
+    if len(query_hw) != 1:
+        return None
+    hardware = query_hw.first()
+    if not hardware:
+        return None
+    return hardware
+
 
 """ BILL AND PAYMENT RELATED FUNCTIONS """
-def create_bill(hw_set_name, p_id, checkin_quantity, curr_user):
+def create_bill(hw_set_id, p_id, checkin_quantity, curr_user):
     # generate unique Bill ID
     rand_bill_id = random.randint(100000, 999999)
     while Bill.objects(bill_id__exact=rand_bill_id):
         rand_bill_id = random.randint(100000, 999999)
     # determine price based off quantity checked in 
-    subtotal = int(checkin_quantity) * Decimal(hw_set_name.price)
-    # amount due for this user 
-    project = get_project_obj(p_id)
-    num_members = len(project.members)
-    user_total = np.round((subtotal / num_members), 2)
-    new_bill = Bill(bill_id=rand_bill_id, recipient_name=curr_user.payment_method['name'],
-                    project_id=p_id, hw_used=hw_set_name, project_subtotal=subtotal,
-                    amount_due=user_total, bill_paid=False)
+    hardware = get_hw_obj(hw_set_id)
+    subtotal = int(checkin_quantity) * Decimal(hardware.price)
+    temp_hw_dict = { hw_set_id : checkin_quantity }
+    # personal bill
+    if not p_id:
+        new_bill = Bill(bill_id=rand_bill_id, recipient_name=curr_user,
+                        project_id='n/a', hw_used=temp_hw_dict, project_subtotal=str(subtotal),
+                        amount_due=str(subtotal), bill_paid=False)
+    # project bill - amount due for this user 
+    elif p_id:
+        project = get_project_obj(p_id)
+        num_members = len(project.members)
+        user_total = round(subtotal / num_members, 2)
+        new_bill = Bill(bill_id=rand_bill_id, recipient_name=curr_user,
+                        project_id=p_id, hw_used=temp_hw_dict, project_subtotal=str(subtotal),
+                        amount_due=str(user_total), bill_paid=False)
     new_bill.save()
     user_obj = get_user_obj(curr_user)
     user_obj.bills_list.append(new_bill)

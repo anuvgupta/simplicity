@@ -580,9 +580,11 @@ def checkInHardware():
                     'message': 'Project does not exist.'
                 }), 404)
             ret_val = project_check_in(hardware_id, checkin_quantity, project_id)
+            create_bill(hardware_id, project_id, checkin_quantity, current_username)
         # check in from user
         elif hardware_json.get('project_id') == 'n/a':
             ret_val = user_check_in(hardware_id, checkin_quantity, current_username)
+            create_bill(hardware_id, None, checkin_quantity, current_username)
         if ret_val == 400:
             return (jsonify({
                 'success': False,
@@ -647,7 +649,7 @@ def checkOutHardware():
                     'success': False,
                     'message': 'Project does not exist.'
                 }), 404)
-            ret_val = project_check_out(hardware_name, checkout_quantity, project_id)
+            ret_val = project_check_out(hardware_id, checkout_quantity, project_id)
         # checkout to user
         elif hardware_json.get('project_id') == 'n/a':        # TODO: find out what is gonna get sent when checkout is personal
             ret_val = user_check_out(hardware_id, checkout_quantity, current_username)

@@ -26,6 +26,7 @@ import Datasets from "./components/Datasets";
 import Overview from "./components/Overview";
 import NavigationBar from "./components/NavBar";
 import JoinProject from './components/JoinProject.js';
+import SettingsPage from './components/SettingsPage.js';
 import Admin from './components/Admin.js';
 
 function App() {
@@ -85,6 +86,11 @@ function App() {
             <NavigationBar></NavigationBar>
             <SideBar active="datasets"></SideBar>
             <Datasets></Datasets>
+          </Route>
+          <Route path="/settings">
+            <NavigationBar></NavigationBar>
+            <SideBar active="settings"></SideBar>
+            <SettingsPage></SettingsPage>
           </Route>
           <Route path="/">
             <HomePage></HomePage>

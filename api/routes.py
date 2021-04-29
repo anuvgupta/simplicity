@@ -97,8 +97,9 @@ def new_user():
                 }), 409)
             else:
                 if not user.is_godmin:
+                    print("User wasn't god user")
                     new_is_admin = False
-                create_user(new_username, new_email, new_password, new_is_admin, False)
+                create_user(new_username, new_email, new_password, [], new_is_admin, False)
                 # access_token = create_access_token(identity=new_username)
                 return (jsonify({
                     'success': True,

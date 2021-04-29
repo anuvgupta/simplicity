@@ -22,6 +22,7 @@ import HardwareForm from './components/HardwareForm';
 import Hardware from './components/Hardware';
 import HomePage from "./components/HomePage";
 import Projects from './components/Projects';
+import Project from './components/Project';
 import Datasets from "./components/Datasets";
 import Overview from "./components/Overview";
 import NavigationBar from "./components/NavBar";
@@ -64,6 +65,11 @@ function App() {
             <NavigationBar></NavigationBar>
             <SideBar active="projects"></SideBar>
             <JoinProject></JoinProject>
+          </Route>
+          <Route path="/project/:id">
+            <NavigationBar></NavigationBar>
+            <SideBar active="projects"></SideBar>
+            <Project></Project>
           </Route>
           <Route path="/projects">
             <NavigationBar></NavigationBar>

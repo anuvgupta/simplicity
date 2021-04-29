@@ -74,7 +74,7 @@ class ProjectCard extends React.Component {
             if (!confirmation) return;
             axios.get(`${global.config.api_url}/projects?id=${this.state.id}&delete=true`, {
                 headers: { Authorization: `Bearer ${this.state.token}` }
-            }).then(response => {
+            }).then((response => {
                 var resp_data = null;
                 if (response && response.data)
                     resp_data = response.data;
@@ -84,7 +84,7 @@ class ProjectCard extends React.Component {
                 } else {
                     console.log(resp_data);
                 }
-            }).catch(error => {
+            }).bind(this)).catch(error => {
                 if (error) {
                     var resp_data = null;
                     if (error.response && error.response.data)
@@ -108,9 +108,9 @@ class ProjectCard extends React.Component {
                 <Card.Text>
                     {this.state.desc}
                 </Card.Text>
-                {/* <Button href={"/editProject/" + this.state.id} style={{ display: (this.state.hideButtons ? 'none' : 'inline-block') }}>
-                    Edit Project
-                </Button> */}
+                <Button href={"/project/" + this.state.id} style={{ display: (this.state.hideButtons ? 'none' : 'inline-block') }}>
+                    Manage
+                </Button>
                 <div style={{
                     position: 'absolute',
                     top: '5px',

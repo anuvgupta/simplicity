@@ -40,7 +40,7 @@ class ProjectForm extends React.Component {
 
     }
 
-    redirectPage(page = 'home') {
+    redirectPage(page = '') {
         this.props.history.push(`/${page}`);
     }
 
@@ -58,8 +58,8 @@ class ProjectForm extends React.Component {
         if (this.props.action == 'edit') {
             axios.get(`${global.config.api_url}/projects?id=${project_id}`, {
                 headers: { Authorization: `Bearer ${user.token}` }
-            }).then(response => {
-                console.log(response);
+            }).then((response => {
+                // console.log(response);
                 var resp_data = null;
                 if (response && response.data)
                     resp_data = response.data;
@@ -72,7 +72,7 @@ class ProjectForm extends React.Component {
                         initialProjectDescription: resp_data.description,
                     });
                 } else console.log('Invalid response: ', resp_data);
-            }).catch(error => {
+            }).bind(this)).catch(error => {
                 if (error) {
                     var resp_data = null;
                     if (error.response && error.response.data)

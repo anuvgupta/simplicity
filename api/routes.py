@@ -193,6 +193,34 @@ def user():
         'message': 'Invalid request input data.'
     }), 400)
 
+@app.route('/api/getNumUsers', methods=['POST'])
+@jwt_required()
+def getNumUsers():
+    current_username = get_jwt_identity()
+    if not current_username:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid token.'
+        }), 401)
+
+    query = User.objects()
+
+    if not query:
+        return (jsonify({
+            'success': False,
+            'message': 'Users not found.'
+        }), 404)
+    else: 
+        print(query.count())
+        return (jsonify({
+            'success': True,
+            'data': query.count()
+        }), 200)
+    return (jsonify({
+        'success': False,
+        'message': 'Unknown error.'
+    }), 500)
+
 
 @ app.route('/api/projects', methods=['GET'])
 @jwt_required()
@@ -374,7 +402,8 @@ def checkHardware():
             hardware_dict[hw.hardware_id] = {
                 'hardware_id': hw.hardware_id,
                 'available': hw.available,
-                'name': hw.name
+                'name': hw.name,
+                'capacity': hw.capacity
             }
         print(hardware_dict)
         return (jsonify({

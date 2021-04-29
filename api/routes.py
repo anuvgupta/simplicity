@@ -25,12 +25,7 @@ def api():
 
 @app.route('/api/home')
 def home():
-    # TODO: Render homepage
-    # TODO: Check for user authenticated, log into account page or show plain homepage
-    # Mock homepage below
-    user = {'username': 'Sylvia'}
-
-    return jsonify(user)
+    return redirect(url_for('api'))
 
 
 @app.route('/api/register', methods=['POST'])
@@ -228,7 +223,18 @@ def joinProject():
         if does_project_id_exist(project_id):
             user = get_user_obj(current_username)
             if user:
-                #TODO: Check for duplicates
+                # check if user has already joined this project
+                if user_already_joined(user):
+                    return jsonify({
+                        'success': False,
+                        'message': 'User is already a member of this project.'
+                    })
+                else:
+                    # add user to project and add project to user's projectList
+                    project_obj = get_project_obj(project_id)
+                    project_obj.members.append(user.username)
+                    project_obj.save()
+
                 user.projectList.append(project_id)
                 user.save()
                 return (jsonify({
@@ -238,7 +244,7 @@ def joinProject():
             else:
                 return (jsonify({
                     'success': False,
-                    'message': "unknonw"
+                    'message': "unknown"
                 }), 500)
         else:
             # create_project(project_name, project_id, project_description)
@@ -325,6 +331,7 @@ def checkHardware():
         'message': 'Unknown error.'
     }), 500)
 
+
 @app.route('/api/checkInHardware', methods=['POST'])
 @jwt_required()
 def checkInHardware():
@@ -355,7 +362,18 @@ def checkInHardware():
         checkin_quantity = int(hardware_json.get('quantity'))
         if not does_hw_set_exist(hardware_name):
             return (hw_response_404(), 404)
-        ret_val = check_in(hardware_name, checkin_quantity, current_username)
+        # check in from project
+        if hardware_json.get('project_id') != 'n/a':
+            project_id = hardware_json.get('project_id')
+            if not does_project_id_exist:
+                return (jsonify({
+                    'success': False,
+                    'message': 'Project does not exist.'
+                }), 404)
+            ret_val = project_check_in(hardware_name, checkin_quantity, project_id)
+        # check in from user
+        elif hardware_json.get('project_id') == 'n/a':
+            ret_val = user_check_in(hardware_name, checkin_quantity, current_username)
         if ret_val == 400:
             return (hw_response_400(), 400)
         elif ret_val == 404:
@@ -367,6 +385,7 @@ def checkInHardware():
             'data': { }
         }), 200)
     return (hw_response_500(), 500)
+
 
 @app.route('/api/checkOutHardware', methods=['POST'])
 @jwt_required()
@@ -398,7 +417,18 @@ def checkOutHardware():
         checkout_quantity = int(hardware_json.get('quantity'))
         if not does_hw_set_exist(hardware_name):
             return (hw_response_404(), 404)
-        ret_val = check_out(hardware_name, checkout_quantity, current_username)
+        # checkout to project
+        if hardware_json.get('project_id') != 'n/a':        
+            project_id = hardware_json.get('project_id')
+            if not does_project_id_exist:
+                return (jsonify({
+                    'success': False,
+                    'message': 'Project does not exist.'
+                }), 404)
+            ret_val = project_check_out(hardware_name, checkout_quantity, project_id)
+        # checkout to user
+        elif hardware_json.get('project_id') == 'n/a':        # TODO: find out what is gonna get sent when checkout is personal
+            ret_val = user_check_out(hardware_name, checkout_quantity, current_username)
         if ret_val == 400:
             return (hw_response_400(), 400)
         elif ret_val == 404:
@@ -422,3 +452,197 @@ def hardware():
 @jwt_required()
 def datasets():
     pass
+
+
+# billing page allows users to update payment info and shows all of their bills
+# bills show their unique id's and amount due for that user
+@app.route('/api/billing', methods=['POST'])
+@jwt_required()
+def billing():
+    current_username = get_jwt_identity()
+    if not current_username:
+        return(jsonify({
+            'success': False,
+            'message': 'Invalid token.'
+        }), 401)
+    bills_dict = dict()
+    query_user_bills = Bill.objects(recipient_name__exact=current_username)
+    if not query_user_bills:
+        return (jsonify({
+            'success': True,
+            'message': 'User currently has no bills.'
+        }), 200)
+    else:
+        for bill in query_user_bills:
+            bills_dict[bill.bill_id] = bill.amount_due
+        return (jsonify({
+            'success': True,
+            'data': bills_dict
+        }), 200)
+    return (jsonify({
+        'success': False,
+        'message': 'Unknown error.'
+    }), 400)
+
+    
+# after user clicks button to update payment
+@app.route('/api/payment', methods=['POST'])
+@jwt_required()
+def payment():
+    bill_response_10 = lambda : jsonify({
+        'success': False,
+        'message': 'Invalid card number.'
+    })
+    bill_response_11 = lambda : jsonify({
+        'success': False,
+        'message': 'Invalid CVV.'
+    })
+    bill_response_12 = lambda : jsonify({
+        'success': False,
+        'message': 'Invalid Expiration Date.'
+    })
+    bill_response_13 = lambda : jsonify({
+        'success': False,
+        'message': 'Invalid Zip Code.'
+    })
+    current_username = get_jwt_identity()
+    if not current_username:
+        return(jsonify({
+            'success': False,
+            'message': 'Invalid token.'
+        }), 401)
+    # get user payment info
+    try:
+        payment_json = request.get_json()
+    except BadRequest:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid request input data.'
+        }), 400)
+    else:
+        name_on_card = payment_json.get('name')
+        card_num = payment_json.get('card_number')
+        cvv = payment_json.get('cvv')
+        expiration = payment.json.get('expiration')
+        zipcode = payment.json.get('zipcode')
+        return_value = verify_payment_info(name_on_card, card_num, cvv, expiration,
+                            zipcode)
+        if return_value == 10:
+            return (bill_response_10(), 406)
+        elif return_value == 11:
+            return (bill_response_11(), 406)
+        elif return_value == 12:
+            return (bill_response_12(), 406)
+        elif return_value == 13:
+            return (bill_response_13(), 406)
+        # payment method is verified
+        update_payment_method(current_username, name_on_card, card_num,
+                                cvv, expiration, zipcode)
+        return (jsonify({
+            'success': True,
+            'data': { }
+        }), 200)
+    return (jsonify({
+        'success': False,
+        'message': 'Unknown error.'
+    }), 500)
+
+
+# when user tries to click on a particular bill to pay for it --> sends over detailed bill information
+@app.route('/api/payBill', methods=['POST'])
+@jwt_required()
+def payBill():
+    current_username = get_jwt_identity()
+    if not current_username:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid token.'
+        }), 401)
+    user = get_user_obj(current_username)
+    if not user.payment_set:
+        return(jsonify({
+            'success': False,
+            'message': 'User has not set payment method.'
+        }), 403)
+    try:
+        bill_json = request.get_json()
+    except BadRequest:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid request input data.'
+        }), 400)
+    else:
+        bill_id = bill_json.get('bill_id')
+        curr_bill = get_bill_obj(bill_id)
+        if curr_bill:
+            # don't allow user to pay for bill if they have already paid for it
+            if curr_bill.bill_paid:
+                return (jsonify({
+                    'success': False,
+                    'message': 'User has already paid this bill.'
+                }), 406)
+            # don't allow user to pay for bill if they have not set their payment method
+            elif not current_username.payment_set:
+                return (jsonify({
+                    'success': False,
+                    'message': 'User needs to set payment method.'
+                }), 406)
+            else:
+                return (jsonify({
+                    'success': True,
+                    'data': {
+                        'bill_id': bill_id,
+                        'recipient': current_username,
+                        'project_id': curr_bill.project_id,
+                        'hw_used': curr_bill.hw_used,
+                        'subtotal': curr_bill.project_subtotal,
+                        'amount_due': curr_bill.amount_due
+                    }
+                }), 200)
+        else:
+            return (jsonify({
+                'success': False,
+                'message': 'Bill not found.'
+            }), 404)
+    return (jsonify({
+        'success': False,
+        'message': 'Invalid request input data.'
+    }), 400)
+
+
+# after user confirms and submits bill payment
+@app.route('/api/authBillPayment', methods=['POST'])
+@jwt_required()
+def authBillPayment:
+    current_username = get_jwt_identity()
+    if not current_username:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid token.'
+        }), 401)
+     try:
+        bill_json = request.get_json()
+    except BadRequest:
+        return (jsonify({
+            'success': False,
+            'message': 'Invalid request input data.'
+        }), 400)
+    else:
+        bill_id = bill_json.get('bill_id')
+        if does_bill_exist(bill_id)
+            curr_bill = get_bill_obj(bill_id)
+            set_bill_paid(curr_bill)
+            return (jsonify({
+                'success': True,
+                'data': {}
+            }), 200)
+        else:
+            return (jsonify({
+                'success': False,
+                'message': 'Bill not found.'
+            }), 404)
+    return (jsonify({
+        'success': False,
+        'message': 'Unknown error.'
+    }), 400)
+        

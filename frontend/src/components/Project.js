@@ -169,7 +169,7 @@ class Project extends React.Component {
     }
 
     editClick() {
-        window.location = String(window.location.origin + "/editProject/" + this.state.projectID);
+        window.location = String(window.location.origin + "/editProject/" + this.state.projectID + '?next=project/' + this.state.projectID);
     }
 
     render() {
@@ -187,7 +187,7 @@ class Project extends React.Component {
                     <div style={{ position: 'absolute', top: '5px', left: '5px' }}>
                         <Button style={{ padding: '5px 20px' }} color="default" startIcon={<ArrowBackIosIcon />} onClick={this.backButtonClick.bind(this)}>Back</Button>
                     </div>
-                    <div style={{ position: 'absolute', top: '2px', right: '5px' }}>
+                    <div style={{ position: 'absolute', top: '-2px', right: '5px' }}>
                         <IconButton style={{ width: '36px', height: '36px' }} onClick={this.menuClick.bind(this)}>
                             <MoreVertIcon style={{ width: '24px', height: '24px' }}></MoreVertIcon>
                         </IconButton>

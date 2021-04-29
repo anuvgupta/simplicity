@@ -64,7 +64,7 @@ class SettingsPage extends React.Component {
                 console.log('Settings: setup user', user);
                 var color = resp_data.data.navColor;
                 console.log(color);
-                if (color == "") {
+                if (color === null || color == "") {
                     color = "#010101";
                     console.log("color is null");
                 }
@@ -240,7 +240,7 @@ class SettingsPage extends React.Component {
         });
         return (
             <div>
-                <div className="center overviewMain">
+                <div className="center overviewMain borderNone">
                     <div className="center">
                         <h1>Settings</h1>
                     </div>
@@ -250,10 +250,10 @@ class SettingsPage extends React.Component {
                     <Form>
                         <Form.Group as={Row} controlId="formSettings">
                             <Form.Label column sm={2}>
-                                username
+                                Username
                             </Form.Label>
                             <Col sm={10}>
-                                <Form.Control type="text" placeholder={this.state.username} onChange={this.updateUsername.bind(this)} />
+                                <Form.Control type="text" placeholder="username" defaultValue={this.state.username} onChange={this.updateUsername.bind(this)} />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} controlId="formHorizontalPassword">
@@ -261,13 +261,13 @@ class SettingsPage extends React.Component {
                                 Password
                             </Form.Label>
                             <Col sm={10}>
-                                <Form.Control type="password" placeholder="Password" onChange={this.updatePassword.bind(this)} />
+                                <Form.Control type="password" placeholder="********" onChange={this.updatePassword.bind(this)} />
                             </Col>
                         </Form.Group>
 
                         <Form.Group as={Row} controlId="formHorizontalCheck">
                             <Col sm={{ span: 6 }}>
-                                <Form.Check label="Is admin" disabled checked={this.state.is_admin} />
+                                <Form.Check label="&nbsp;Admin" disabled checked={this.state.is_admin} />
                             </Col>
                             <Col sm={{ span: 2, offset: 4 }}>
                                 <Button type="submit" onClick={this.validateForm.bind(this, true)}>Update Info</Button>

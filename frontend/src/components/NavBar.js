@@ -32,7 +32,7 @@ class NavigationBar extends React.Component {
         this.props.history.push('/');
     }
 
-    setupPage(user){
+    setupPage(user) {
         console.log('Settings: loading user ' + user.username);
         // console.log("list is " + user.email);
         axios.get(`${global.config.api_url}/user?username=${user.username}`, {
@@ -46,7 +46,7 @@ class NavigationBar extends React.Component {
                 console.log('Settings: setup user', user);
                 var color = resp_data.data.navColor;
                 console.log(color);
-                if(color == ""){
+                if (color === null || color == "") {
                     color = "#010101";
                     console.log("color is null");
                 }

@@ -27,6 +27,7 @@ class ProjectForm extends React.Component {
             initialProjectDescription: "",
             errorMsg: "",
             token: "",
+            nextPage: "projects"
         };
     }
 
@@ -50,10 +51,15 @@ class ProjectForm extends React.Component {
         var project_id = '';
         if (this.props.match.params.hasOwnProperty('id'))
             project_id = this.props.match.params.id;
+        let query = new URLSearchParams(this.props.location.search);
+        var next = 'projects';
+        if (query.has('next'))
+            next = query.get('next').trim();
         this.setState({
             token: user.token,
             projectID: `${project_id}`,
-            initialProjectID: `${project_id}`
+            initialProjectID: `${project_id}`,
+            nextPage: next
         });
         if (this.props.action == 'edit') {
             axios.get(`${global.config.api_url}/projects?id=${project_id}`, {
@@ -125,7 +131,7 @@ class ProjectForm extends React.Component {
                     errorMsg: errorMessage
                 });
             } else {
-                this.redirectPage('projects');
+                this.redirectPage(this.state.nextPage);
             }
         };
         axios.post(`${global.config.api_url}/${action}Project`, {

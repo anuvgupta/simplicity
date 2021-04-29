@@ -82,7 +82,7 @@ class User(me.Document):
     hw_sets = me.DictField()
     payment_method = me.DictField()    # Keys: 'name_on_card', 'card_number', 'cvv', 'expiration', 'zipcode'
     payment_set = me.BooleanField(default=False)
-    bills_list = me.EmbeddedDocumentListField(Bill)
+    bills_list = me.ListField()
     is_admin = me.BooleanField(required=True, default=False) # admins (second level, users created by godmin)
     is_godmin = me.BooleanField(required=True, default=False) #Original admin (highest level, can create other admin)
     navColor = me.StringField()
@@ -115,24 +115,17 @@ def create_user(username, email, pwd, project_list = None, is_admin = False, is_
     hw_set = {}
     projectList = []
     if project_list:
-       projectList = project_list 
+       projectList = project_list
+    if is_admin == False:
+        is_godmin = False
     if is_godmin == True:
-        new_user = User(username=username, email=email,
-                    password=pwd, projectList=projectList, hw_sets=hw_set, is_admin=True, is_godmin=True)
-        new_user.save(force_insert=True)
-        return
-    else:
-        if is_admin == True:
-            new_user = User(username=username, email=email,
-                    password=pwd, projectList=projectList, hw_sets=hw_set, is_admin=is_admin)
-            new_user.save(force_insert=True)
-            return
-        else:
-            new_user = User(username=username, email=email,
-                        password=pwd, projectList=projectList, hw_sets=hw_set)
-            # creates a new document, doesn't allow for updates if this document already exists
-            new_user.save(force_insert=True)
-            return
+        is_admin = True
+    new_user = User(username=username, email=email, password=pwd, projectList=projectList,
+                    hw_sets=hw_set, is_admin=is_admin, is_godmin=is_godmin, navColor="#000000",
+                    bills_list=[], payment_set=False, payment_method={})
+    # creates a new document, doesn't allow for updates if this document already exists
+    new_user.save(force_insert=True)
+    return
 
 
 # check if the username already exists in the database

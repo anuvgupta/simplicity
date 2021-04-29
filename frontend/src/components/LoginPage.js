@@ -128,7 +128,7 @@ class LoginPage extends React.Component {
                 </div>
                 <form>
                     Username: <input type="text" id="username" placeholder="username" onChange={this.updateUsername.bind(this)} onKeyUp={this.checkEnter.bind(this)}></input><br />
-                    Password: <input type="password" id="password" placeholder="password" onChange={this.updatePassword.bind(this)} onKeyUp={this.checkEnter.bind(this)}></input><br />
+                    Password: <input type="password" id="password" placeholder="********" onChange={this.updatePassword.bind(this)} onKeyUp={this.checkEnter.bind(this)}></input><br />
                     <Button style={{ marginTop: '8px' }} onClick={this.validateForm.bind(this, true)}> Sign In </Button>
                 </form>
                 <span className="errorMessage">{this.state.errorMsg}</span>

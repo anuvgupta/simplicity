@@ -2,7 +2,8 @@
 import '../global.js'
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Container, Form, Row } from 'react-bootstrap';
+import { Container, Form, Row } from 'react-bootstrap';
+import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
@@ -114,7 +115,7 @@ class Admin extends React.Component {
     redirectPage() {
         this.props.history.push('/home');
     }
-    getAdminStats(){
+    getAdminStats() {
         console.log("test");
     }
 
@@ -146,12 +147,12 @@ class Admin extends React.Component {
             }
         });
         this.getUserInfo(user.token, (resp, error = null) => {
-            if (resp){
+            if (resp) {
                 console.log(resp.data);
                 this.setState({
                     numUsers: resp.data
                 });
-            } else{
+            } else {
                 console.log(error);
             }
         });
@@ -159,7 +160,7 @@ class Admin extends React.Component {
             if (resp) {
                 console.log(resp.data);
                 var checkoutAmount = 0;
-                for(let entry in resp.data){
+                for (let entry in resp.data) {
                     // console.log(resp.data[entry].capacity);
                     checkoutAmount += resp.data[entry].capacity - resp.data[entry].available;
                 }
@@ -386,32 +387,30 @@ class Admin extends React.Component {
                 <div className="rightSide" style={{ marginBottom: '60px', marginTop: '55px' }}>
                     <div className="formCard" style={{ padding: '60px 40px 40px 40px' }}>
                         <div className="formCenter">
-                            <div className="centerTitle" style={{ marginBottom: '10px' }}>
+                            <div className="centerTitle" style={{ marginBottom: '20px' }}>
                                 <h1 style={{ fontSize: '2.2em' }}> Create Admin Users </h1>
                             </div>
-                            <Form>
-                                <Form.Group controlId="adminUserFrom">
-                                    <Form.Group>
-                                        <Form.Label style={{ marginTop: '0.5em' }}>Username</Form.Label>
-                                        <Form.Control type="text" placeholder="username" style={{ marginBottom: '10px' }} onChange={this.updateUsername.bind(this)} onKeyUp={this.checkEnter.bind(this)} />
-                                    </Form.Group>
-                                    <Form.Group>
-                                        <Form.Label style={{ marginTop: '0.5em' }}>Email</Form.Label>
-                                        <Form.Control type="text" placeholder="test@example.com" style={{ marginBottom: '10px' }} onChange={this.updateEmail.bind(this)} onKeyUp={this.checkEnter.bind(this)} />
-                                    </Form.Group>
-                                    <Form.Group>
-                                        <Form.Label style={{ marginTop: '0.5em' }}>Password</Form.Label>
-                                        <Form.Control type="text" placeholder="password" style={{ marginBottom: '10px' }} onChange={this.updatePassword.bind(this)} onKeyUp={this.checkEnter.bind(this)} />
-                                    </Form.Group>
-                                    <Form.Group>
-                                        {/* <Form.Label style={{ marginTop: '0.5em' }}>Permissions </Form.Label> */}
-                                        <Form.Check type="checkbox" label="Is user admin?" disabled={!this.state.is_godmin} onChange={this.updateAdmin.bind(this)} onKeyUp={this.checkEnter.bind(this)} />
-                                    </Form.Group>
-                                    <Button style={{ marginTop: '20px' }} onClick={this.validateForm.bind(this, true)}> Create user </Button>
+                            <Form.Group controlId="adminUserFrom">
+                                <Form.Group>
+                                    <Form.Label style={{ marginTop: '0.5em' }}>Username</Form.Label>
+                                    <Form.Control type="text" placeholder="username" style={{ marginBottom: '10px' }} onChange={this.updateUsername.bind(this)} onKeyUp={this.checkEnter.bind(this)} />
                                 </Form.Group>
-                                <span className={color} style={{ paddingTop: '15px' }}>{this.state.respMsg}</span>
-                                {/* <span className="successMessage" style={{ paddingTop: '15px' }}>{this.state.successMsg}</span> */}
-                            </Form>
+                                <Form.Group>
+                                    <Form.Label style={{ marginTop: '0.5em' }}>Email</Form.Label>
+                                    <Form.Control type="text" placeholder="name@email.com" style={{ marginBottom: '10px' }} onChange={this.updateEmail.bind(this)} onKeyUp={this.checkEnter.bind(this)} />
+                                </Form.Group>
+                                <Form.Group>
+                                    <Form.Label style={{ marginTop: '0.5em' }}>Password</Form.Label>
+                                    <Form.Control type="password" placeholder="********" style={{ marginBottom: '10px' }} onChange={this.updatePassword.bind(this)} onKeyUp={this.checkEnter.bind(this)} />
+                                </Form.Group>
+                                <Form.Group style={{ marginTop: '25px' }}>
+                                    {/* <Form.Label style={{ marginTop: '0.5em' }}>Permissions </Form.Label> */}
+                                    <Form.Check type="checkbox" label="&nbsp;Administrator Status" disabled={!this.state.is_godmin} onChange={this.updateAdmin.bind(this)} onKeyUp={this.checkEnter.bind(this)} />
+                                </Form.Group>
+                                <Button variant="outlined" color="default" style={{ marginTop: '20px' }} onClick={this.validateForm.bind(this, true)}> Create user </Button>
+                            </Form.Group>
+                            <span className={color} style={{ paddingTop: '15px' }}>{this.state.respMsg}</span>
+                            {/* <span className="successMessage" style={{ paddingTop: '15px' }}>{this.state.successMsg}</span> */}
                         </div>
                     </div>
                 </div>
@@ -424,25 +423,23 @@ class Admin extends React.Component {
                             <div className="centerTitle" style={{ marginBottom: '10px' }}>
                                 <h1 style={{ fontSize: '2.2em' }}> Create Hardware Set </h1>
                             </div>
-                            <Form>
-                                <Form.Group controlId="hwSetForm">
-                                    <Form.Group>
-                                        <Form.Label style={{ marginTop: '0.5em' }}>Hardware Set ID</Form.Label>
-                                        <Form.Control type="text" placeholder="hwSetX" style={{ marginBottom: '10px' }} onChange={this.updateH_ID.bind(this)} />
-                                    </Form.Group>
-                                    <Form.Group>
-                                        <Form.Label style={{ marginTop: '0.5em' }}>Hardware Set Name</Form.Label>
-                                        <Form.Control type="text" placeholder="Hardware Set 1" style={{ marginBottom: '10px' }} onChange={this.updateHName.bind(this)} />
-                                    </Form.Group>
-                                    <Form.Group>
-                                        <Form.Label style={{ marginTop: '0.5em' }}>Capacity</Form.Label>
-                                        <Form.Control type="text" placeholder="512 GB" style={{ marginBottom: '10px' }} onChange={this.updateHCapacity.bind(this)} />
-                                    </Form.Group>
-
-                                    <Button style={{ marginTop: '20px' }} onClick={this.validateHForm.bind(this, true)}> Create Hardware Set </Button>
+                            <Form.Group controlId="hwSetForm">
+                                <Form.Group>
+                                    <Form.Label style={{ marginTop: '0.5em' }}>Hardware Set ID</Form.Label>
+                                    <Form.Control type="text" placeholder="hwSetX" style={{ marginBottom: '10px' }} onChange={this.updateH_ID.bind(this)} />
                                 </Form.Group>
-                                <span className={color} style={{ paddingTop: '15px' }}>{this.state.hwRespMsg}</span>
-                            </Form>
+                                <Form.Group>
+                                    <Form.Label style={{ marginTop: '0.5em' }}>Hardware Set Name</Form.Label>
+                                    <Form.Control type="text" placeholder="Hardware Set 1" style={{ marginBottom: '10px' }} onChange={this.updateHName.bind(this)} />
+                                </Form.Group>
+                                <Form.Group>
+                                    <Form.Label style={{ marginTop: '0.5em' }}>Capacity</Form.Label>
+                                    <Form.Control type="text" placeholder="512 GB" style={{ marginBottom: '10px' }} onChange={this.updateHCapacity.bind(this)} />
+                                </Form.Group>
+
+                                <Button variant="outlined" color="default" style={{ marginTop: '20px' }} onClick={this.validateHForm.bind(this, true)}> Create Hardware Set </Button>
+                            </Form.Group>
+                            <span className={color} style={{ paddingTop: '15px' }}>{this.state.hwRespMsg}</span>
                         </div>
                     </div>
                 </div>

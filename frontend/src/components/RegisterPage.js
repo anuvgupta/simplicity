@@ -147,7 +147,7 @@ class RegisterPage extends React.Component {
                 <form>
                     Username: <input type="text" id="username" placeholder="username" onChange={this.updateUsername.bind(this)} onKeyUp={this.checkEnter.bind(this)}></input><br />
                     Email: <input type="email" id="email" placeholder="name@email.com" onChange={this.updateEmail.bind(this)} onKeyUp={this.checkEnter.bind(this)}></input><br />
-                    Password: <input type="password" id="password" placeholder="password" onChange={this.updatePassword.bind(this)} onKeyUp={this.checkEnter.bind(this)}></input><br />
+                    Password: <input type="password" id="password" placeholder="********" onChange={this.updatePassword.bind(this)} onKeyUp={this.checkEnter.bind(this)}></input><br />
                     <Button style={{ marginTop: '8px' }} onClick={this.validateForm.bind(this, true)}> Sign Up </Button>
                 </form>
                 <span className="errorMessage">{this.state.errorMsg}</span>

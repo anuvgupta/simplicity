@@ -430,11 +430,11 @@ class Admin extends React.Component {
                                 </Form.Group>
                                 <Form.Group>
                                     <Form.Label style={{ marginTop: '0.5em' }}>Hardware Set Name</Form.Label>
-                                    <Form.Control type="text" placeholder="Hardware Set 1" style={{ marginBottom: '10px' }} onChange={this.updateHName.bind(this)} />
+                                    <Form.Control type="text" placeholder="Hardware Set X" style={{ marginBottom: '10px' }} onChange={this.updateHName.bind(this)} />
                                 </Form.Group>
                                 <Form.Group>
-                                    <Form.Label style={{ marginTop: '0.5em' }}>Capacity</Form.Label>
-                                    <Form.Control type="text" placeholder="512 GB" style={{ marginBottom: '10px' }} onChange={this.updateHCapacity.bind(this)} />
+                                    <Form.Label style={{ marginTop: '0.5em' }}>Capacity (GB)</Form.Label>
+                                    <Form.Control type="text" placeholder="512" style={{ marginBottom: '10px' }} onChange={this.updateHCapacity.bind(this)} />
                                 </Form.Group>
 
                                 <Button variant="outlined" color="default" style={{ marginTop: '20px' }} onClick={this.validateHForm.bind(this, true)}> Create Hardware Set </Button>

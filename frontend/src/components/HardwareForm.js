@@ -234,9 +234,9 @@ class HardwareForm extends React.Component {
                                         <option value={hw_set.hardware_id} key={i}>{hw_set.name}</option>
                                     )) : ''}
                             </Form.Control>
-                            <Form.Label style={{ marginTop: '1em' }}> Request Capacity </Form.Label>
-                            <Form.Control type="name" placeholder="1 GB" onChange={this.updateQuantity.bind(this)} />
-                            <Form.Label style={{ marginTop: '1em' }}> Total Availability </Form.Label>
+                            <Form.Label style={{ marginTop: '1em' }}> Request Capacity (GB) </Form.Label>
+                            <Form.Control type="name" placeholder="10" onChange={this.updateQuantity.bind(this)} />
+                            <Form.Label style={{ marginTop: '1em' }}> Total Availability (GB) </Form.Label>
                             <Form.Control type="name" value={this.state.amount} disabled />
                             {/* <Form.Label>Description</Form.Label>
                             <Form.Control as="textarea" rows={3} /> */}

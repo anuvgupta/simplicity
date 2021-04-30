@@ -5,7 +5,7 @@ This file will contain decorators and their functions
 
 from flask import flash, jsonify, redirect, render_template, url_for, request
 from flask_cors import CORS
-from .__init__ import app, db
+from .__init__ import *
 from .models import *
 from werkzeug.exceptions import BadRequest
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, verify_jwt_in_request
@@ -19,7 +19,6 @@ def slash():
 
 @app.route('/api')
 def api():
-    
     return "Simplicity API"
 
 

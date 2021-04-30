@@ -520,13 +520,14 @@ def createHW():
         hw_set_id = hw_set_json.get('id')
         hw_set_name = hw_set_json.get('name')
         hw_set_capacity = hw_set_json.get('capacity')
+        hw_set_price = hw_set_json.get('price')
         if does_hw_set_exist(hw_set_id):
             return (jsonify({
                 'success': False,
                 'message': 'Hardware Set already exists.'
             }), 409)
         else:
-            create_hw_set(hw_set_id, hw_set_name, hw_set_capacity)
+            create_hw_set(hw_set_id, hw_set_name, hw_set_capacity, hw_set_price)
             return (jsonify({
                 'success': True,
                 'data': {
@@ -695,7 +696,7 @@ def datasets():
 
 # billing page allows users to update payment info and shows all of their bills
 # bills show their unique id's and amount due for that user
-@app.route('/api/billing', methods=['POST'])
+@app.route('/api/billing', methods=['GET'])
 @jwt_required()
 def billing():
     current_username = get_jwt_identity()
@@ -704,16 +705,17 @@ def billing():
             'success': False,
             'message': 'Invalid token.'
         }), 401)
-    bills_dict = dict()
-    query_user_bills = Bill.objects(recipient_name__exact=current_username)
-    if not query_user_bills:
+    query_user_bills = Bill.objects(recipient_username__exact=current_username)
+    if len(query_user_bills) < 1:
         return (jsonify({
             'success': True,
-            'message': 'User currently has no bills.'
+            'message': 'User currently has no bills.',
+            'data': {}
         }), 200)
     else:
+        bills_dict = dict()
         for bill in query_user_bills:
-            bills_dict[bill.bill_id] = bill.amount_due
+            bills_dict[bill.bill_id] = bill_obj_to_dict(bill)
         return (jsonify({
             'success': True,
             'data': bills_dict

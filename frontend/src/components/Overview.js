@@ -24,6 +24,7 @@ class Overview extends React.Component {
             projectList: [],
             hwUsageList: {},
             projectHWUsageList: {},
+            is_admin: false,
             first: false
         };
     }
@@ -65,7 +66,8 @@ class Overview extends React.Component {
                     username: resp_data.data.username,
                     projectList: resp_data.data.projectList,
                     hwUsageList: resp_data.data.hw_sets ? resp_data.data.hw_sets : {},
-                    projectHWUsageList: resp_data.data.proj_hw_usage ? resp_data.data.proj_hw_usage : {}
+                    projectHWUsageList: resp_data.data.proj_hw_usage ? resp_data.data.proj_hw_usage : {},
+                    is_admin: resp_data.data.is_admin
                 });
             } else console.log('Invalid response: ', resp_data);
         }).catch(error => {
@@ -104,7 +106,7 @@ class Overview extends React.Component {
                             <div className="topPanel" style={{ maxWidth: `${cardDivWidth}px`, float: 'left' }}>
                                 <div className="hwLeftOverview" style={{ marginRight: '15px' }}>
                                     <div className="overviewCard">
-                                        <h1 className="top" style={{ fontSize: '1.5em', marginTop: '7px' }}> You have </h1>
+                                        <h1 className="top" style={{ fontSize: (this.state.is_admin ? '1.8em' : '1.5em'), marginTop: (this.state.is_admin ? '3.5px' : '7px') }}> {(this.state.is_admin ? 'Total' : 'You have')} </h1>
                                         <h1 className="num"> {this.state.projectList.length} </h1>
                                         <h1 className="bottom" style={{ fontSize: '1.9em' }}> project{this.state.projectList.length == 1 ? '' : 's'} </h1>
                                     </div>

@@ -21,7 +21,7 @@ class HardwareForm extends React.Component {
             username: "",
             password: "",
             token: "",
-            hwSetID: "hwSet1",
+            hwSetID: "hwSetA",
             respData: {},
             amount: "",
             quantity: "",
@@ -110,7 +110,7 @@ class HardwareForm extends React.Component {
                 var hwSetID = this.state.hwSetID;
                 // console.log(hwSetID);
                 // console.log(resp.data[hwSetID]);
-                console.log(resp);
+                // console.log(resp);
                 this.setState({
                     amount: resp.data[hwSetID].available
                 });

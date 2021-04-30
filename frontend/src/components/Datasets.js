@@ -17,40 +17,7 @@ class Datasets extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoaded: true,
-            posts: [
-                {
-                    projectName: "test1",
-                    projectId: "1",
-                    desc: " Lorem impsum ldeokdeosjdoisejdis"
-                },
-                {
-                    projectName: "test2",
-                    projectId: "2",
-                    desc: " Lorem impsum ldeokdeosjdoisejdis"
-                },
-                {
-                    projectName: "test1",
-                    projectId: "1",
-                    desc: " Lorem impsum ldeokdeosjdoisejdis"
-                },
-                {
-                    projectName: "test2",
-                    projectId: "2",
-                    desc: " Lorem impsum ldeokdeosjdoisejdis"
-                },
-                {
-                    projectName: "test1",
-                    projectId: "1",
-                    desc: " Lorem impsum ldeokdeosjdoisejdis"
-                },
-                {
-                    projectName: "test2",
-                    projectId: "2",
-                    desc: " Lorem impsum ldeokdeosjdoisejdis"
-                },
 
-            ],
         };
     }
 

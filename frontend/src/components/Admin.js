@@ -38,6 +38,7 @@ class Admin extends React.Component {
             h_id: "",
             h_name: "",
             h_capacity: 512,
+            h_price: 1,
             color: ""
         };
     }
@@ -92,6 +93,17 @@ class Admin extends React.Component {
     updateHCapacity(event) {
         this.setState({
             h_capacity: event.target.value
+        });
+    }
+    updateHPrice(event) {
+        var updateVal = 1.0;
+        try {
+            updateVal = parseFloat(`${event.target.value}`);
+        } catch (e) {
+            return;
+        }
+        this.setState({
+            h_price: updateVal
         });
     }
 
@@ -254,11 +266,12 @@ class Admin extends React.Component {
         var hw_id = this.state.h_id;
         var hw_name = this.state.h_name;
         var hw_capacity = this.state.h_capacity;
+        var hw_price = this.state.h_price;
         if (hw_id && hw_id.trim().length > 0) {
             if (hw_name && hw_name.trim().length > 0) {
                 if (global.util.validateAlphanumeric(hw_id)) {
                     if (sendRequest) {
-                        this.createNewHwSet(hw_id, hw_name, hw_capacity, (_ => {
+                        this.createNewHwSet(hw_id, hw_name, hw_capacity, hw_price, (_ => {
                             global.api.authenticated((user => {
                                 if (user === false) this.redirectPage();
                                 else this.setupPage(user);
@@ -270,8 +283,8 @@ class Admin extends React.Component {
         } else this.updateResponseMsg('Empty hardware set ID.', false);
     }
 
-    createNewHwSet(hw_id, hw_name, hw_capacity, resolve = null) {
-        console.log(hw_id, hw_name, hw_capacity);
+    createNewHwSet(hw_id, hw_name, hw_capacity, hw_price, resolve = null) {
+        // console.log(hw_id, hw_name, hw_capacity);
         var handleResponse = response => {
             var rMsg = "";
             var color = "";
@@ -302,7 +315,8 @@ class Admin extends React.Component {
         axios.post(`${global.config.api_url}/createHW`, {
             id: `${hw_id}`,
             name: `${hw_name}`,
-            capacity: hw_capacity
+            capacity: hw_capacity,
+            price: hw_price
         }, {
             headers: { Authorization: `Bearer ${this.state.token}` }
         }).then(response => {
@@ -431,16 +445,20 @@ class Admin extends React.Component {
                             </div>
                             <Form.Group controlId="hwSetForm">
                                 <Form.Group>
-                                    <Form.Label style={{ marginTop: '0.5em', fontSize: '19px' }}>Hardware Set ID</Form.Label>
+                                    <Form.Label style={{ marginTop: '0.5em', fontSize: '19px' }}> Hardware Set ID </Form.Label>
                                     <Form.Control type="text" placeholder="hwSetX" style={{ marginBottom: '10px' }} onChange={this.updateH_ID.bind(this)} />
                                 </Form.Group>
                                 <Form.Group>
-                                    <Form.Label style={{ marginTop: '0.5em', fontSize: '19px' }}>Hardware Set Name</Form.Label>
+                                    <Form.Label style={{ marginTop: '0.5em', fontSize: '19px' }}> Hardware Set Name </Form.Label>
                                     <Form.Control type="text" placeholder="Hardware Set X" style={{ marginBottom: '10px' }} onChange={this.updateHName.bind(this)} />
                                 </Form.Group>
                                 <Form.Group>
-                                    <Form.Label style={{ marginTop: '0.5em', fontSize: '19px' }}>Capacity (GB)</Form.Label>
+                                    <Form.Label style={{ marginTop: '0.5em', fontSize: '19px' }}> Capacity (GB) </Form.Label>
                                     <Form.Control type="text" placeholder="512" style={{ marginBottom: '10px' }} onChange={this.updateHCapacity.bind(this)} />
+                                </Form.Group>
+                                <Form.Group>
+                                    <Form.Label style={{ marginTop: '0.5em', fontSize: '19px' }}> Price ($/GB) </Form.Label>
+                                    <Form.Control type="text" placeholder="4.35" style={{ marginBottom: '10px' }} onChange={this.updateHPrice.bind(this)} />
                                 </Form.Group>
 
                                 <Button variant="outlined" color="default" style={{ marginTop: '20px' }} onClick={this.validateHForm.bind(this, true)}> Create Hardware Set </Button>

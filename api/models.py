@@ -12,6 +12,7 @@ from flask import jsonify
 import mongoengine as me
 import numpy as np
 import random
+import time
 import re
 from wtforms.validators import DataRequired, ValidationError
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -33,15 +34,15 @@ class Hardware(me.Document):
 
 
 def init_hardware():
-    query = Hardware.objects(hardware_id="hwSet1")
+    query = Hardware.objects(hardware_id="hwSetA")
     hwSet1 = query.first()
     if not hwSet1:
-        hw1 = Hardware(hardware_id="hwSet1", name="Hardware Set 1", capacity=512, available=512)
+        hw1 = Hardware(hardware_id="hwSetA", name="Hardware Set A", capacity=512, available=512, price=4.89)
         hw1.save(force_insert=True)
-    query = Hardware.objects(hardware_id="hwSet2")
+    query = Hardware.objects(hardware_id="hwSetB")
     hwSet2 = query.first()
     if not hwSet2:
-        hw2 = Hardware(hardware_id="hwSet2", name="Hardware Set 2", capacity=1024, available=1024)
+        hw2 = Hardware(hardware_id="hwSetB", name="Hardware Set B", capacity=1024, available=1024, price=2.45)
         hw2.save(force_insert=True)
     # creates a new document, doesn't allow for updates if this document already exists
     return
@@ -59,14 +60,14 @@ class Project(me.Document):
     hw_dict = me.DictField()    # map hwset id to quantity checked out
 
 
-class Bill(me.EmbeddedDocument):
-    bill_id = me.StringField(max_length=20, required=True, unique=True, validation=_not_empty)    # randomly generated 6-digit number for now
+class Bill(me.Document):
     recipient_username = me.StringField(max_length=50, required=True, unique=False)    
-    project_id = me.StringField(max_length=20, required=True, unique=True, validation=_not_empty)
+    project_id = me.StringField(max_length=20, required=False, unique=False, validation=_not_empty)
     hw_used = me.DictField()    # maps hw_set_name to quantity checked in
     project_subtotal = me.DecimalField(min_value=0, force_string=True, precision=2)    # store as a string, can also force it to round a certain way if needed
     amount_due = me.DecimalField(min_value=0, force_string=True, precision=2)
     bill_paid = me.BooleanField(default=False)
+    timestamp = me.IntField(required=True)
 
 
 # defines fields for user accounts
@@ -388,9 +389,9 @@ def user_already_joined(project_obj, username) -> bool:
 
 """ HARDWARE SET RELATED FUNCTIONS """
 
-def create_hw_set(h_id, name, capacity):
+def create_hw_set(h_id, name, capacity, price):
     new_hw_set = Hardware(hardware_id=h_id, name=name,
-                          capacity=capacity, available=capacity)
+                          capacity=capacity, available=capacity, price=price)
     new_hw_set.save(force_insert=True)
     return
 
@@ -532,31 +533,40 @@ def get_hw_obj(hw_set_id):
 
 
 """ BILL AND PAYMENT RELATED FUNCTIONS """
-def create_bill(hw_set_id, p_id, checkin_quantity, curr_user):
-    # generate unique Bill ID
-    rand_bill_id = random.randint(100000, 999999)
-    while Bill.objects(bill_id__exact=rand_bill_id):
-        rand_bill_id = random.randint(100000, 999999)
+def create_bill(hw_set_id, p_id, checkin_quantity, curr_username):
     # determine price based off quantity checked in 
+    if not does_hw_set_exist(hw_set_id):
+        return False
     hardware = get_hw_obj(hw_set_id)
+    if not hardware:
+        return False
     subtotal = int(checkin_quantity) * Decimal(hardware.price)
-    temp_hw_dict = { hw_set_id : checkin_quantity }
-    # personal bill
     if not p_id:
-        new_bill = Bill(bill_id=rand_bill_id, recipient_name=curr_user,
-                        project_id='n/a', hw_used=temp_hw_dict, project_subtotal=str(subtotal),
-                        amount_due=str(subtotal), bill_paid=False)
-    # project bill - amount due for this user 
+        # personal bill
+        bill_cost_total = subtotal
     elif p_id:
+        # project bill - amount due for this user 
+        if not does_project_id_exist(p_id):
+            return False
         project = get_project_obj(p_id)
+        if not project:
+            return False
         num_members = len(project.members)
         user_total = round(subtotal / num_members, 2)
-        new_bill = Bill(bill_id=rand_bill_id, recipient_name=curr_user,
-                        project_id=p_id, hw_used=temp_hw_dict, project_subtotal=str(subtotal),
-                        amount_due=str(user_total), bill_paid=False)
+        bill_cost_total = user_total
+    if not does_user_name_exist(curr_username):
+        return False
+    user_obj = get_user_obj(curr_username)
+    if not user_obj:
+        return False
+    timestamp = time.time()
+    new_bill = Bill(recipient_username=curr_username, project_id=p_id,
+                    hw_used={ hw_set_id : checkin_quantity },
+                    project_subtotal=str(subtotal),
+                    amount_due=str(bill_cost_total),
+                    bill_paid=False, timestamp=timestamp)
     new_bill.save()
-    user_obj = get_user_obj(curr_user)
-    user_obj.bills_list.append(new_bill)
+    user_obj.bills_list.append(str(new_bill.id))
     user_obj.save()
     return 1
 
@@ -634,5 +644,14 @@ def set_bill_paid(bill_obj):
     bill_obj.bill_paid = True
     bill_obj.save()
     
-
-    
+def bill_obj_to_dict(bill_obj):
+    return {
+        'recipient_username': bill_obj.recipient_username,
+        'project_id': bill_obj.project_id if ('project_id' in bill_obj) else None,
+        'bill_id': bill_obj.bill_id,
+        'hw_used': bill_obj.hw_used,
+        'project_subtotal': bill_obj.project_subtotal,
+        'amount_due': bill_obj.amount_due,
+        'bill_paid': bill_obj.bill_paid,
+        'timestamp': bill_obj.timestamp
+    }

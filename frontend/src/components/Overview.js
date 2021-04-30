@@ -106,12 +106,12 @@ class Overview extends React.Component {
                                     <div className="overviewCard">
                                         <h1 className="top" style={{ fontSize: '1.5em', marginTop: '7px' }}> You have </h1>
                                         <h1 className="num"> {this.state.projectList.length} </h1>
-                                        <h1 className="bottom" style={{ fontSize: '1.9em' }}> projects </h1>
+                                        <h1 className="bottom" style={{ fontSize: '1.9em' }}> project{this.state.projectList.length == 1 ? '' : 's'} </h1>
                                     </div>
                                 </div>
                                 <div className="hwRightOverview" style={{ marginLeft: '15px' }}>
                                     <div className="overviewCard">
-                                        <h1 className="top" style={{ fontSize: '1.4em', marginTop: '4px', marginBottom: '12.5px' }}> Hardware Checked Out </h1>
+                                        <h1 className="top" style={{ fontSize: '1.4em', marginTop: '4px', marginBottom: '12.5px' }}> Hardware checked out </h1>
                                         <h1 className="num"> {hw_usage[0]} GB </h1>
                                         <h1 className="bottom" style={{ fontSize: '1.4em', color: '#333', marginTop: '15px', marginBottom: '5px' }}> {hw_usage[1]} GB Personal &nbsp;/&nbsp; {hw_usage[2]} GB Shared </h1>
                                     </div>

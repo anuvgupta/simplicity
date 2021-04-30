@@ -372,16 +372,17 @@ class Admin extends React.Component {
             <div>
                 <div className="center overviewMain">
                     <div className="rightSideAlt">
-                        <div className="centerTitle">
-                            <h1 style={{ fontSize: '3em', marginBottom: "3.5vh" }}> Admin </h1>
+                        <div className="centerTitle" style={{ marginBottom: "3.5vh" }}>
+                            <h1 style={{ fontSize: '3em', marginBottom: '2px' }}> Admin </h1>
+                            <h6 style={{ display: (this.state.is_godmin ? 'block' : 'none'), color: '#444', marginBottom: '3px', fontStyle: 'italic', fontSize: '18px' }}> godmin </h6>
                         </div>
                         <div className="topPanel">
 
                             <div className="centerCard overviewCard">
-                                <h1 className="top" style={{ fontSize: '1.5em' }}> <span className="">{this.state.numUsers}</span> user{(this.state.numUsers == 1 ? '' : 's')} </h1>
-                                <h1 className="top" style={{ fontSize: '1.5em' }}> <span className="">{this.state.projectList.length} </span> project{(this.state.projectList.length == 1 ? '' : 's')} </h1>
-                                <h1 className="top" style={{ fontSize: '1.5em' }}> <span className="">{Object.keys(this.state.hw_sets).length}</span> hardware set{(Object.keys(this.state.hw_sets).length == 1 ? '' : 's')} </h1>
-                                <h1 className="top" style={{ fontSize: '1.5em' }}> <span className="">{this.state.usedHw}</span> GB checked out </h1>
+                                <h1 className="top" style={{ fontSize: '1.5em' }}> <span className="adminItem">{this.state.numUsers}</span> User{(this.state.numUsers == 1 ? '' : 's')} </h1>
+                                <h1 className="top" style={{ fontSize: '1.5em' }}> <span className="adminItem">{this.state.projectList.length} </span> Project{(this.state.projectList.length == 1 ? '' : 's')} </h1>
+                                <h1 className="top" style={{ fontSize: '1.5em' }}> <span className="adminItem">{Object.keys(this.state.hw_sets).length}</span> Hardware Set{(Object.keys(this.state.hw_sets).length == 1 ? '' : 's')} </h1>
+                                <h1 className="top" style={{ fontSize: '1.5em' }}> <span className="adminItem">{this.state.usedHw} GB</span> checked out </h1>
 
                             </div>
 
@@ -397,15 +398,15 @@ class Admin extends React.Component {
                             </div>
                             <Form.Group controlId="adminUserFrom">
                                 <Form.Group>
-                                    <Form.Label style={{ marginTop: '0.5em' }}>Username</Form.Label>
+                                    <Form.Label style={{ marginTop: '0.5em', fontSize: '19px' }}>Username</Form.Label>
                                     <Form.Control type="text" placeholder="username" style={{ marginBottom: '10px' }} onChange={this.updateUsername.bind(this)} onKeyUp={this.checkEnter.bind(this)} />
                                 </Form.Group>
                                 <Form.Group>
-                                    <Form.Label style={{ marginTop: '0.5em' }}>Email</Form.Label>
+                                    <Form.Label style={{ marginTop: '0.5em', fontSize: '19px' }}>Email</Form.Label>
                                     <Form.Control type="text" placeholder="name@email.com" style={{ marginBottom: '10px' }} onChange={this.updateEmail.bind(this)} onKeyUp={this.checkEnter.bind(this)} />
                                 </Form.Group>
                                 <Form.Group>
-                                    <Form.Label style={{ marginTop: '0.5em' }}>Password</Form.Label>
+                                    <Form.Label style={{ marginTop: '0.5em', fontSize: '19px' }}>Password</Form.Label>
                                     <Form.Control type="password" placeholder="********" style={{ marginBottom: '10px' }} onChange={this.updatePassword.bind(this)} onKeyUp={this.checkEnter.bind(this)} />
                                 </Form.Group>
                                 <Form.Group style={{ marginTop: '25px' }}>
@@ -430,15 +431,15 @@ class Admin extends React.Component {
                             </div>
                             <Form.Group controlId="hwSetForm">
                                 <Form.Group>
-                                    <Form.Label style={{ marginTop: '0.5em' }}>Hardware Set ID</Form.Label>
+                                    <Form.Label style={{ marginTop: '0.5em', fontSize: '19px' }}>Hardware Set ID</Form.Label>
                                     <Form.Control type="text" placeholder="hwSetX" style={{ marginBottom: '10px' }} onChange={this.updateH_ID.bind(this)} />
                                 </Form.Group>
                                 <Form.Group>
-                                    <Form.Label style={{ marginTop: '0.5em' }}>Hardware Set Name</Form.Label>
+                                    <Form.Label style={{ marginTop: '0.5em', fontSize: '19px' }}>Hardware Set Name</Form.Label>
                                     <Form.Control type="text" placeholder="Hardware Set X" style={{ marginBottom: '10px' }} onChange={this.updateHName.bind(this)} />
                                 </Form.Group>
                                 <Form.Group>
-                                    <Form.Label style={{ marginTop: '0.5em' }}>Capacity (GB)</Form.Label>
+                                    <Form.Label style={{ marginTop: '0.5em', fontSize: '19px' }}>Capacity (GB)</Form.Label>
                                     <Form.Control type="text" placeholder="512" style={{ marginBottom: '10px' }} onChange={this.updateHCapacity.bind(this)} />
                                 </Form.Group>
 

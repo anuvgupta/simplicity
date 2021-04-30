@@ -234,16 +234,16 @@ class HardwareForm extends React.Component {
                     </div>
                     <div className="hardwareForm" style={{ marginBottom: '15px' }}>
                         <Form.Group controlId="projectName">
-                            <Form.Label style={{ marginTop: '1em' }}> Hardware Set </Form.Label>
+                            <Form.Label style={{ marginTop: '1em', fontSize: '19px' }}> Hardware Set </Form.Label>
                             <Form.Control as="select" onChange={this.updateSetID.bind(this)}>
                                 {Object.keys(this.state.hwList).length > 0 ?
                                     Object.values(this.state.hwList).map((hw_set, i) => (
                                         <option value={hw_set.hardware_id} key={i}>{hw_set.name}</option>
                                     )) : ''}
                             </Form.Control>
-                            <Form.Label style={{ marginTop: '1em' }}> Request Capacity (GB) </Form.Label>
+                            <Form.Label style={{ marginTop: '1em', fontSize: '19px' }}> Request Capacity (GB) </Form.Label>
                             <Form.Control type="name" placeholder="10" onChange={this.updateQuantity.bind(this)} />
-                            <Form.Label style={{ marginTop: '1em' }}> Total Availability (GB) </Form.Label>
+                            <Form.Label style={{ marginTop: '1em', fontSize: '19px' }}> Total Availability (GB) </Form.Label>
                             <Form.Control type="name" value={this.state.amount} disabled />
                             {/* <Form.Label>Description</Form.Label>
                             <Form.Control as="textarea" rows={3} /> */}

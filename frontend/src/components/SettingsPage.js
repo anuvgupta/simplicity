@@ -307,7 +307,7 @@ class SettingsPage extends React.Component {
                             Admin
                             </Form.Label>
                         <Col sm={{ span: 3 }}>
-                            <Form.Check style={{ fontSize: '15px', marginTop: '7px' }} label={"Administrator Status" + (this.state.is_godmin ? ' (Godmin)' : '')} disabled checked={this.state.is_admin} />
+                            <Form.Check style={{ fontSize: '15px', marginTop: '7px' }} label={"Administrator Status" + (this.state.is_godmin ? ' (godmin)' : '')} disabled checked={this.state.is_admin} />
                         </Col>
                         <Col sm={{ span: 3, offset: 3 }} style={{ marginTop: '5px' }}>
                             <Button variant="outlined" color="default" type="submit" onClick={this.validateForm.bind(this, true)}>Update Info</Button>

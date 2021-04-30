@@ -1,11 +1,17 @@
-.successMessage{
+.successMessage {
     font-size: 20px;
     color: green;
     opacity: 0.8;
     display: block;
     margin-top: 18px;
 }
-.centerCard{
+.centerCard {
     margin-left: auto;
     margin-right: auto;
+}
+
+span.adminItem {
+    font-size: 27px;
+    padding-right: 3px;
+    font-weight: bold;
 }

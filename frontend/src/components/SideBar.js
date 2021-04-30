@@ -22,7 +22,7 @@ export default class SideBar extends React.Component {
     }
 
     componentDidMount() {
-        global.api.authenticated((user => {
+        global.api.authenticate((user => {
             if (user === false) this.redirectPage();
             else this.setupPage(user);
         }).bind(this));
@@ -67,6 +67,7 @@ export default class SideBar extends React.Component {
                     <NavLink to="/projects" style={{ backgroundColor: (active == 'projects' ? this.state.activeBG : this.state.inactiveBG) }}> Projects </NavLink>
                     <NavLink to="/hardware" style={{ backgroundColor: (active == 'hardware' ? this.state.activeBG : this.state.inactiveBG) }}> Hardware </NavLink>
                     <NavLink to="/datasets" style={{ backgroundColor: (active == 'datasets' ? this.state.activeBG : this.state.inactiveBG) }}> Datasets </NavLink>
+                    <NavLink to="/billing" style={{ backgroundColor: (active == 'billing' ? this.state.activeBG : this.state.inactiveBG) }}> Billing </NavLink>
                     <NavLink to="/settings" style={{ backgroundColor: (active == 'settings' ? this.state.activeBG : this.state.inactiveBG) }}> Settings </NavLink>
                 </div>
                 <div className="main">

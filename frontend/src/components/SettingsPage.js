@@ -29,7 +29,8 @@ class SettingsPage extends React.Component {
             password: "",
             curPassword: "",
             email: "",
-            is_admin: "",
+            is_admin: false,
+            is_godmin: false,
             navColor: "",
             token: "",
             displayColorPicker: false,
@@ -40,7 +41,7 @@ class SettingsPage extends React.Component {
     }
 
     componentDidMount() {
-        global.api.authenticated((user => {
+        global.api.authenticate((user => {
             if (user === false) this.redirectPage();
             else this.setupPage(user);
         }).bind(this));
@@ -64,7 +65,7 @@ class SettingsPage extends React.Component {
                 resp_data = response.data;
             // console.log('resp_data', resp_data);
             if (resp_data && resp_data.success && resp_data.success === true && resp_data.data && resp_data.data.username) {
-                console.log('Settings: setup user', user);
+                // console.log('Settings: setup user', user);
                 var color = resp_data.data.navColor;
                 // console.log(color);
                 if (color === null || color == "") {
@@ -77,6 +78,7 @@ class SettingsPage extends React.Component {
                     password: resp_data.data.password,
                     email: resp_data.data.email,
                     is_admin: resp_data.data.is_admin,
+                    is_godmin: resp_data.data.is_godmin,
                     token: user.token,
                     color: color
                 });
@@ -161,12 +163,8 @@ class SettingsPage extends React.Component {
             if (password && password.trim().length > 0) {
                 if (curPassword && curPassword.trim().length > 0) {
                     if (global.util.validateAlphanumeric(username)) {
-                        console.log(password);
                         password = global.util.hashPassword(password);
-                        console.log(password);
-                        console.log(curPassword);
                         curPassword = global.util.hashPassword(curPassword);
-                        console.log(curPassword);
                         if (sendRequest) {
                             this.updateUser(username, email, password, is_admin, curPassword);
                         }
@@ -271,32 +269,32 @@ class SettingsPage extends React.Component {
 
                 </div>
                 <div className="overviewMain borderNone marginTopSmaller centerWidth60">
-                    <Form.Group as={Row} controlId="formSettings">
-                        <Form.Label column sm={3}>
+                    <Form.Group as={Row} controlId="formSettings1">
+                        <Form.Label column sm={3} style={{ fontSize: '17.5px' }}>
                             Username
                             </Form.Label>
                         <Col sm={9}>
                             <Form.Control type="text" placeholder="username" defaultValue={this.state.username} onChange={this.updateUsername.bind(this)} />
                         </Col>
                     </Form.Group>
-                    <Form.Group as={Row} controlId="formSettings">
-                        <Form.Label column sm={3}>
+                    <Form.Group as={Row} controlId="formSettings2">
+                        <Form.Label column sm={3} style={{ fontSize: '17.5px' }}>
                             Email
                             </Form.Label>
                         <Col sm={9}>
                             <Form.Control type="text" placeholder="name@email.com" defaultValue={this.state.email} onChange={this.updateEmail.bind(this)} />
                         </Col>
                     </Form.Group>
-                    <Form.Group as={Row} controlId="formHorizontalPassword">
-                        <Form.Label column sm={3}>
+                    <Form.Group as={Row} controlId="formHorizontalPassword1">
+                        <Form.Label column sm={3} style={{ fontSize: '17.5px' }}>
                             Password
                             </Form.Label>
                         <Col sm={9}>
                             <Form.Control type="password" placeholder="********" onChange={this.updatePassword.bind(this)} />
                         </Col>
                     </Form.Group>
-                    <Form.Group as={Row} controlId="formHorizontalPassword">
-                        <Form.Label column sm={3}>
+                    <Form.Group as={Row} controlId="formHorizontalPassword2">
+                        <Form.Label column sm={3} style={{ fontSize: '17.5px' }}>
                             Current Password
                             </Form.Label>
                         <Col sm={9}>
@@ -305,11 +303,11 @@ class SettingsPage extends React.Component {
                     </Form.Group>
 
                     <Form.Group as={Row} controlId="formHorizontalCheck">
-                        <Form.Label column sm={3}>
+                        <Form.Label column sm={3} style={{ fontSize: '17.5px' }}>
                             Admin
                             </Form.Label>
                         <Col sm={{ span: 3 }}>
-                            <Form.Check style={{ fontSize: '15px', marginTop: '7px' }} label="&nbsp;Administrator Status" disabled checked={this.state.is_admin} />
+                            <Form.Check style={{ fontSize: '15px', marginTop: '7px' }} label={"Administrator Status" + (this.state.is_godmin ? ' (Godmin)' : '')} disabled checked={this.state.is_admin} />
                         </Col>
                         <Col sm={{ span: 3, offset: 3 }} style={{ marginTop: '5px' }}>
                             <Button variant="outlined" color="default" type="submit" onClick={this.validateForm.bind(this, true)}>Update Info</Button>
@@ -318,7 +316,7 @@ class SettingsPage extends React.Component {
                     <span className={this.state.msgColor} style={{ paddingTop: '15px' }}>{this.state.respMsg}</span>
 
                     <Form.Group as={Row} style={{ marginTop: '35px' }}>
-                        <Form.Label column sm={3}>
+                        <Form.Label column sm={3} style={{ fontSize: '17.5px' }}>
                             Theme
                             </Form.Label>
                         <Col sm={9}>

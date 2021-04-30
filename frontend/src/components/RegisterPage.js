@@ -3,7 +3,7 @@
 
 import axios from 'axios';
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import Button from '@material-ui/core/Button';
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -30,7 +30,7 @@ class RegisterPage extends React.Component {
     }
 
     componentDidMount() {
-        global.api.authenticated(is_authenticated => {
+        global.api.authenticate(is_authenticated => {
             if (is_authenticated) this.redirectPage();
         });
     }
@@ -144,11 +144,11 @@ class RegisterPage extends React.Component {
                 <div className="centerTitle">
                     <h1 className="loginTitle titleFont">Sign Up</h1>
                 </div>
-                <form>
+                <form style={{ marginTop: '7px' }}>
                     Username: <input type="text" id="username" placeholder="username" onChange={this.updateUsername.bind(this)} onKeyUp={this.checkEnter.bind(this)}></input><br />
                     Email: <input type="email" id="email" placeholder="name@email.com" onChange={this.updateEmail.bind(this)} onKeyUp={this.checkEnter.bind(this)}></input><br />
-                    Password: <input type="password" id="password" placeholder="password" onChange={this.updatePassword.bind(this)} onKeyUp={this.checkEnter.bind(this)}></input><br />
-                    <Button style={{ marginTop: '8px' }} onClick={this.validateForm.bind(this, true)}> Sign Up </Button>
+                    Password: <input type="password" id="password" placeholder="********" onChange={this.updatePassword.bind(this)} onKeyUp={this.checkEnter.bind(this)}></input><br />
+                    <Button variant="outlined" color="default" style={{ marginTop: '12px' }} onClick={this.validateForm.bind(this, true)}> Sign Up </Button>
                 </form>
                 <span className="errorMessage">{this.state.errorMsg}</span>
             </div>

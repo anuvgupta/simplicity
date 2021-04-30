@@ -2,10 +2,12 @@
 import '../global.js'
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import axios from 'axios'
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import Button from '@material-ui/core/Button';
 import '../styles/project.css'
 
 
@@ -28,7 +30,7 @@ class JoinProject extends React.Component {
     }
 
     componentDidMount() {
-        global.api.authenticated((user => {
+        global.api.authenticate((user => {
             if (user === false) this.redirectPage();
             else this.setupPage(user);
         }).bind(this));
@@ -96,26 +98,34 @@ class JoinProject extends React.Component {
         }
     }
 
+    backButtonClick() {
+        this.redirectPage('projects');
+    }
 
     render() {
         return (
-            <div className="center rightSide vCenter">
-                <div className="formBorder">
-                    <div className="centerTitle">
-                        <h1> Join Project</h1>
-                    </div>
-                    {/* An area where users can create new project, by providing project name, description, and projectID. */}
-                    <Form.Group controlId="projectName">
-                        <Form.Label style={{ marginTop: '18px' }}>Project ID</Form.Label>
-                        <Form.Control style={{ marginTop: '8px' }} onChange={this.updateProjectId.bind(this)} type="name" placeholder="1" onKeyUp={this.keyUpListener.bind(this)} />
-                    </Form.Group>
-                    <Button style={{ marginTop: '14px' }} onClick={this.addProject.bind(this)}>
-                        Join Project
+            <div style={{ position: 'relative' }}>
+                <div className="rightSide center vCenterAlt">
+                    <div className="formBorder">
+                        <div className="centerTitle">
+                            <h1> Join Project</h1>
+                        </div>
+                        {/* An area where users can create new project, by providing project name, description, and projectID. */}
+                        <Form.Group controlId="projectName2">
+                            <Form.Label style={{ marginTop: '18px', fontSize: '19px' }}>Project ID</Form.Label>
+                            <Form.Control style={{ marginTop: '8px' }} onChange={this.updateProjectId.bind(this)} type="name" placeholder="testProject1" onKeyUp={this.keyUpListener.bind(this)} />
+                        </Form.Group>
+                        <Button variant="outlined" color="default" style={{ marginTop: '14px' }} onClick={this.addProject.bind(this)}>
+                            Join Project
                     </Button>
-                    <div style={{ marginTop: '30px' }}>
-                        <span className={this.state.color}>{this.state.msg}</span>
-                    </div>
+                        <div style={{ marginTop: '30px' }}>
+                            <span className={this.state.color}>{this.state.msg}</span>
+                        </div>
 
+                    </div>
+                </div>
+                <div style={{ position: 'absolute', top: 'calc(68px + 35px)', left: 'calc(14.3vw + 40px)' }}>
+                    <Button style={{ padding: '5px 20px', opacity: '0.92' }} color="default" startIcon={<ArrowBackIosIcon />} onClick={this.backButtonClick.bind(this)}>Back</Button>
                 </div>
             </div>
         );

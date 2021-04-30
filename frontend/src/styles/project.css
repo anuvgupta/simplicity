@@ -35,6 +35,10 @@
     margin-top: 18vh;
     margin-bottom: auto;
 }
+.vCenterAlt {
+    padding-top: 18vh;
+    margin-bottom: auto;
+}
 div .projectMain {
     width: calc(100% - 14.3vw);
     margin: 30px auto 0 14.3vw;

@@ -11,7 +11,7 @@ global.config = {
 };
 
 global.api = {
-    authenticated: resolve => {
+    authenticate: resolve => {
         var token = global.util.cookie('token');
         if (token && token.trim().length > 0) {
             var handleResponse = response => {
@@ -78,6 +78,9 @@ global.util = {
                 (global.util.is.set(date) ? '; expires=' + date : '');
         }
         return global.util.is.unset(val) ? null : val;
+    },
+    random: (min, max) => {
+        return Math.floor(Math.random() * (max - min) + min);
     },
     delete_cookie: id => {
         global.util.cookie(id, '', 'Thu, 01 Jan 1970 00:00:00 GMT');

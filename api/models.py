@@ -12,6 +12,7 @@ from flask import jsonify
 import mongoengine as me
 import numpy as np
 import random
+import time
 import re
 from wtforms.validators import DataRequired, ValidationError
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -33,15 +34,15 @@ class Hardware(me.Document):
 
 
 def init_hardware():
-    query = Hardware.objects(hardware_id="hwSet1")
+    query = Hardware.objects(hardware_id="hwSetA")
     hwSet1 = query.first()
     if not hwSet1:
-        hw1 = Hardware(hardware_id="hwSet1", name="Hardware Set 1", capacity=512, available=512)
+        hw1 = Hardware(hardware_id="hwSetA", name="Hardware Set A", capacity=512, available=512, price=4.89)
         hw1.save(force_insert=True)
-    query = Hardware.objects(hardware_id="hwSet2")
+    query = Hardware.objects(hardware_id="hwSetB")
     hwSet2 = query.first()
     if not hwSet2:
-        hw2 = Hardware(hardware_id="hwSet2", name="Hardware Set 2", capacity=1024, available=1024)
+        hw2 = Hardware(hardware_id="hwSetB", name="Hardware Set B", capacity=1024, available=1024, price=2.45)
         hw2.save(force_insert=True)
     # creates a new document, doesn't allow for updates if this document already exists
     return
@@ -56,17 +57,17 @@ class Project(me.Document):
         max_length=20, required=True, unique=True, validation=_not_empty)
     description = me.StringField(max_length=200)
     members = me.ListField()    # store members by username
-    hw_list = me.DictField()    # map hwset names to quantity checked out
+    hw_dict = me.DictField()    # map hwset id to quantity checked out
 
 
-class Bill(me.EmbeddedDocument):
-    bill_id = me.StringField(max_length=20, required=True, unique=True, validation=_not_empty)    # randomly generated 6-digit number for now
+class Bill(me.Document):
     recipient_username = me.StringField(max_length=50, required=True, unique=False)    
-    project_id = me.StringField(max_length=20, required=True, unique=True, validation=_not_empty)
-    hw_used = me.DictField()    # maps hw_set to quantity checked in
+    project_id = me.StringField(max_length=20, required=False, unique=False, validation=_not_empty)
+    hw_used = me.DictField()    # maps hw_set_name to quantity checked in
     project_subtotal = me.DecimalField(min_value=0, force_string=True, precision=2)    # store as a string, can also force it to round a certain way if needed
     amount_due = me.DecimalField(min_value=0, force_string=True, precision=2)
     bill_paid = me.BooleanField(default=False)
+    timestamp = me.IntField(required=True)
 
 
 # defines fields for user accounts
@@ -226,13 +227,33 @@ def update_user(currName, currPwd, username, email, password, is_admin):
     current_user.save()
     return (True, "")
 
+def get_proj_hw_usage(username):
+    usage_obj = {}
+    queryA = User.objects(username__exact=username)
+    if len(queryA) != 1:
+        return (None, "User not found.")
+    current_user = queryA.first()
+    if not current_user:
+        return (None, "User not found.")
+    if current_user.projectList and len(current_user.projectList) > 0:
+        for p_id in current_user.projectList:
+            queryB = Project.objects(project_id__exact=p_id)
+            if len(queryB) == 1:
+                p_obj = queryB.first()
+                if p_obj and p_obj.hw_dict:
+                    for hw_id in p_obj.hw_dict:
+                        if hw_id not in usage_obj:
+                            usage_obj[hw_id] = 0
+                        usage_obj[hw_id] += p_obj.hw_dict[hw_id]
+    return (usage_obj, "")
 
 
 """ PROJECT-RELATION FUNCTIONS """
 # create a new project and save to database
 def create_project(name, proj_id, desc, username=""):
     new_project = Project(name=name, project_id=proj_id,
-                          description=desc, owner=username)
+                          description=desc, owner=username, 
+                          members=[], hw_dict={})
     new_project.save(force_insert=True)
     if username != "":
         query = User.objects(username__exact=username)
@@ -243,6 +264,10 @@ def create_project(name, proj_id, desc, username=""):
             return
         user.projectList.append(proj_id)
         user.save()
+        members_list = []
+        members_list.append(username)
+        new_project.members = members_list
+        new_project.save()
     return
 
 def delete_project_from_users(proj_id):
@@ -272,6 +297,12 @@ def delete_project(proj_id, username) -> bool:
     proj = queryB.first()
     if not proj:
         return (False, "Project not found.")
+    if proj.hw_dict and len(proj.hw_dict) > 0:
+        total_shared_usage = 0
+        for hw_set_id in proj.hw_dict:
+            total_shared_usage += int(proj.hw_dict[hw_set_id])
+        if total_shared_usage > 0:
+            return (False, "Project contains hardware, check in before deleting.")
     if not (proj_id in user.projectList):
         if username != "admin":
             return (False, "Project does not belong to user.")
@@ -317,7 +348,8 @@ def get_project_json(project_id):
     return jsonify({
         "projectName": project.name,
         "id": project.project_id,
-        "description": project.description
+        "description": project.description,
+        "hw_dict": project.hw_dict
     })
 
 
@@ -341,11 +373,15 @@ def get_project_ids() -> []:
     return projectIds
 
 
-def user_already_joined(curr_project, curr_user) -> bool:
+def user_already_joined(project_obj, username) -> bool:
     # joinProject already calls does_project_id_exist to check if the project is valid
     # '==' is case sensitive
-    for member in curr_project.members.keys():
-        if curr_user == member.username:
+    for member in project_obj.members:
+        if username == member:
+            return True
+    user_obj = get_user_obj(username)
+    for projID in user_obj.projectList:
+        if projID == project_obj.project_id:
             return True
     return False
   
@@ -353,15 +389,15 @@ def user_already_joined(curr_project, curr_user) -> bool:
 
 """ HARDWARE SET RELATED FUNCTIONS """
 
-def create_hw_set(h_id, name, capacity):
+def create_hw_set(h_id, name, capacity, price):
     new_hw_set = Hardware(hardware_id=h_id, name=name,
-                          capacity=capacity, available=capacity)
+                          capacity=capacity, available=capacity, price=price)
     new_hw_set.save(force_insert=True)
     return
 
 
 def user_check_in(hw_set_id, checkin_quantity, username) -> int:
-    queryA = Hardware.objects(name__exact=hw_set_id)
+    queryA = Hardware.objects(hardware_id__exact=hw_set_id)
     if len(queryA) != 1:
         return 404
     hw_set = queryA.first()
@@ -373,6 +409,9 @@ def user_check_in(hw_set_id, checkin_quantity, username) -> int:
     user = queryB.first()
     if not user:
         return 404
+    if hw_set_id not in user.hw_sets or user.hw_sets[hw_set_id] <= 0:
+        user.hw_sets[hw_set_id] = 0
+        return 400
     # check if requested quantity is valid
     # print(hw_set.capacity)
     if checkin_quantity > int(user.hw_sets[hw_set_id]): 
@@ -383,16 +422,13 @@ def user_check_in(hw_set_id, checkin_quantity, username) -> int:
         return 400
     hw_set.available += checkin_quantity
     hw_set.save()     # since the hardware set already existed, this saves the document with the new available quantity
-    if hw_set_id not in user.hw_sets or user.hw_sets[hw_set_id] <= 0:
-        user.hw_sets[hw_set_id] = 0
-        return 400
     user.hw_sets[hw_set_id] -= checkin_quantity
     user.save()
     return 1
 
 
-def project_check_in(hw_set_name, checkin_quantity, p_id):
-    queryA = Hardware.objects(name__exact=hw_set_name)
+def project_check_in(hw_set_id, checkin_quantity, p_id):
+    queryA = Hardware.objects(hardware_id__exact=hw_set_id)
     if len(queryA) != 1:
         return 404
     hw_set = queryA.first()
@@ -404,21 +440,24 @@ def project_check_in(hw_set_name, checkin_quantity, p_id):
     project = queryB.first()
     if not project:
         return 404
+    if hw_set_id not in project.hw_dict or project.hw_dict[hw_set_id] <= 0:
+        project.hw_dict[hw_set_id] = 0
+        return 400
     # see if check in quantity is greater than capacity checked out to project
-    if checkin_quantity > int(project.hw_list[hw_set]):
+    if checkin_quantity > int(project.hw_dict[hw_set_id]):
         return 400
     if checkin_quantity > int(hw_set.capacity):
         return 400
     hw_set.available += checkin_quantity
     hw_set.save()
-    project.hw_list[hw_set] -= checkin_quantity
+    project.hw_dict[hw_set_id] -= checkin_quantity
     project.save()
     # TODO: generate bill for each project member
     return 1
 
 
 def user_check_out(hw_set_id, checkout_quantity, username):
-    queryA = Hardware.objects(name__exact=hw_set_id)
+    queryA = Hardware.objects(hardware_id__exact=hw_set_id)
     if len(queryA) != 1:
         return 404
     hw_set = queryA.first()
@@ -442,8 +481,8 @@ def user_check_out(hw_set_id, checkout_quantity, username):
     return 1
 
 
-def project_check_out(hw_set_name, checkout_quantity, p_id):
-    queryA = Hardware.objects(name__exact=hw_set_name)
+def project_check_out(hw_set_id, checkout_quantity, p_id):
+    queryA = Hardware.objects(hardware_id__exact=hw_set_id)
     if len(queryA) != 1:
         return 404
     hw_set = queryA.first()
@@ -459,12 +498,10 @@ def project_check_out(hw_set_name, checkout_quantity, p_id):
         return 400
     hw_set.available -= checkout_quantity
     hw_set.save()
-    if hw_set_name in project.hw_list.keys():
-        project.hw_list[hw_set_name] += checkout_quantity
-        project.save()
-    else:
-        project.hw_list[hw_set_name] = checkout_quantity
-        project.save()
+    if hw_set_id not in project.hw_dict or project.hw_dict[hw_set_id] <= 0:
+        project.hw_dict[hw_set_id] = 0
+    project.hw_dict[hw_set_id] += checkout_quantity
+    project.save()
     return 1
     
 
@@ -485,25 +522,51 @@ def does_hw_set_exist(hw_set_id) -> bool:
     return True
 
 
+def get_hw_obj(hw_set_id):
+    query_hw = Hardware.objects(hardware_id__exact=hw_set_id)
+    if len(query_hw) != 1:
+        return None
+    hardware = query_hw.first()
+    if not hardware:
+        return None
+    return hardware
+
 
 """ BILL AND PAYMENT RELATED FUNCTIONS """
-def create_bill(hw_set_name, p_id, checkin_quantity, curr_user):
-    # generate unique Bill ID
-    rand_bill_id = random.randint(100000, 999999)
-    while Bill.objects(bill_id__exact=rand_bill_id):
-        rand_bill_id = random.randint(100000, 999999)
+def create_bill(hw_set_id, p_id, checkin_quantity, curr_username):
     # determine price based off quantity checked in 
-    subtotal = int(checkin_quantity) * Decimal(hw_set_name.price)
-    # amount due for this user 
-    project = get_project_obj(p_id)
-    num_members = len(project.members)
-    user_total = np.round((subtotal / num_members), 2)
-    new_bill = Bill(bill_id=rand_bill_id, recipient_name=curr_user.payment_method['name'],
-                    project_id=p_id, hw_used=hw_set_name, project_subtotal=subtotal,
-                    amount_due=user_total, bill_paid=False)
+    if not does_hw_set_exist(hw_set_id):
+        return False
+    hardware = get_hw_obj(hw_set_id)
+    if not hardware:
+        return False
+    subtotal = int(checkin_quantity) * Decimal(hardware.price)
+    if not p_id:
+        # personal bill
+        bill_cost_total = subtotal
+    elif p_id:
+        # project bill - amount due for this user 
+        if not does_project_id_exist(p_id):
+            return False
+        project = get_project_obj(p_id)
+        if not project:
+            return False
+        num_members = len(project.members)
+        user_total = round(subtotal / num_members, 2)
+        bill_cost_total = user_total
+    if not does_user_name_exist(curr_username):
+        return False
+    user_obj = get_user_obj(curr_username)
+    if not user_obj:
+        return False
+    timestamp = time.time()
+    new_bill = Bill(recipient_username=curr_username, project_id=p_id,
+                    hw_used={ hw_set_id : checkin_quantity },
+                    project_subtotal=str(subtotal),
+                    amount_due=str(bill_cost_total),
+                    bill_paid=False, timestamp=timestamp)
     new_bill.save()
-    user_obj = get_user_obj(curr_user)
-    user_obj.bills_list.append(new_bill)
+    user_obj.bills_list.append(str(new_bill.id))
     user_obj.save()
     return 1
 
@@ -581,5 +644,14 @@ def set_bill_paid(bill_obj):
     bill_obj.bill_paid = True
     bill_obj.save()
     
-
-    
+def bill_obj_to_dict(bill_obj):
+    return {
+        'recipient_username': bill_obj.recipient_username,
+        'project_id': bill_obj.project_id if ('project_id' in bill_obj) else None,
+        'bill_id': bill_obj.bill_id,
+        'hw_used': bill_obj.hw_used,
+        'project_subtotal': bill_obj.project_subtotal,
+        'amount_due': bill_obj.amount_due,
+        'bill_paid': bill_obj.bill_paid,
+        'timestamp': bill_obj.timestamp
+    }

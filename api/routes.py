@@ -160,9 +160,17 @@ def user():
             user = get_user_obj(username)
             if user:
                 proj_list = user.projectList
-                if user.is_admin:
+                if user.is_admin or user.is_godmin:
                     proj_list = get_project_ids()
-                print(proj_list)
+                # print(proj_list)
+                proj_hw_usage_obj = {}
+                projectHWusage = request.args.get('projectHWusage')
+                if projectHWusage and (projectHWusage == 'true' or projectHWusage == True):
+                    result = get_proj_hw_usage(user.username)
+                    if result[0]:
+                        proj_hw_usage_obj = result[0]
+                    else:
+                        print(result[1])
                 return (jsonify({
                     'success': True,
                     'data': {
@@ -172,7 +180,8 @@ def user():
                         'hw_sets': user.hw_sets,
                         'is_admin': user.is_admin,
                         'is_godmin': user.is_godmin,
-                        'navColor':  user.navColor
+                        'navColor':  user.navColor,
+                        'proj_hw_usage': proj_hw_usage_obj
                     }
                 }), 200)
             return (jsonify({
@@ -376,19 +385,18 @@ def joinProject():
     else:
         project_id = project_json.get('id')
         if does_project_id_exist(project_id):
+            project_obj = get_project_obj(project_id)
             user = get_user_obj(current_username)
             if user:
                 # check if user has already joined this project
-                if user_already_joined(user):
+                if user_already_joined(project_obj, user.username):
                     return jsonify({
                         'success': False,
                         'message': 'User is already a member of this project.'
                     })
-                else:
-                    # add user to project and add project to user's projectList
-                    project_obj = get_project_obj(project_id)
-                    project_obj.members.append(user.username)
-                    project_obj.save()
+                # add user to project and add project to user's projectList
+                project_obj.members.append(user.username)
+                project_obj.save()
 
                 user.projectList.append(project_id)
                 user.save()
@@ -399,7 +407,7 @@ def joinProject():
             else:
                 return (jsonify({
                     'success': False,
-                    'message': "unknown"
+                    'message': "Unknown error."
                 }), 500)
         else:
             # create_project(project_name, project_id, project_description)
@@ -479,7 +487,8 @@ def checkHardware():
                 'hardware_id': hw.hardware_id,
                 'available': hw.available,
                 'name': hw.name,
-                'capacity': hw.capacity
+                'capacity': hw.capacity,
+                'price': float(hw.price)
             }
         print(hardware_dict)
         return (jsonify({
@@ -511,13 +520,14 @@ def createHW():
         hw_set_id = hw_set_json.get('id')
         hw_set_name = hw_set_json.get('name')
         hw_set_capacity = hw_set_json.get('capacity')
+        hw_set_price = hw_set_json.get('price')
         if does_hw_set_exist(hw_set_id):
             return (jsonify({
                 'success': False,
                 'message': 'Hardware Set already exists.'
             }), 409)
         else:
-            create_hw_set(hw_set_id, hw_set_name, hw_set_capacity)
+            create_hw_set(hw_set_id, hw_set_name, hw_set_capacity, hw_set_price)
             return (jsonify({
                 'success': True,
                 'data': {
@@ -570,18 +580,22 @@ def checkInHardware():
             return (hw_response_400_alt(), 400)
         if not does_hw_set_exist(hardware_id):
             return (hw_response_404(), 404)
-        # check in from project
-        if hardware_json.get('project_id') != 'n/a':
+        usage = "personal" if hardware_json.get('usage') == "personal" else "shared"
+        ret_val = 0
+        if usage == "personal":
+            # check in from user
+            ret_val = user_check_in(hardware_id, checkin_quantity, current_username)
+            create_bill(hardware_id, None, checkin_quantity, current_username)
+        else:
+            # check in from project
             project_id = hardware_json.get('project_id')
-            if not does_project_id_exist:
+            if not does_project_id_exist(project_id):
                 return (jsonify({
                     'success': False,
-                    'message': 'Project does not exist.'
+                    'message': 'Project ' + project_id + ' not found.'
                 }), 404)
             ret_val = project_check_in(hardware_id, checkin_quantity, project_id)
-        # check in from user
-        elif hardware_json.get('project_id') == 'n/a':
-            ret_val = user_check_in(hardware_id, checkin_quantity, current_username)
+            create_bill(hardware_id, project_id, checkin_quantity, current_username)
         if ret_val == 400:
             return (jsonify({
                 'success': False,
@@ -638,18 +652,20 @@ def checkOutHardware():
             return (hw_response_400_alt(), 400)
         if not does_hw_set_exist(hardware_id):
             return (hw_response_404(), 404)
-        # checkout to project
-        if hardware_json.get('project_id') != 'n/a':        
+        usage = "personal" if hardware_json.get('usage') == "personal" else "shared"
+        ret_val = 0
+        if usage == "personal":
+            # checkout to user
+            ret_val = user_check_out(hardware_id, checkout_quantity, current_username)
+        else:        
+            # checkout to project
             project_id = hardware_json.get('project_id')
-            if not does_project_id_exist:
+            if not does_project_id_exist(project_id):
                 return (jsonify({
                     'success': False,
-                    'message': 'Project does not exist.'
+                    'message': 'Project not found.'
                 }), 404)
-            ret_val = project_check_out(hardware_name, checkout_quantity, project_id)
-        # checkout to user
-        elif hardware_json.get('project_id') == 'n/a':        # TODO: find out what is gonna get sent when checkout is personal
-            ret_val = user_check_out(hardware_id, checkout_quantity, current_username)
+            ret_val = project_check_out(hardware_id, checkout_quantity, project_id)
         if ret_val == 400:
             return (jsonify({
                 'success': False,
@@ -680,7 +696,7 @@ def datasets():
 
 # billing page allows users to update payment info and shows all of their bills
 # bills show their unique id's and amount due for that user
-@app.route('/api/billing', methods=['POST'])
+@app.route('/api/billing', methods=['GET'])
 @jwt_required()
 def billing():
     current_username = get_jwt_identity()
@@ -689,16 +705,17 @@ def billing():
             'success': False,
             'message': 'Invalid token.'
         }), 401)
-    bills_dict = dict()
-    query_user_bills = Bill.objects(recipient_name__exact=current_username)
-    if not query_user_bills:
+    query_user_bills = Bill.objects(recipient_username__exact=current_username)
+    if len(query_user_bills) < 1:
         return (jsonify({
             'success': True,
-            'message': 'User currently has no bills.'
+            'message': 'User currently has no bills.',
+            'data': {}
         }), 200)
     else:
+        bills_dict = dict()
         for bill in query_user_bills:
-            bills_dict[bill.bill_id] = bill.amount_due
+            bills_dict[bill.bill_id] = bill_obj_to_dict(bill)
         return (jsonify({
             'success': True,
             'data': bills_dict

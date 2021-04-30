@@ -584,6 +584,7 @@ def checkInHardware():
         if usage == "personal":
             # check in from user
             ret_val = user_check_in(hardware_id, checkin_quantity, current_username)
+            create_bill(hardware_id, None, checkin_quantity, current_username)
         else:
             # check in from project
             project_id = hardware_json.get('project_id')
@@ -593,6 +594,7 @@ def checkInHardware():
                     'message': 'Project ' + project_id + ' not found.'
                 }), 404)
             ret_val = project_check_in(hardware_id, checkin_quantity, project_id)
+            create_bill(hardware_id, project_id, checkin_quantity, current_username)
         if ret_val == 400:
             return (jsonify({
                 'success': False,

@@ -388,7 +388,7 @@ class Admin extends React.Component {
                     <div className="rightSideAlt">
                         <div className="centerTitle" style={{ marginBottom: "3.5vh" }}>
                             <h1 style={{ fontSize: '3em', marginBottom: '2px' }}> Admin </h1>
-                            <h6 style={{ display: (this.state.is_godmin ? 'block' : 'none'), color: '#444', marginBottom: '3px', fontStyle: 'italic', fontSize: '18px' }}> godmin </h6>
+                            <h6 style={{ display: (this.state.is_godmin ? 'block' : 'none'), color: '#444', marginBottom: '3px', fontStyle: 'italic', fontSize: '18px' }}> Godmin </h6>
                         </div>
                         <div className="topPanel">
 
@@ -457,7 +457,7 @@ class Admin extends React.Component {
                                     <Form.Control type="text" placeholder="512" style={{ marginBottom: '10px' }} onChange={this.updateHCapacity.bind(this)} />
                                 </Form.Group>
                                 <Form.Group>
-                                    <Form.Label style={{ marginTop: '0.5em', fontSize: '19px' }}> Price ($/GB) </Form.Label>
+                                    <Form.Label style={{ marginTop: '0.5em', fontSize: '19px' }}> Pricing ($/GB) </Form.Label>
                                     <Form.Control type="text" placeholder="4.35" style={{ marginBottom: '10px' }} onChange={this.updateHPrice.bind(this)} />
                                 </Form.Group>
 

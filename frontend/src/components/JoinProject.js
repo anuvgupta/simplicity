@@ -111,7 +111,7 @@ class JoinProject extends React.Component {
                             <h1> Join Project</h1>
                         </div>
                         {/* An area where users can create new project, by providing project name, description, and projectID. */}
-                        <Form.Group controlId="projectName">
+                        <Form.Group controlId="projectName2">
                             <Form.Label style={{ marginTop: '18px', fontSize: '19px' }}>Project ID</Form.Label>
                             <Form.Control style={{ marginTop: '8px' }} onChange={this.updateProjectId.bind(this)} type="name" placeholder="testProject1" onKeyUp={this.keyUpListener.bind(this)} />
                         </Form.Group>

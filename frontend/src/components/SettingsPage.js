@@ -270,7 +270,7 @@ class SettingsPage extends React.Component {
                 </div>
                 <div className="overviewMain borderNone marginTopSmaller centerWidth60">
                     <Form.Group as={Row} controlId="formSettings1">
-                        <Form.Label column sm={3}>
+                        <Form.Label column sm={3} style={{ fontSize: '17.5px' }}>
                             Username
                             </Form.Label>
                         <Col sm={9}>
@@ -278,7 +278,7 @@ class SettingsPage extends React.Component {
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="formSettings2">
-                        <Form.Label column sm={3}>
+                        <Form.Label column sm={3} style={{ fontSize: '17.5px' }}>
                             Email
                             </Form.Label>
                         <Col sm={9}>
@@ -286,7 +286,7 @@ class SettingsPage extends React.Component {
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="formHorizontalPassword1">
-                        <Form.Label column sm={3}>
+                        <Form.Label column sm={3} style={{ fontSize: '17.5px' }}>
                             Password
                             </Form.Label>
                         <Col sm={9}>
@@ -294,7 +294,7 @@ class SettingsPage extends React.Component {
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="formHorizontalPassword2">
-                        <Form.Label column sm={3}>
+                        <Form.Label column sm={3} style={{ fontSize: '17.5px' }}>
                             Current Password
                             </Form.Label>
                         <Col sm={9}>
@@ -303,11 +303,11 @@ class SettingsPage extends React.Component {
                     </Form.Group>
 
                     <Form.Group as={Row} controlId="formHorizontalCheck">
-                        <Form.Label column sm={3}>
+                        <Form.Label column sm={3} style={{ fontSize: '17.5px' }}>
                             Admin
                             </Form.Label>
                         <Col sm={{ span: 3 }}>
-                            <Form.Check style={{ fontSize: '15px', marginTop: '7px' }} label={"Administrator Status" + (this.state.is_godmin ? ' (godmin)' : '')} disabled checked={this.state.is_admin} />
+                            <Form.Check style={{ fontSize: '15px', marginTop: '7px' }} label={"Administrator Status" + (this.state.is_godmin ? ' (Godmin)' : '')} disabled checked={this.state.is_admin} />
                         </Col>
                         <Col sm={{ span: 3, offset: 3 }} style={{ marginTop: '5px' }}>
                             <Button variant="outlined" color="default" type="submit" onClick={this.validateForm.bind(this, true)}>Update Info</Button>
@@ -316,7 +316,7 @@ class SettingsPage extends React.Component {
                     <span className={this.state.msgColor} style={{ paddingTop: '15px' }}>{this.state.respMsg}</span>
 
                     <Form.Group as={Row} style={{ marginTop: '35px' }}>
-                        <Form.Label column sm={3}>
+                        <Form.Label column sm={3} style={{ fontSize: '17.5px' }}>
                             Theme
                             </Form.Label>
                         <Col sm={9}>

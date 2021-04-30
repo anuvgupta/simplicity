@@ -79,6 +79,9 @@ global.util = {
         }
         return global.util.is.unset(val) ? null : val;
     },
+    random: (min, max) => {
+        return Math.floor(Math.random() * (max - min) + min);
+    },
     delete_cookie: id => {
         global.util.cookie(id, '', 'Thu, 01 Jan 1970 00:00:00 GMT');
     },

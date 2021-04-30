@@ -488,7 +488,8 @@ def checkHardware():
                 'hardware_id': hw.hardware_id,
                 'available': hw.available,
                 'name': hw.name,
-                'capacity': hw.capacity
+                'capacity': hw.capacity,
+                'price': float(hw.price)
             }
         print(hardware_dict)
         return (jsonify({

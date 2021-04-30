@@ -43,9 +43,9 @@ class NavigationBar extends React.Component {
                 resp_data = response.data;
             // console.log('resp_data', resp_data);
             if (resp_data && resp_data.success && resp_data.success === true && resp_data.data && resp_data.data.username) {
-                console.log('Settings: setup user', user);
+                // console.log('Settings: setup user', user);
                 var color = resp_data.data.navColor;
-                console.log(color);
+                // console.log(color);
                 if (color === null || color == "") {
                     color = "#010101";
                     console.log("color is null");

@@ -84,6 +84,8 @@ class ProjectCard extends React.Component {
                     window.location.reload();
                 } else {
                     console.log(resp_data);
+                    if (resp_data.message)
+                        alert(`${resp_data.message}`);
                 }
             }).bind(this)).catch(error => {
                 if (error) {
@@ -91,6 +93,8 @@ class ProjectCard extends React.Component {
                     if (error.response && error.response.data)
                         resp_data = error.response.data;
                     console.log(error);
+                    if (resp_data.message)
+                        alert(`${resp_data.message}`);
                 }
             });
         }
@@ -276,11 +280,11 @@ class Projects extends React.Component {
                                 </Card.ImgOverlay>
                             </Card> */}
                         </CardDeck>
-                        <div style={{ height: '22px' }}></div>
+                        <div style={{ height: '45px' }}></div>
                         <Button variant="outlined" color="default" className="mt9px" onClick={this.redirectPage.bind(this, 'createProject')} style={{ display: (this.props.hideButtons === 'true' ? 'none' : 'inline-block') }}>
                             New Project
                         </Button>
-                        {' '}
+                        <div style={{ display: 'inline-block', width: '10px', height: '1px' }}></div>
                         <Button variant="outlined" color="default" className="mt9px" onClick={this.redirectPage.bind(this, 'joinProject')} style={{ display: (this.props.hideButtons === 'true' ? 'none' : 'inline-block') }}>
                             Join Project
                         </Button>

@@ -70,6 +70,9 @@ function App() {
             <NavigationBar></NavigationBar>
             <SideBar active="projects"></SideBar>
             <Project></Project>
+            <div className="rightSide" style={{ marginBottom: '60px', marginTop: '70px' }}>
+              <HardwareForm usage="shared"></HardwareForm>
+            </div>
           </Route>
           <Route path="/projects">
             <NavigationBar></NavigationBar>
@@ -84,8 +87,8 @@ function App() {
             <NavigationBar></NavigationBar>
             <SideBar active="hardware"></SideBar>
             <Hardware mainView="true" ></Hardware>
-            <div className="rightSide" style={{ marginBottom: '60px', marginTop: '55px' }}>
-              <HardwareForm></HardwareForm>
+            <div className="rightSide" style={{ marginBottom: '60px', marginTop: '20px' }}>
+              <HardwareForm usage="personal"></HardwareForm>
             </div>
           </Route>
           <Route path="/datasets">

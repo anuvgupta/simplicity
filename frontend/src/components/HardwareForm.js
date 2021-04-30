@@ -27,7 +27,8 @@ class HardwareForm extends React.Component {
             quantity: "",
             msg: "",
             color: "",
-            hwList: {}
+            hwList: {},
+            projectID: ''
         };
     }
 
@@ -69,8 +70,12 @@ class HardwareForm extends React.Component {
 
     setupPage(user) {
         console.log('HardwareForm: loading user ' + user.username);
+        var project_id = '';
+        if (this.props.match.params.hasOwnProperty('id'))
+            project_id = (`${this.props.match.params.id}`).trim();
         this.setState({
-            token: user.token
+            token: user.token,
+            projectID: `${project_id}`
         });
         this.getHardwareInfo(user.token, (resp, error = null) => {
             if (resp) {
@@ -127,94 +132,95 @@ class HardwareForm extends React.Component {
             //TODO: POST checkin
             axios.post(`${global.config.api_url}/checkInHardware`, {
                 id: `${this.state.hwSetID}`,
-                quantity: `${this.state.quantity}`
-            },
-                {
-                    headers: { Authorization: `Bearer ${this.state.token}` }
-                }).then(response => {
-                    var resp_data = null;
-                    if (response && response.data)
-                        resp_data = response.data;
-                    // console.log(this.state);
-                    // console.log(resp_data);
-                    this.getHardwareInfo(this.state.token, (resp, error = null) => {
-                        if (resp) {
-                            var hwSetID = this.state.hwSetID;
-                            this.setState({
-                                amount: resp.data[hwSetID].available,
-                                msg: "Success!",
-                                color: "green"
-                            });
-                            window.location.reload();
-                        } else {
-                            console.log(error);
-                        }
-                    });
-                }).catch(error => {
-                    if (error) {
-                        var resp_data = null;
-                        if (error.response && error.response.data)
-                            resp_data = error.response.data;
-
-                        if (error.response.status == 500) {
-                            this.setState({
-                                msg: "Unknown error",
-                                color: "red"
-                            });
-                        } else {
-                            this.setState({
-                                msg: resp_data.message,
-                                color: "red"
-                            });
-                        }
+                quantity: `${this.state.quantity}`,
+                usage: `${this.props.usage}`,
+                project_id: `${this.state.projectID}`
+            }, {
+                headers: { Authorization: `Bearer ${this.state.token}` }
+            }).then(response => {
+                var resp_data = null;
+                if (response && response.data)
+                    resp_data = response.data;
+                // console.log(this.state);
+                // console.log(resp_data);
+                this.getHardwareInfo(this.state.token, (resp, error = null) => {
+                    if (resp) {
+                        var hwSetID = this.state.hwSetID;
+                        this.setState({
+                            amount: resp.data[hwSetID].available,
+                            msg: "Success!",
+                            color: "green"
+                        });
+                        window.location.reload();
+                    } else {
+                        console.log(error);
                     }
                 });
+            }).catch(error => {
+                if (error) {
+                    var resp_data = null;
+                    if (error.response && error.response.data)
+                        resp_data = error.response.data;
+                    if (error.response.status == 500) {
+                        this.setState({
+                            msg: "Unknown error",
+                            color: "red"
+                        });
+                    } else {
+                        this.setState({
+                            msg: resp_data.message,
+                            color: "red"
+                        });
+                    }
+                }
+            });
         }
         else {
             //TODO: POST checkout
             axios.post(`${global.config.api_url}/checkOutHardware`, {
                 id: `${this.state.hwSetID}`,
-                quantity: `${this.state.quantity}`
-            },
-                {
-                    headers: { Authorization: `Bearer ${this.state.token}` }
-                }).then(response => {
-                    var resp_data = null;
-                    if (response && response.data)
-                        resp_data = response.data;
-                    this.getHardwareInfo(this.state.token, (resp, error = null) => {
-                        if (resp) {
-                            var hwSetID = this.state.hwSetID;
-                            this.setState({
-                                amount: resp.data[hwSetID].available,
-                                msg: "Success!",
-                                color: "green"
-                            });
-                            window.location.reload();
-                        } else {
-                            console.log(error);
-                        }
-                    });
-                }).catch(error => {
-                    if (error) {
-                        var resp_data = null;
-                        if (error.response && error.response.data)
-                            resp_data = error.response.data;
-                        console.log(error.response.status);
-                        if (error.response.status == 500) {
-                            this.setState({
-                                msg: "Unknown error",
-                                color: "red"
-                            });
-                        } else {
-                            this.setState({
-                                msg: resp_data.message,
-                                color: "red"
-                            });
-                        }
-                        console.log(error, resp_data);
+                quantity: `${this.state.quantity}`,
+                usage: `${this.props.usage}`,
+                project_id: `${this.state.projectID}`
+            }, {
+                headers: { Authorization: `Bearer ${this.state.token}` }
+            }).then(response => {
+                var resp_data = null;
+                if (response && response.data)
+                    resp_data = response.data;
+                this.getHardwareInfo(this.state.token, (resp, error = null) => {
+                    if (resp) {
+                        var hwSetID = this.state.hwSetID;
+                        this.setState({
+                            amount: resp.data[hwSetID].available,
+                            msg: "Success!",
+                            color: "green"
+                        });
+                        window.location.reload();
+                    } else {
+                        console.log(error);
                     }
                 });
+            }).catch(error => {
+                if (error) {
+                    var resp_data = null;
+                    if (error.response && error.response.data)
+                        resp_data = error.response.data;
+                    console.log(error.response.status);
+                    if (error.response.status == 500) {
+                        this.setState({
+                            msg: "Unknown error",
+                            color: "red"
+                        });
+                    } else {
+                        this.setState({
+                            msg: resp_data.message,
+                            color: "red"
+                        });
+                    }
+                    console.log(error, resp_data);
+                }
+            });
         }
     }
 
@@ -224,8 +230,9 @@ class HardwareForm extends React.Component {
                 <div className="formCenter">
                     <div className="centerTitle" style={{ marginBottom: '10px' }}>
                         <h1 style={{ fontSize: '2.2em' }}> Check In/Out Hardware </h1>
+                        <h4 style={{ color: '#333' }}> {(this.props.usage == 'personal' ? 'Personal' : 'Shared')} Use </h4>
                     </div>
-                    <Form style={{ marginBottom: '15px' }}>
+                    <div className="hardwareForm" style={{ marginBottom: '15px' }}>
                         <Form.Group controlId="projectName">
                             <Form.Label style={{ marginTop: '1em' }}> Hardware Set </Form.Label>
                             <Form.Control as="select" onChange={this.updateSetID.bind(this)}>
@@ -241,7 +248,7 @@ class HardwareForm extends React.Component {
                             {/* <Form.Label>Description</Form.Label>
                             <Form.Control as="textarea" rows={3} /> */}
                         </Form.Group>
-                    </Form>
+                    </div>
                     <Button variant="outlined" color="default" style={{ marginRight: '3px' }} className="mt9px" onClick={this.checkHardware.bind(this, false)}>
                         Check Out
                     </Button>

@@ -65,7 +65,7 @@ class SettingsPage extends React.Component {
                 resp_data = response.data;
             // console.log('resp_data', resp_data);
             if (resp_data && resp_data.success && resp_data.success === true && resp_data.data && resp_data.data.username) {
-                console.log('Settings: setup user', user);
+                // console.log('Settings: setup user', user);
                 var color = resp_data.data.navColor;
                 // console.log(color);
                 if (color === null || color == "") {
@@ -269,7 +269,7 @@ class SettingsPage extends React.Component {
 
                 </div>
                 <div className="overviewMain borderNone marginTopSmaller centerWidth60">
-                    <Form.Group as={Row} controlId="formSettings">
+                    <Form.Group as={Row} controlId="formSettings1">
                         <Form.Label column sm={3}>
                             Username
                             </Form.Label>
@@ -277,7 +277,7 @@ class SettingsPage extends React.Component {
                             <Form.Control type="text" placeholder="username" defaultValue={this.state.username} onChange={this.updateUsername.bind(this)} />
                         </Col>
                     </Form.Group>
-                    <Form.Group as={Row} controlId="formSettings">
+                    <Form.Group as={Row} controlId="formSettings2">
                         <Form.Label column sm={3}>
                             Email
                             </Form.Label>
@@ -285,7 +285,7 @@ class SettingsPage extends React.Component {
                             <Form.Control type="text" placeholder="name@email.com" defaultValue={this.state.email} onChange={this.updateEmail.bind(this)} />
                         </Col>
                     </Form.Group>
-                    <Form.Group as={Row} controlId="formHorizontalPassword">
+                    <Form.Group as={Row} controlId="formHorizontalPassword1">
                         <Form.Label column sm={3}>
                             Password
                             </Form.Label>
@@ -293,7 +293,7 @@ class SettingsPage extends React.Component {
                             <Form.Control type="password" placeholder="********" onChange={this.updatePassword.bind(this)} />
                         </Col>
                     </Form.Group>
-                    <Form.Group as={Row} controlId="formHorizontalPassword">
+                    <Form.Group as={Row} controlId="formHorizontalPassword2">
                         <Form.Label column sm={3}>
                             Current Password
                             </Form.Label>

@@ -226,6 +226,25 @@ def update_user(currName, currPwd, username, email, password, is_admin):
     current_user.save()
     return (True, "")
 
+def get_proj_hw_usage(username):
+    usage_obj = {}
+    queryA = User.objects(username__exact=username)
+    if len(queryA) != 1:
+        return (None, "User not found.")
+    current_user = queryA.first()
+    if not current_user:
+        return (None, "User not found.")
+    if current_user.projectList and len(current_user.projectList) > 0:
+        for p_id in current_user.projectList:
+            queryB = Project.objects(project_id__exact=p_id)
+            if len(queryB) == 1:
+                p_obj = queryB.first()
+                if p_obj and p_obj.hw_dict:
+                    for hw_id in p_obj.hw_dict:
+                        if hw_id not in usage_obj:
+                            usage_obj[hw_id] = 0
+                        usage_obj[hw_id] += p_obj.hw_dict[hw_id]
+    return (usage_obj, "")
 
 
 """ PROJECT-RELATION FUNCTIONS """
@@ -277,6 +296,12 @@ def delete_project(proj_id, username) -> bool:
     proj = queryB.first()
     if not proj:
         return (False, "Project not found.")
+    if proj.hw_dict and len(proj.hw_dict) > 0:
+        total_shared_usage = 0
+        for hw_set_id in proj.hw_dict:
+            total_shared_usage += int(proj.hw_dict[hw_set_id])
+        if total_shared_usage > 0:
+            return (False, "Project contains hardware, check in before deleting.")
     if not (proj_id in user.projectList):
         if username != "admin":
             return (False, "Project does not belong to user.")
@@ -322,7 +347,8 @@ def get_project_json(project_id):
     return jsonify({
         "projectName": project.name,
         "id": project.project_id,
-        "description": project.description
+        "description": project.description,
+        "hw_dict": project.hw_dict
     })
 
 
@@ -346,11 +372,15 @@ def get_project_ids() -> []:
     return projectIds
 
 
-def user_already_joined(curr_project, curr_user) -> bool:
+def user_already_joined(project_obj, username) -> bool:
     # joinProject already calls does_project_id_exist to check if the project is valid
     # '==' is case sensitive
-    for member in curr_project.members.keys():
-        if curr_user == member.username:
+    for member in project_obj.members:
+        if username == member:
+            return True
+    user_obj = get_user_obj(username)
+    for projID in user_obj.projectList:
+        if projID == project_obj.project_id:
             return True
     return False
   
@@ -366,7 +396,7 @@ def create_hw_set(h_id, name, capacity):
 
 
 def user_check_in(hw_set_id, checkin_quantity, username) -> int:
-    queryA = Hardware.objects(name__exact=hw_set_id)
+    queryA = Hardware.objects(hardware_id__exact=hw_set_id)
     if len(queryA) != 1:
         return 404
     hw_set = queryA.first()
@@ -378,6 +408,9 @@ def user_check_in(hw_set_id, checkin_quantity, username) -> int:
     user = queryB.first()
     if not user:
         return 404
+    if hw_set_id not in user.hw_sets or user.hw_sets[hw_set_id] <= 0:
+        user.hw_sets[hw_set_id] = 0
+        return 400
     # check if requested quantity is valid
     # print(hw_set.capacity)
     if checkin_quantity > int(user.hw_sets[hw_set_id]): 
@@ -388,16 +421,13 @@ def user_check_in(hw_set_id, checkin_quantity, username) -> int:
         return 400
     hw_set.available += checkin_quantity
     hw_set.save()     # since the hardware set already existed, this saves the document with the new available quantity
-    if hw_set_id not in user.hw_sets or user.hw_sets[hw_set_id] <= 0:
-        user.hw_sets[hw_set_id] = 0
-        return 400
     user.hw_sets[hw_set_id] -= checkin_quantity
     user.save()
     return 1
 
 
-def project_check_in(hw_set_name, checkin_quantity, p_id):
-    queryA = Hardware.objects(name__exact=hw_set_name)
+def project_check_in(hw_set_id, checkin_quantity, p_id):
+    queryA = Hardware.objects(hardware_id__exact=hw_set_id)
     if len(queryA) != 1:
         return 404
     hw_set = queryA.first()
@@ -409,21 +439,24 @@ def project_check_in(hw_set_name, checkin_quantity, p_id):
     project = queryB.first()
     if not project:
         return 404
+    if hw_set_id not in project.hw_dict or project.hw_dict[hw_set_id] <= 0:
+        project.hw_dict[hw_set_id] = 0
+        return 400
     # see if check in quantity is greater than capacity checked out to project
-    if checkin_quantity > int(project.hw_dict[hw_set]):
+    if checkin_quantity > int(project.hw_dict[hw_set_id]):
         return 400
     if checkin_quantity > int(hw_set.capacity):
         return 400
     hw_set.available += checkin_quantity
     hw_set.save()
-    project.hw_dict[hw_set] -= checkin_quantity
+    project.hw_dict[hw_set_id] -= checkin_quantity
     project.save()
     # TODO: generate bill for each project member
     return 1
 
 
 def user_check_out(hw_set_id, checkout_quantity, username):
-    queryA = Hardware.objects(name__exact=hw_set_id)
+    queryA = Hardware.objects(hardware_id__exact=hw_set_id)
     if len(queryA) != 1:
         return 404
     hw_set = queryA.first()
@@ -447,8 +480,8 @@ def user_check_out(hw_set_id, checkout_quantity, username):
     return 1
 
 
-def project_check_out(hw_set_name, checkout_quantity, p_id):
-    queryA = Hardware.objects(name__exact=hw_set_name)
+def project_check_out(hw_set_id, checkout_quantity, p_id):
+    queryA = Hardware.objects(hardware_id__exact=hw_set_id)
     if len(queryA) != 1:
         return 404
     hw_set = queryA.first()
@@ -464,12 +497,10 @@ def project_check_out(hw_set_name, checkout_quantity, p_id):
         return 400
     hw_set.available -= checkout_quantity
     hw_set.save()
-    if hw_set_name in project.hw_dict.keys():
-        project.hw_dict[hw_set_name] += checkout_quantity
-        project.save()
-    else:
-        project.hw_dict[hw_set_name] = checkout_quantity
-        project.save()
+    if hw_set_id not in project.hw_dict or project.hw_dict[hw_set_id] <= 0:
+        project.hw_dict[hw_set_id] = 0
+    project.hw_dict[hw_set_id] += checkout_quantity
+    project.save()
     return 1
     
 

@@ -22,7 +22,7 @@ class NavigationBar extends React.Component {
     }
 
     componentDidMount() {
-        global.api.authenticated((user => {
+        global.api.authenticate((user => {
             if (user === false) this.redirectPage();
             else this.setupPage(user);
         }).bind(this));

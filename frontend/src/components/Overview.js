@@ -31,7 +31,7 @@ class Overview extends React.Component {
 
     componentDidMount() {
         this.parseURL();
-        global.api.authenticated((user => {
+        global.api.authenticate((user => {
             if (user === false) this.redirectPage();
             else this.setupPage(user);
         }).bind(this));

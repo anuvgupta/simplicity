@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import axios from 'axios'
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
-import '../styles/project.css'
+import '../styles/billing.css'
 
 class Datasets extends React.Component {
 
@@ -37,7 +37,7 @@ class Datasets extends React.Component {
     }
 
     setupPage(user) {
-        console.log('Datasets: loading user ' + user.username);
+        console.log('Billing: loading user ' + user.username);
         // TODO: load user data/info
     }
 

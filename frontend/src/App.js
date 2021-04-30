@@ -24,6 +24,7 @@ import HomePage from "./components/HomePage";
 import Projects from './components/Projects';
 import Project from './components/Project';
 import Datasets from "./components/Datasets";
+import Billing from "./components/Billing";
 import Overview from "./components/Overview";
 import NavigationBar from "./components/NavBar";
 import JoinProject from './components/JoinProject.js';
@@ -95,6 +96,11 @@ function App() {
             <NavigationBar></NavigationBar>
             <SideBar active="datasets"></SideBar>
             <Datasets></Datasets>
+          </Route>
+          <Route path="/billing">
+            <NavigationBar></NavigationBar>
+            <SideBar active="billing"></SideBar>
+            <Billing></Billing>
           </Route>
           <Route path="/settings">
             <NavigationBar></NavigationBar>

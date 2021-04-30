@@ -11,7 +11,7 @@ global.config = {
 };
 
 global.api = {
-    authenticated: resolve => {
+    authenticate: resolve => {
         var token = global.util.cookie('token');
         if (token && token.trim().length > 0) {
             var handleResponse = response => {

@@ -19,7 +19,7 @@ class HomePage extends React.Component {
     }
 
     componentDidMount() {
-        global.api.authenticated((is_authenticated => {
+        global.api.authenticate((is_authenticated => {
             if (is_authenticated) this.redirectPage();
         }).bind(this));
     }

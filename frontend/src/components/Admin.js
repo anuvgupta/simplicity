@@ -115,7 +115,7 @@ class Admin extends React.Component {
 
 
     componentDidMount() {
-        global.api.authenticated((user => {
+        global.api.authenticate((user => {
             if (user === false) this.redirectPage();
             else this.setupPage(user);
         }).bind(this));
@@ -132,7 +132,7 @@ class Admin extends React.Component {
     }
 
     setupPage(user) {
-        console.log(user);
+        // console.log(user);
         axios.get(`${global.config.api_url}/user?username=${user.username}`, {
             headers: { Authorization: `Bearer ${user.token}` }
         }).then((response => {
@@ -141,7 +141,7 @@ class Admin extends React.Component {
                 resp_data = response.data;
             // console.log('resp_data', resp_data);
             if (resp_data && resp_data.success && resp_data.success === true && resp_data.data) {
-                console.log(resp_data);
+                // console.log(resp_data);
                 // var adminStats = this.getAdminStats();
                 this.setState({
                     is_godmin: resp_data.data.is_godmin,
@@ -160,7 +160,7 @@ class Admin extends React.Component {
         });
         this.getUserInfo(user.token, (resp, error = null) => {
             if (resp) {
-                console.log(resp.data);
+                // console.log(resp.data);
                 this.setState({
                     numUsers: resp.data
                 });
@@ -170,7 +170,7 @@ class Admin extends React.Component {
         });
         this.getHardwareInfo(user.token, (resp, error = null) => {
             if (resp) {
-                console.log(resp.data);
+                // console.log(resp.data);
                 var checkoutAmount = 0;
                 for (let entry in resp.data) {
                     // console.log(resp.data[entry].capacity);
@@ -198,7 +198,7 @@ class Admin extends React.Component {
                     password = global.util.hashPassword(password);
                     if (sendRequest) {
                         this.createNewUser(username, email, password, is_admin, is_godmin, (_ => {
-                            global.api.authenticated((user => {
+                            global.api.authenticate((user => {
                                 if (user === false) this.redirectPage();
                                 else this.setupPage(user);
                             }).bind(this));
@@ -272,7 +272,7 @@ class Admin extends React.Component {
                 if (global.util.validateAlphanumeric(hw_id)) {
                     if (sendRequest) {
                         this.createNewHwSet(hw_id, hw_name, hw_capacity, hw_price, (_ => {
-                            global.api.authenticated((user => {
+                            global.api.authenticate((user => {
                                 if (user === false) this.redirectPage();
                                 else this.setupPage(user);
                             }).bind(this));

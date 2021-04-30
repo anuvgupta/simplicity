@@ -158,7 +158,7 @@ class Hardware extends React.Component {
                                         <div className="stack">
                                             <h2> {hw_set.name} </h2>
                                             <div className="hwOverviewCard">
-                                                <h3 className="top" style={{ fontSize: '1.3em', marginBottom: '12px', marginTop: '5px' }}> You have checked out </h3>
+                                                <h3 className="top" style={{ fontSize: '1.3em', marginBottom: '12px', marginTop: '5px' }}> {hw_set.hardware_id} checked out </h3>
                                                 <h1 className="num"> {hw_usage[0]} GB </h1>
                                                 <h2 className="bottom" style={{ fontSize: '1.2em', color: '#333', marginTop: '10px', marginBottom: '15px' }}> {hw_usage[1]} GB Personal &nbsp;/&nbsp; {hw_usage[2]} GB Shared </h2>
                                             </div>

@@ -22,7 +22,8 @@ class Overview extends React.Component {
         this.state = {
             username: "",
             projectList: [],
-            totalHW: "0",
+            hwUsageList: {},
+            projectHWUsageList: {},
             first: false
         };
     }
@@ -52,7 +53,7 @@ class Overview extends React.Component {
     setupPage(user) {
         console.log('Overview: loading user ' + user.username);
         // console.log("list is " + user.email);
-        axios.get(`${global.config.api_url}/user?username=${user.username}`, {
+        axios.get(`${global.config.api_url}/user?username=${user.username}&projectHWusage=true`, {
             headers: { Authorization: `Bearer ${user.token}` }
         }).then(response => {
             var resp_data = null;
@@ -60,14 +61,11 @@ class Overview extends React.Component {
                 resp_data = response.data;
             // console.log('resp_data', resp_data);
             if (resp_data && resp_data.success && resp_data.success === true && resp_data.data && resp_data.data.username && resp_data.data.projectList) {
-                var totalCheckedout = 0;
-                for (var s in resp_data.data.hw_sets) {
-                    totalCheckedout += resp_data.data.hw_sets[s];
-                }
                 this.setState({
                     username: resp_data.data.username,
                     projectList: resp_data.data.projectList,
-                    totalHW: totalCheckedout
+                    hwUsageList: resp_data.data.hw_sets ? resp_data.data.hw_sets : {},
+                    projectHWUsageList: resp_data.data.proj_hw_usage ? resp_data.data.proj_hw_usage : {}
                 });
             } else console.log('Invalid response: ', resp_data);
         }).catch(error => {
@@ -80,27 +78,43 @@ class Overview extends React.Component {
         });
     }
 
+    getTotalHardwareUsage() {
+        var shared_usage = 0;
+        var personal_usage = 0;
+        for (var hardware_set_id in this.state.hwUsageList) {
+            personal_usage += this.state.hwUsageList.hasOwnProperty(`${hardware_set_id}`) ? this.state.hwUsageList[hardware_set_id] : 0;
+        }
+        for (var hardware_set_id in this.state.projectHWUsageList) {
+            shared_usage += this.state.projectHWUsageList.hasOwnProperty(`${hardware_set_id}`) ? this.state.projectHWUsageList[hardware_set_id] : 0;
+        }
+        return [(shared_usage + personal_usage), personal_usage, shared_usage];
+    }
+
     render() {
+        let hw_usage = this.getTotalHardwareUsage();
+        let cardDivWidth = 855;
         return (
             <div>
                 <div className="center overviewMain">
                     <div className="rightSideAlt">
                         <div className="centerTitle">
-                            <h1 style={{ fontSize: '3em', marginBottom: "3.5vh" }}> Welcome{(this.state.first === false ? ' back' : '')} @{this.state.username}</h1>
+                            <h1 style={{ fontSize: '3em', marginBottom: "50px" }}> Welcome{(this.state.first === false ? ' back' : '')} @{this.state.username}</h1>
                         </div>
-                        <div className="topPanel">
-                            <div className="leftOverview">
-                                <div className="overviewCard">
-                                    <h1 className="top" style={{ fontSize: '1.5em' }}> You have </h1>
-                                    <h1 className="num"> {this.state.projectList.length} </h1>
-                                    <h1 className="bottom" style={{ fontSize: '1.9em' }}> projects </h1>
+                        <div style={{ width: '100%', maxWidth: `${cardDivWidth}px`, margin: '0 auto' }}>
+                            <div className="topPanel" style={{ maxWidth: `${cardDivWidth}px`, float: 'left' }}>
+                                <div className="hwLeftOverview" style={{ marginRight: '15px' }}>
+                                    <div className="overviewCard">
+                                        <h1 className="top" style={{ fontSize: '1.5em', marginTop: '7px' }}> You have </h1>
+                                        <h1 className="num"> {this.state.projectList.length} </h1>
+                                        <h1 className="bottom" style={{ fontSize: '1.9em' }}> projects </h1>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="rightOverView">
-                                <div className="overviewCard">
-                                    <h1 className="top" style={{ fontSize: '1.4em' }}> You have checked out </h1>
-                                    <h1 className="num"> {this.state.totalHW} GB </h1>
-                                    <h1 className="bottom" style={{ fontSize: '1.9em' }}> of hardware </h1>
+                                <div className="hwRightOverview" style={{ marginLeft: '15px' }}>
+                                    <div className="overviewCard">
+                                        <h1 className="top" style={{ fontSize: '1.4em', marginTop: '4px', marginBottom: '12.5px' }}> Hardware Checked Out </h1>
+                                        <h1 className="num"> {hw_usage[0]} GB </h1>
+                                        <h1 className="bottom" style={{ fontSize: '1.4em', color: '#333', marginTop: '15px', marginBottom: '5px' }}> {hw_usage[1]} GB Personal &nbsp;/&nbsp; {hw_usage[2]} GB Shared </h1>
+                                    </div>
                                 </div>
                             </div>
                         </div>

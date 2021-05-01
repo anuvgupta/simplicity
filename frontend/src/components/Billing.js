@@ -197,11 +197,11 @@ class Billing extends React.Component {
                                                 <span><b> Amount {(bill.bill_paid ? 'Paid' : 'Due')}:</b>&nbsp;<span>${amount_due_text} </span><br /></span>
                                                 <span style={{ display: (bill.bill_paid ? 'block' : 'none') }}><b> Payment Date:</b>&nbsp;<span>{paid_timestamp_desc_full} </span><br /></span>
                                             </Typography>
-                                            <div style={{ height: '79%', width: '190px', backgroundColor: '#111', position: 'absolute', top: '9px', right: '60px', borderRadius: '4px', border: '1px solid #f1f1f1', boxShadow: '0 3px 6px 0 rgb(0 0 0 / 12%)', color: 'white' }}>
+                                            <div style={{ height: '79%', width: '190px', backgroundColor: '#fdfdfd', position: 'absolute', top: '9px', right: '60px', borderRadius: '4px', border: '1px solid #f0f0f0', boxShadow: '0 2px 4px 0 rgb(0 0 0 / 5%)', color: '#111' }}>
                                                 <div style={{ width: '100%', height: '100%' }} className="block_wrap">
                                                     <div className="block_content">
-                                                        <span style={{ fontSize: '29px', opacity: '1', letterSpacing: '1.5px', display: 'block', marginTop: '15px', marginRight: '3px' }}>${amount_due_text}</span>
-                                                        <Button disabled={bill.bill_paid} className="billSubmitButton" variant="contained" color="default" style={{ marginBottom: '22px' }} onClick={this.submitBill.bind(this, bill)}> {(!bill.bill_paid ? 'Pay Bill' : 'Paid Bill')} </Button>
+                                                        <span style={{ fontSize: '29px', opacity: '1', letterSpacing: '1.5px', display: 'block', marginTop: '13px', marginRight: '3px' }}>${amount_due_text}</span>
+                                                        <Button disabled={bill.bill_paid} color="secondary" className="billSubmitButton" variant="contained" style={{ marginBottom: '20px' }} onClick={this.submitBill.bind(this, bill)}> {(!bill.bill_paid ? 'Pay Bill' : 'Paid Bill')} </Button>
                                                     </div>
                                                 </div>
                                             </div>

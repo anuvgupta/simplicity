@@ -17,5 +17,6 @@ div.billingMain div.MuiAccordionDetails-root.billItemDetails {
 }
 
 div.billingMain .billSubmitButton {
-    background-color: white;
+    background-color: black;
+    color: white;
 }

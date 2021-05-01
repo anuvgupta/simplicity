@@ -289,7 +289,7 @@ class HardwareForm extends React.Component {
                                     )) : ''}
                             </Form.Control>
                             <Form.Label style={{ marginTop: '1em', fontSize: '19px' }}> Request Capacity (GB) </Form.Label>
-                            <Form.Control type="text" placeholder="10" onChange={this.updateQuantity.bind(this)} />
+                            <Form.Control type="text" placeholder="0" onChange={this.updateQuantity.bind(this)} />
                             <Form.Label style={{ marginTop: '1em', fontSize: '19px' }}> Total Availability (GB) </Form.Label>
                             <Form.Control type="text" value={this.state.amount} disabled />
                             <Form.Label style={{ marginTop: '1em', fontSize: '19px', display: 'block' }}> Projected Pricing &amp; Cost </Form.Label>

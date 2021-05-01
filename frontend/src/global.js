@@ -118,6 +118,26 @@ global.util = {
         // return hashPassword;
         return global.util.sha256(value);
     },
+    date_options: {
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true
+    },
+    date_desc: (timestamp, fullYear = true, spacing = true, seconds = false) => {
+        var date = new Date(timestamp);
+        var timeString = date.toLocaleString('en-US', global.util.date_options);
+        if (seconds) timeString = timeString.split(' ')[0] + ':' + global.util.lpad(date.getSeconds(), 2, '0') + ' ' + timeString.split(' ').slice(1).join(' ')
+        if (!spacing) timeString = timeString.split(' AM').join('AM').split(' PM').join('PM');
+        var fullYearText = `${date.getFullYear()}`;
+        return ("" + (date.getMonth() + 1) +
+            "/" + date.getDate() +
+            "/" + (fullYear ? fullYearText : fullYearText.substring(fullYearText.length - 2)) +
+            ", " + timeString);
+    },
+    lpad: (string_val, width, char) => {
+        return string_val.length >= width ? string_val
+            : (new Array(width).join(char) + string_val).slice(-1 * width);
+    },
     resizeQueries: [],
     resizeQueriesInit: false,
     resizeQueryInterval: 15,

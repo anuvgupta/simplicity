@@ -1,0 +1,21 @@
+div.billingMain {
+    margin-top: 35px;
+    width: 90%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 17px 35px 30px 35px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+div.billingMain div.MuiAccordion-root:before {
+    opacity: 0.3;
+}
+
+div.billingMain div.MuiAccordionDetails-root.billItemDetails {
+    position: relative;
+}
+
+div.billingMain .billSubmitButton {
+    background-color: white;
+}

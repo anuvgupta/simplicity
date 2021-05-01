@@ -583,10 +583,10 @@ def checkInHardware():
             return (hw_response_404(), 404)
         usage = "personal" if hardware_json.get('usage') == "personal" else "shared"
         ret_val = 0
+        project_id = None
         if usage == "personal":
             # check in from user
             ret_val = user_check_in(hardware_id, checkin_quantity, current_username)
-            create_bill(hardware_id, None, checkin_quantity, current_username)
         else:
             # check in from project
             project_id = hardware_json.get('project_id')
@@ -596,7 +596,6 @@ def checkInHardware():
                     'message': 'Project ' + project_id + ' not found.'
                 }), 404)
             ret_val = project_check_in(hardware_id, checkin_quantity, project_id)
-            create_bill(hardware_id, project_id, checkin_quantity, current_username)
         if ret_val == 400:
             return (jsonify({
                 'success': False,
@@ -606,9 +605,17 @@ def checkInHardware():
             return (hw_response_404(), 404)
         elif ret_val == 500:
             return (hw_response_500(), 500)
+        new_bill_id = create_bill(hardware_id, project_id, checkin_quantity, current_username)
+        if new_bill_id == False:
+            return (jsonify({
+                'success': False,
+                'message': "Error creating/processing bill, but check-in completed."
+            }), 500)
         return (jsonify({
             'success': True,
-            'data': { }
+            'data': {
+                "bill_id": new_bill_id
+            }
         }), 200)
     return (hw_response_500(), 500)
 
@@ -716,7 +723,7 @@ def billing():
     else:
         bills_dict = dict()
         for bill in query_user_bills:
-            bills_dict[bill.bill_id] = bill_obj_to_dict(bill)
+            bills_dict[str(bill.id)] = bill_obj_to_dict(bill)
         return (jsonify({
             'success': True,
             'data': bills_dict
@@ -834,11 +841,12 @@ def payBill():
                     'success': True,
                     'data': {
                         'bill_id': bill_id,
-                        'recipient': current_username,
+                        'recipient_username': current_username,
                         'project_id': curr_bill.project_id,
                         'hw_used': curr_bill.hw_used,
-                        'subtotal': curr_bill.project_subtotal,
-                        'amount_due': curr_bill.amount_due
+                        'bill_subtotal': float(curr_bill.bill_subtotal),
+                        'amount_due': float(curr_bill.amount_due),
+                        'timestamp': curr_bill.timestamp
                     }
                 }), 200)
         else:

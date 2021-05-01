@@ -126,11 +126,11 @@ class LoginPage extends React.Component {
                 <div className="centerTitle">
                     <h1 className="loginTitle titleFont">Sign In</h1>
                 </div>
-                <form style={{ marginTop: '7px' }}>
+                <div class="defaultFormClass" style={{ marginTop: '7px' }}>
                     Username: <input type="text" id="username" placeholder="username" onChange={this.updateUsername.bind(this)} onKeyUp={this.checkEnter.bind(this)}></input><br />
                     Password: <input type="password" id="password" placeholder="********" onChange={this.updatePassword.bind(this)} onKeyUp={this.checkEnter.bind(this)}></input><br />
                     <Button variant="outlined" color="default" style={{ marginTop: '12px' }} onClick={this.validateForm.bind(this, true)}> Sign In </Button>
-                </form>
+                </div>
                 <span className="errorMessage">{this.state.errorMsg}</span>
             </div>
         );

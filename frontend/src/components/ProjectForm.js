@@ -188,19 +188,16 @@ class ProjectForm extends React.Component {
                             <h1> {action_title} Project </h1>
                         </div>
                         {/* An area where users can create new project, by providing project name, description, and projectID. */}
-                        <Form>
-                            <Form.Group controlId="projectName">
-                                <Form.Label style={{ opacity: (create ? '1' : '0.9'), marginTop: '0.5em', fontSize: '19px' }}>Project ID</Form.Label>
-                                <Form.Control type="text" placeholder="testProject1" disabled={!create} defaultValue={create ? '' : this.state.initialProjectID} onChange={this.updateProjectID.bind(this)} style={{ opacity: (create ? '1' : '0.7'), marginBottom: '10px' }} />
-                                <Form.Label style={{ marginTop: '0.5em', fontSize: '19px' }}>Project Name</Form.Label>
-                                <Form.Control type="text" placeholder="Test Project" defaultValue={create ? '' : this.state.initialProjectName} onChange={this.updateProjectName.bind(this)} style={{ marginBottom: '10px' }} />
-                                <Form.Label style={{ marginTop: '0.5em', fontSize: '19px' }}>Project Description</Form.Label>
-                                <Form.Control type="text" as="textarea" rows={3} defaultValue={create ? '' : this.state.initialProjectDescription} placeholder="Lorem ipsum dolor sit amet..." onChange={this.updateProjectDescription.bind(this)} style={{ marginBottom: '10px' }} />
-                                <Button variant="outlined" color="default" onClick={this.validateForm.bind(this, true)} style={{ marginTop: '20px' }}> {action_title} Project </Button>
-                            </Form.Group>
-                            <span className="errorMessage" style={{ paddingTop: '15px' }}>{this.state.errorMsg}</span>
-                        </Form>
-
+                        <Form.Group controlId="projectName">
+                            <Form.Label style={{ opacity: (create ? '1' : '0.9'), marginTop: '0.5em', fontSize: '19px' }}>Project ID</Form.Label>
+                            <Form.Control type="text" placeholder="testProject1" disabled={!create} defaultValue={create ? '' : this.state.initialProjectID} onChange={this.updateProjectID.bind(this)} style={{ opacity: (create ? '1' : '0.7'), marginBottom: '10px' }} />
+                            <Form.Label style={{ marginTop: '0.5em', fontSize: '19px' }}>Project Name</Form.Label>
+                            <Form.Control type="text" placeholder="Test Project" defaultValue={create ? '' : this.state.initialProjectName} onChange={this.updateProjectName.bind(this)} style={{ marginBottom: '10px' }} />
+                            <Form.Label style={{ marginTop: '0.5em', fontSize: '19px' }}>Project Description</Form.Label>
+                            <Form.Control type="text" as="textarea" rows={3} defaultValue={create ? '' : this.state.initialProjectDescription} placeholder="Lorem ipsum dolor sit amet..." onChange={this.updateProjectDescription.bind(this)} style={{ marginBottom: '10px' }} />
+                            <Button variant="outlined" color="default" onClick={this.validateForm.bind(this, true)} style={{ marginTop: '20px' }}> {action_title} Project </Button>
+                        </Form.Group>
+                        <span className="errorMessage" style={{ paddingTop: '15px' }}>{this.state.errorMsg}</span>
                     </div>
                 </div>
                 <div style={{ position: 'absolute', top: '-60px', left: 'calc(14.3vw + 40px)' }}>

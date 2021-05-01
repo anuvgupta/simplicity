@@ -188,7 +188,7 @@ class Billing extends React.Component {
                                         </AccordionSummary>
                                         <AccordionDetails className="billItemDetails">
                                             <Typography style={{ textAlign: 'left', paddingLeft: '20px', paddingRight: '15px', letterSpacing: '0.45px', fontSize: '14px', marginTop: '-5px', paddingBottom: '5px' }}>
-                                                <span><b> Bill ID:</b>&nbsp;<span>{bill.bill_id} </span><br /></span>
+                                                <span style={{ fontStyle: 'none' }}><b> Bill ID:</b>&nbsp;<span>{bill.bill_id} </span><br /></span>
                                                 <span><b> Creation Date:</b>&nbsp;<span>{timestamp_desc_full} </span><br /></span>
                                                 <span><b> Hardware Usage:</b>&nbsp;<span>{hardware_usage_text} </span><br /></span>
                                                 <span><b> Usage Type:</b>&nbsp;<span>{p_id_exists ? 'Project/Shared' : 'Personal'} </span><br /></span>

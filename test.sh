@@ -2,4 +2,4 @@
 
 pytest -rA
 
-mongo web-app --eval "db.dropDatabase()"
+mongo simplicity-cloud --eval "db.dropDatabase()"

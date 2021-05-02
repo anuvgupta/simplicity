@@ -39,7 +39,7 @@ Created by Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
 &nbsp;
 &nbsp;
 <a name=""></a>  
-## <a name="1-getting-started"></a>Getting Started
+# <a name="1-getting-started"></a>1. Getting Started
 * #### <a name="what-is-simplicity?"></a>What is Simplicity?
 
 * #### <a name="create-an-account"></a>**Create** an account
@@ -47,55 +47,34 @@ Created by Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
 * #### <a name="how-do-i-sign-in?"></a>How do I **sign in**?
 
 
-## <a name="2-overview-page"></a>Overview Page
+# <a name="2-overview-page"></a>2. Overview Page
 
 
-## <a name="3-user-functions-and-features"></a>User Functions and Features
+# <a name="3-user-functions-and-features"></a>3. User Functions and Features
+* ### <a name="3.1-projects"></a>3.1 Projects
+   * #### <a name="what-is-a-project?"></a>What is a project?
+   * #### <a name="create-a-project"></a>**Create** a project
+   * #### <a name="join-a-project"></a>**Join** a project
+   * #### <a name="edit-a-project"></a>**Edit** a project
+   * #### <a name="delete-a-project"></a>**Delete** a project
+* ### <a name="3.2-my-account"></a>3.2 My Account
+   * #### <a name="change-my-username"></a>**Change** my username
+   * #### <a name="change-my-email"></a>**Change** my email
+   * #### <a name="change-my-password"></a>**Change** my password
+   * #### <a name="change-user-theme"></a>**Change** user theme
 
 
-* ## <a name="3.1-projects"></a>3.1 Projects
+# <a name="4-hardware-page"></a>4. Hardware Page
+* #### <a name="what-is-hardware?"></a>What is hardware?
+* #### <a name="hardware-for-a-project"></a>Hardware for a project
+* #### <a name="hardware-for-personal-use"></a>Hardware for personal use
+* #### <a name="checking-out-hardware"></a>Checking out hardware
+* #### <a name="checking-in-hardware"></a>Checking in hardware
 
 
-
-  
-  
-  
-  
-
-  
-  
-  
-  
-  
-[1.Getting Started]:
-[What is Simplicity?]:
-[**Create** an account]:
-[How do I **sign in**?]:
-
-[2. Overview Page]:
-[3. User Functions and Features]:
-[3.1 Projects]:
-[What is a **project**?]:
-[**Create** a project]:
-[**Join** a project]:
-[**Edit** a project:
-[**Delete** a project:
-[3.2 My Account]:
-[**Change** my username]:
-[**Change** my email]:
-[**Change** my password]:
-[**Change** user theme]:
-
-[4. Hardware Page]:
-[What is hardware?]:
-[Checking out/in hardware to a **project**]:
-[Checking out/in hardware for **personal use**]:
-[**Checking out** hardware]:
-[**Checking in** hardware]:
-
-[5. Datasets Page]:
-[What is a dataset?]:
-[**Downloading** a dataset]:
+# <a name="5-hardware-page"></a>5. Datasets Page
+* #### <a name="what-is-a-dataset?"></a>What is a dataset?
+* #### <a name="downloading-a-dataset"></a>**Downloading** a dataset
 
 
 

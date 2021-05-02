@@ -42,12 +42,12 @@ Created by Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
 # <a name="1-getting-started"></a>1. Getting Started
 * <details>
   <summary>What is Simplicity?<a name="what-is-simplicity?"></summary>
-  <p>Hello, and welcome to Simplicity! Simplicity is a Haas (Hardware-as-a-service) website where users can use the site's resources to work on collaborative projects with others, or even on personal projects. Creating an account is quick, easy, and FREE! Create yours today! </p>
+  <p>Hello, and welcome to Simplicity! 😄 Simplicity is a Haas (Hardware-as-a-service) website where users can use the site's resources to work on collaborative projects with others, or even on personal projects. Creating an account is quick, easy, and FREE! Create yours today! 🥳</p>
 </details>
 
 * <details>
   <summary><a name="create-an-account"></a><b>Create</b> an account</summary>
-  <p>Good news, creating an account is simple! Click <a href="https://simplicitycloud.ml/">this link</a> to head to the Simplicity home page. Click 'Sign Up'; you'll be redirected to the registration page. Fill out the fields listed on the screen. Once you do that, you're ready to work with Simplicity! </p>
+  <p>Good news, creating an account is simple! Click <a href="https://simplicitycloud.ml/">this link</a> to head to the Simplicity home page. Click 'Sign Up'; you'll be redirected to the registration page. Fill out the fields listed on the screen. Once you do that, you're ready to work with Simplicity! 😎</p>
   </details>
 
 * <details>
@@ -61,34 +61,99 @@ Created by Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
 
 # <a name="3-user-functions-and-features"></a>3. User Functions and Features
 * ### <a name="3.1-projects"></a>3.1 Projects
-   * #### <a name="what-is-a-project?"></a>What is a project?
-   * #### <a name="create-a-project"></a>**Create** a project
-   * #### <a name="join-a-project"></a>**Join** a project
-   * #### <a name="edit-a-project"></a>**Edit** a project
-   * #### <a name="delete-a-project"></a>**Delete** a project
-* ### <a name="3.2-my-account"></a>3.2 My Account
-   * #### <a name="change-my-username"></a>**Change** my username
-   * #### <a name="change-my-email"></a>**Change** my email
-   * #### <a name="change-my-password"></a>**Change** my password
-   * #### <a name="change-user-theme"></a>**Change** user theme
+   * <details>
+     <summary><a name="what-is-a-project?"></a>What is a project?</summary>
+     <p>A project is anything you could imagine! Use our hardware and data sets to bring any idea to life. 🤙 </p>
+     </details>
+   
+   * <details>
+     <summary><a name="create-a-project"></a><b>Create</b> a project</summary>
+     <p>click it and create it sis</p>
+     </details>
+     
+   * <details>
+     <summary><a name="join-a-project"></a><b>Join</b> a project</summary>
+     <p>join the party</p>
+     </details>
+     
+   * <details>
+     <summary><a name="edit-a-project"></a><b>Edit</b> a project</summary>
+     <p>there's a reason erasers don't work on your heart: because your heart isn't composed of loosely connected graphite particles that are more attracted to rubber than to paper. *tosses up and catches eraser*</p>
+     </details>
+     
+   * <details>
+     <summary><a name="delete-a-project"></a><b>Delete</b> a project</summary>
+     <p>i am a bee</p>
+     </details>
+     
+* <details>
+  <summary><a name="3.2-my-account"></a>3.2 My Account</summary>
+  <p>my dog is broken</p>
+  </details>
+  
+   * <details>
+     <summary><a name="change-my-username"></a><b>Change</b> my username</summary>
+     <p>say my name say my name 🎼 </p>
+     </details>
+     
+   * <details>
+     <summary><a name="change-my-email"></a><b>Change</b> my email</summary>
+     <p>i don't wanna hook em anymore</p>
+     </details>
+     
+   * <details>
+     <summary><a name="change-my-password"></a><b>Change</b> my password</summary>
+     <p>zoo wee mama</p>
+     </details>
+     
+   * <details>
+     <summary><a name="change-user-theme"></a><b>Change</b> user theme</summary>
+     <p>back pain</p>
+     </details>
 
 
 # <a name="4-hardware-page"></a>4. Hardware Page
-* #### <a name="what-is-hardware?"></a>What is hardware?
-* #### <a name="hardware-for-a-project"></a>Hardware for a project
-* #### <a name="hardware-for-personal-use"></a>Hardware for personal use
-* #### <a name="checking-out-hardware"></a>Checking out hardware
-* #### <a name="checking-in-hardware"></a>Checking in hardware
+* <details>
+  <summary><a name="what-is-hardware?"></a>What is hardware?</summary>
+  <p>ayayyeuh</p>
+  </details>
+  
+* <details>
+  <summary><a name="hardware-for-a-project"></a>Hardware for a project</summary>
+  <p>i ordered a mechanical keyboard woo</p>
+  </details>
+  
+* <details>
+  <summary><a name="hardware-for-personal-use"></a>Hardware for personal use</summary>
+  <p>dehydration</p>
+  </details>
+  
+* <details>
+  <summary><a name="checking-out-hardware"></a>Checking out hardware</summary>
+  <p>check it out check it out check it out</p>
+  </details>
+  
+* <details>
+  <summary><a name="checking-in-hardware"></a>Checking in hardware</summary>
+  <p>if you break it you buy it if you return it you buy it if you don't return it you probably still buy it so return your hardware <3</p>
+  </details>
 
 
 # <a name="5-hardware-page"></a>5. Datasets Page
-* #### <a name="what-is-a-dataset?"></a>What is a dataset?
-* #### <a name="downloading-a-dataset"></a>**Downloading** a dataset
+* <details>
+  <summary><a name="what-is-a-dataset?"></a>What is a dataset?</summary>
+  <p>42</p>
+  </details>
+  
+* <details>
+  <summary><a name="downloading-a-dataset"></a><b>Downloading</b> a dataset</summary>
+  <p>brb gotta download this knowledge</p>
+  </details>
 
 
 
 
-
+&nbsp;  
 &nbsp;  
 ## Sources used
 

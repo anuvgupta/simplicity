@@ -19,7 +19,7 @@ Created by Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
    * [**Join** a project](#join-a-project)
    * [**Edit** a project](#edit-a-project)
    * [**Delete** a project](#delete-a-project)
-* #### [3.2 My Account]
+* #### [3.2 My Account](#3.2-my-account)
    * [**Change** my username](#change-my-username)
    * [**Change** my email](#change-my-email)
    * [**Change** my password](#change-my-password)
@@ -38,7 +38,7 @@ Created by Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
 &nbsp;
 &nbsp;
 &nbsp;
-  
+<a name=""></a>  
 ## <a name="1-getting-started"></a>Getting Started
 * #### <a name="what-is-simplicity?"></a>What is Simplicity?
 
@@ -47,12 +47,16 @@ Created by Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
 * #### <a name="how-do-i-sign-in?"></a>How do I **sign in**?
 
 
-### 2. Overview Page
+## <a name="2-overview-page"></a>Overview Page
 
 
-### [3. User Functions and Features](#3.-user-functions-and-features)
-   - #### [3.1 Projects](3.1-projects)
-      - ##### What is a project?  
+## <a name="3-user-functions-and-features"></a>User Functions and Features
+
+
+* ## <a name="3.1-projects"></a>3.1 Projects
+
+
+
   
   
   

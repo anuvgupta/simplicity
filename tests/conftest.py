@@ -12,7 +12,7 @@ class TestConfig:
     TESTING = True
     SECRET_KEY = os.environ.get('SECRET_KEY') or '5tay0ut!'
     MONGODB_SETTINGS = {
-        "db": "web-app",
+        "db": "simplicity-cloud",
         "host": "localhost",
         "port": 27017
     }
@@ -24,7 +24,7 @@ def app():
     # app = Flask(__name__)
     # app.config.from_object(TestConfig)
     # # app.config['MONGODB_SETTINGS']= {
-    # #     "db": "web-app-test",
+    # #     "db": "simplicity-cloud-test",
     # #     "host": "localhost",
     # #     "port": 27017
     # # }
@@ -35,7 +35,7 @@ def app():
 
     app.config["TESTING"] = True
     app.config['MONGODB_SETTINGS'] = {
-        "db": "web-app-test",
+        "db": "simplicity-cloud-test",
         "host": "localhost",
         "port": 27017
     }

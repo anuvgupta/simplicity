@@ -20,7 +20,7 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 app.config['MONGODB_SETTINGS']= {
-    "db": "web-app",
+    "db": "simplicity-cloud",
     "host": "localhost",
     "port": 27017
 }

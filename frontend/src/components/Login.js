@@ -1,4 +1,4 @@
-// Register page
+// login page
 
 
 import axios from 'axios';
@@ -11,8 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../global.js';
 import '../styles/loginpage.css';
 
-
-class RegisterPage extends React.Component {
+class Login extends React.Component {
 
     static propTypes = {
         location: PropTypes.object.isRequired,
@@ -23,16 +22,15 @@ class RegisterPage extends React.Component {
         super(props);
         this.state = {
             username: "",
-            email: "",
             password: "",
             errorMsg: ""
         };
     }
 
     componentDidMount() {
-        global.api.authenticate(is_authenticated => {
+        global.api.authenticate((is_authenticated => {
             if (is_authenticated) this.redirectPage();
-        });
+        }).bind(this));
     }
     componentWillUnmount() {
 
@@ -41,12 +39,6 @@ class RegisterPage extends React.Component {
     updateUsername(event) {
         this.setState({
             username: event.target.value
-        });
-    }
-
-    updateEmail(event) {
-        this.setState({
-            email: event.target.value
         });
     }
 
@@ -64,18 +56,14 @@ class RegisterPage extends React.Component {
 
     validateForm(sendRequest = false) {
         var username = this.state.username;
-        var email = this.state.email;
         var password = this.state.password;
         if (username && username.trim().length > 0) {
-            if (email && email.trim().length > 0) {
-                if (password && password.trim().length > 0) {
-                    if (global.util.validateAlphanumeric(username)) {
-                        password = global.util.hashPassword(password);
-                        if (sendRequest) this.requestSignUp(username, email, password);
-                    } else this.updateErrorMsg('Invalid username (letters and numbers only).');
-                } else this.updateErrorMsg('Empty password.');
-            } else this.updateErrorMsg('Empty email.');
-
+            if (password && password.trim().length > 0) {
+                if (global.util.validateAlphanumeric(username)) {
+                    password = global.util.hashPassword(password);
+                    if (sendRequest) this.requestSignIn(username, password);
+                } else this.updateErrorMsg('Invalid username (letters and numbers only).');
+            } else this.updateErrorMsg('Empty password.');
         } else this.updateErrorMsg('Empty username.');
     }
 
@@ -85,15 +73,11 @@ class RegisterPage extends React.Component {
         }
     }
 
-    redirectPage(force = false) {
-        if (!force) {
-            this.props.history.push('/home');
-        } else {
-            window.location = String(`${window.location.origin}/home?first=true`);
-        }
+    redirectPage() {
+        this.props.history.push('/home');
     }
 
-    requestSignUp(username, email, password) {
+    requestSignIn(username, password) {
         var handleResponse = response => {
             var accessToken = null;
             var errorMessage = 'Unknown error.';
@@ -115,18 +99,16 @@ class RegisterPage extends React.Component {
                 });
             } else if (accessToken) {
                 global.api.login(accessToken, false);
-                this.redirectPage(true);
+                this.redirectPage();
             }
         };
-        axios.post(`${global.config.api_url}/register`, {
+        axios.post(`${global.config.api_url}/login`, {
             username: `${username}`,
-            email: `${email}`,
             password: `${password}`
         }).then(response => {
             var resp_data = null;
             if (response && response.data)
                 resp_data = response.data;
-            console.log(resp_data);
             handleResponse(resp_data);
         }).catch(error => {
             if (error) {
@@ -142,13 +124,12 @@ class RegisterPage extends React.Component {
         return (
             <div className="center h100">
                 <div className="centerTitle">
-                    <h1 className="loginTitle titleFont">Sign Up</h1>
+                    <h1 className="loginTitle titleFont">Sign In</h1>
                 </div>
-                <div className="defaultFormClass" style={{ marginTop: '7px' }}>
+                <div class="defaultFormClass" style={{ marginTop: '7px' }}>
                     Username: <input type="text" id="username" placeholder="username" onChange={this.updateUsername.bind(this)} onKeyUp={this.checkEnter.bind(this)}></input><br />
-                    Email: <input type="email" id="email" placeholder="name@email.com" onChange={this.updateEmail.bind(this)} onKeyUp={this.checkEnter.bind(this)}></input><br />
                     Password: <input type="password" id="password" placeholder="********" onChange={this.updatePassword.bind(this)} onKeyUp={this.checkEnter.bind(this)}></input><br />
-                    <Button variant="outlined" color="default" style={{ marginTop: '12px' }} onClick={this.validateForm.bind(this, true)}> Sign Up </Button>
+                    <Button variant="outlined" color="default" style={{ marginTop: '12px' }} onClick={this.validateForm.bind(this, true)}> Sign In </Button>
                 </div>
                 <span className="errorMessage">{this.state.errorMsg}</span>
             </div>
@@ -156,4 +137,4 @@ class RegisterPage extends React.Component {
     }
 }
 
-export default withRouter(RegisterPage);
+export default withRouter(Login);

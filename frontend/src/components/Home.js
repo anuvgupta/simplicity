@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import '../styles/homepage.css';
 
-class HomePage extends React.Component {
+class Home extends React.Component {
     static propTypes = {
         location: PropTypes.object.isRequired,
         history: PropTypes.object.isRequired
@@ -52,4 +52,4 @@ class HomePage extends React.Component {
     }
 }
 
-export default withRouter(HomePage);
+export default withRouter(Home);

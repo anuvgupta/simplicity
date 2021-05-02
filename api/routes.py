@@ -741,10 +741,10 @@ def payment():
         'success': False,
         'message': 'Invalid card number.'
     })
-    bill_response_11 = lambda : jsonify({
-        'success': False,
-        'message': 'Invalid CVV.'
-    })
+    # bill_response_11 = lambda : jsonify({
+    #     'success': False,
+    #     'message': 'Invalid CVV.'
+    # })
     bill_response_12 = lambda : jsonify({
         'success': False,
         'message': 'Invalid Expiration Date.'
@@ -770,22 +770,23 @@ def payment():
     else:
         name_on_card = payment_json.get('name')
         card_num = payment_json.get('card_number')
-        cvv = payment_json.get('cvv')
-        expiration = payment.json.get('expiration')
-        zipcode = payment.json.get('zipcode')
-        return_value = verify_payment_info(name_on_card, card_num, cvv, expiration,
-                            zipcode)
+        # cvv = payment_json.get('cvv')
+        expiration = payment_json.get('expiration')
+        zipcode = payment_json.get('zipcode')
+        # return_value = verify_payment_info(name_on_card, card_num, cvv, expiration, zipcode)
+        return_value = verify_payment_info(name_on_card, card_num, expiration, zipcode)
         if return_value == 10:
             return (bill_response_10(), 406)
-        elif return_value == 11:
-            return (bill_response_11(), 406)
+        # elif return_value == 11:
+        #     return (bill_response_11(), 406)
         elif return_value == 12:
             return (bill_response_12(), 406)
         elif return_value == 13:
             return (bill_response_13(), 406)
         # payment method is verified
-        update_payment_method(current_username, name_on_card, card_num,
-                                cvv, expiration, zipcode)
+        # update_payment_method(current_username, name_on_card, card_num, cvv, expiration, zipcode)
+        update_payment_method(current_username, name_on_card, card_num, expiration, zipcode)
+
         return (jsonify({
             'success': True,
             'data': { }

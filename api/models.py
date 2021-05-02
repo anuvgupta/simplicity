@@ -585,17 +585,18 @@ def create_bill(hw_set_id, p_id, checkin_quantity, curr_username):
     return return_bill_id
 
 
-def verify_payment_info(name, card_number, cvv, expiration, zipcode):
+# def verify_payment_info(name, card_number, cvv, expiration, zipcode):
+def verify_payment_info(name, card_number, expiration, zipcode):
     # check card number
     card_num_regex = re.compile(r'^(\d\d\d\d( )?){4}$')
     search_card = card_num_regex.search(card_number)
     if not search_card:
         return 10
-    # check cvv
-    cvv_regex = re.compile(r'^(\d){3}$')
-    search_cvv = cvv_regex.search(cvv)
-    if not search_cvv:
-        return 11
+    # # check cvv
+    # cvv_regex = re.compile(r'^(\d){3}$')
+    # search_cvv = cvv_regex.search(cvv)
+    # if not search_cvv:
+    #     return 11
     # check expiration date
     expiration_regex = re.compile(r'^(\d\d)(/* *)(\d\d)$')
     search_expiration = expiration_regex.search(expiration)
@@ -615,21 +616,21 @@ def verify_payment_info(name, card_number, cvv, expiration, zipcode):
     return 1
 
 
-def update_payment_method(curr_username, card_name, card_num, cvv, expiration, zipcode):
+# def update_payment_method(curr_username, card_name, card_num, cvv, expiration, zipcode):
+def update_payment_method(curr_username, card_name, card_num, expiration, zipcode):
+    if not does_user_name_exist(curr_username):
+        return (False, "User not found.")
     user = get_user_obj(curr_username)
     if not user:
-        return (jsonify({
-            'success': False,
-            'message': 'User is not verified.'
-        }), 400)
+        return (False, "User not found.")
     user.payment_method['name_on_card'] = card_name
     user.payment_method['card_number'] = card_num
-    user.payment_method['cvv'] = cvv
+    # user.payment_method['cvv'] = cvv
     user.payment_method['expiration'] = expiration
     user.payment_method['zipcode'] = zipcode
     user.payment_set = True
     user.save()
-    return 
+    return (True, "")
 
 
 def does_bill_exist(b_id) -> bool:

@@ -15,12 +15,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './global.js';
 import './App.css';
 import SideBar from "./components/SideBar";
-import LoginPage from "./components/LoginPage";
-import RegisterPage from "./components/RegisterPage";
+import Login from "./components/Login";
+import Register from "./components/Register";
 import ProjectForm from "./components/ProjectForm";
 import HardwareForm from './components/HardwareForm';
+import PaymentForm from './components/PaymentForm';
 import Hardware from './components/Hardware';
-import HomePage from "./components/HomePage";
+import Home from "./components/Home";
 import Projects from './components/Projects';
 import Project from './components/Project';
 import Datasets from "./components/Datasets";
@@ -28,7 +29,7 @@ import Billing from "./components/Billing";
 import Overview from "./components/Overview";
 import NavigationBar from "./components/NavBar";
 import JoinProject from './components/JoinProject.js';
-import SettingsPage from './components/SettingsPage.js';
+import Settings from './components/Settings.js';
 import Admin from './components/Admin.js';
 
 function App() {
@@ -37,10 +38,10 @@ function App() {
       <Router>
         <Switch>
           <Route path="/login">
-            <LoginPage></LoginPage>
+            <Login></Login>
           </Route>
           <Route path="/register">
-            <RegisterPage></RegisterPage>
+            <Register></Register>
           </Route>
           <Route path="/home">
             <NavigationBar></NavigationBar>
@@ -101,14 +102,15 @@ function App() {
             <NavigationBar></NavigationBar>
             <SideBar active="billing"></SideBar>
             <Billing></Billing>
+            <PaymentForm></PaymentForm>
           </Route>
           <Route path="/settings">
             <NavigationBar></NavigationBar>
             <SideBar active="settings"></SideBar>
-            <SettingsPage></SettingsPage>
+            <Settings></Settings>
           </Route>
           <Route path="/">
-            <HomePage></HomePage>
+            <Home></Home>
           </Route>
         </Switch>
       </Router >

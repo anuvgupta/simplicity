@@ -15,7 +15,7 @@ import '../global.js';
 import '../styles/settingspage.css';
 
 
-class SettingsPage extends React.Component {
+class Settings extends React.Component {
 
     static propTypes = {
         location: PropTypes.object.isRequired,
@@ -338,4 +338,4 @@ class SettingsPage extends React.Component {
     }
 }
 
-export default withRouter(SettingsPage);
+export default withRouter(Settings);

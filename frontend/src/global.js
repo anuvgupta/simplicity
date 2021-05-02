@@ -112,6 +112,15 @@ global.util = {
         }
         return true;
     },
+    validateNumeric: (value) => {
+        var numerics = '0123456789';
+        for (var v in value) {
+            if (!numerics.includes(value[v])) {
+                return false;
+            }
+        }
+        return true;
+    },
     hashPassword: (value) => {
         // const hashSalt = bcryptjs.genSaltSync();
         // const hashPassword = bcryptjs.hashSync(value, hashSalt);

@@ -9,6 +9,7 @@ import json
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, verify_jwt_in_request
 
 # @test("Hello world test")
+#Create 2 projects
 @simplicity_test
 def test_create_project(client, request):
     user_data = {
@@ -25,7 +26,35 @@ def test_create_project(client, request):
     print(res.data)
     assert res.status_code == 200
 
+@simplicity_test
+def test_create_another_project(client, request):
+    user_data = {
+        "username": "regUser2",
+        "name": "regUser Project",
+        "id": "p2",
+        "desc": "Test description 2"
+    }
+    access_token = create_access_token(identity=user_data.get("username"))
+    headers = {
+        'Authorization': 'Bearer {}'.format(access_token)
+    }
+    res = client.post('/api/createProject', headers=headers, json=user_data)
+    print(res.data)
+    assert res.status_code == 200
+
+#Check if we get projects by id (2 of them)
+
+#join each other's projects
+
+#edit project 1 with user 2
+
+#check if user 1 can see it
+
+#delete both pictures
+
+
 #TODO: Check if admin can view project
 
-#TODO: NEed second user so we can test join project
+#TODO: Need second user so we can test join project
+
     

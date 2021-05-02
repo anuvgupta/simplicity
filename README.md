@@ -8,10 +8,10 @@ Created by Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
 # **User Documentation**
 &nbsp;
 ## **Table of Contents**
-### 1. Getting Started
-   - #### What is Simplicity?
-   - #### **Create** an account
-   - #### How do I **sign in**?
+### [1. Getting Started](1.-getting-started)
+   - #### [What is Simplicity?](what-is-simplicity?)
+   - #### [**Create** an account](create-an-account)
+   - #### [How do I **sign in**?](how-do-i-sign-in?)
 ### 2. Overview Page
 ### 3. User Functions and Features
 #### 3.1 Projects
@@ -40,7 +40,7 @@ Created by Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
 &nbsp;
 &nbsp;
   
-### [1. Getting Started](1.-getting-started)
+### 1. Getting Started
 ##### [What is Simplicity?](what-is-simplicity?)
 
 ##### [Create an account](create-an-account)

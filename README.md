@@ -5,47 +5,46 @@ This project is the semester project for EE461L.
 Created by Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
 &nbsp;
 &nbsp;
-# **User Documentation**
 &nbsp;
-## **Table of Contents**
-### [1. Getting Started](1-getting-started)
-   - #### [What is Simplicity?](what-is-simplicity?)
-   - #### [**Create** an account](create-an-account)
-   - #### [How do I **sign in**?](how-do-i-sign-in?)
-### 2. Overview Page
-### 3. User Functions and Features
-#### 3.1 Projects
-   - #### What is a **project**?
-   - #### **Create** a project
-   - #### **Join** a project
-   - #### **Edit** a project
-   - #### **Delete** a project
-  #### [3.2 My Account]
-   - #### **Change** my username
-   - #### **Change** my email
-   - #### **Change** my password
-   - #### **Change** user theme
-### 4. Hardware Page
-   - #### What is hardware?
-   - #### Checking out/in hardware to a **project**
-   - #### Checking out/in hardware for **personal use**
-   - #### **Checking out** hardware
-   - #### **Checking in** hardware
-### 5. Datasets Page
-   - #### What is a dataset?
-   - #### **Downloading** a dataset
+# User Documentation Table of Contents
+### [1. Getting Started](#1-getting-started)
+* [What is Simplicity?](#what-is-simplicity?)
+* [**Create** an account](#create-an-account)
+* [How do I **sign in**?](#how-do-i-sign-in?)
+### [2. Overview Page](#2-overview-page)
+### [3. User Functions and Features](#3-user-functions-and-features)
+* #### [3.1 Projects](#3.1-projects)
+   * [What is a **project**?](#what-is-a-project?)
+   * [**Create** a project](#create-a-project)
+   * [**Join** a project](#join-a-project)
+   * [**Edit** a project](#edit-a-project)
+   * [**Delete** a project](#delete-a-project)
+* #### [3.2 My Account]
+   * [**Change** my username](#change-my-username)
+   * [**Change** my email](#change-my-email)
+   * [**Change** my password](#change-my-password)
+   * [**Change** user theme](#change-user-theme)
+### [4. Hardware Page](#4-hardware-page)
+   * [What is hardware?](#what-is-hardware?)
+   * [Hardware for a **project**](#hardware-for-a-project)
+   * [Hardware for **personal use**](#hardware-for-personal-use)
+   * [**Checking out** hardware](#checking-out-hardware)
+   * [**Checking in** hardware](#checking-in-hardware)
+### [5. Datasets Page](#5-datasets-page)
+   * [What is a dataset?](#what-is-a-dataset?)
+   * [**Downloading** a dataset](#downloading-a-dataset)
 
 &nbsp;
 &nbsp;
 &nbsp;
 &nbsp;
   
-### 1. Getting Started
-##### What is Simplicity?
+## <a name="1-getting-started"></a>Getting Started
+* #### <a name="what-is-simplicity?"></a>What is Simplicity?
 
-##### [Create an account](create-an-account)
+* #### <a name="create-an-account"></a>**Create** an account
 
-##### [How do I sign in?](how-do-i-sign-in?)
+* #### <a name="how-do-i-sign-in?"></a>How do I **sign in**?
 
 
 ### 2. Overview Page
@@ -58,16 +57,7 @@ Created by Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
   
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
   
   
   

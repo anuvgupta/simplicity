@@ -40,7 +40,10 @@ Created by Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
 &nbsp;
 <a name=""></a>  
 # <a name="1-getting-started"></a>1. Getting Started
-* #### <a name="what-is-simplicity?"></a>What is Simplicity?
+<details>
+  <summary>What is Simplicity?</summary><a name="what-is-simplicity?">
+  <p> lorem ipsum </p>
+</details>
 
 * #### <a name="create-an-account"></a>**Create** an account
 

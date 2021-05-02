@@ -171,6 +171,9 @@ def user():
                         proj_hw_usage_obj = result[0]
                     else:
                         print(result[1])
+                payment_rep = ""
+                if user.payment_set:
+                    payment_rep = ("Card *{}").format(user.payment_method['card_number'][-4:])
                 return (jsonify({
                     'success': True,
                     'data': {
@@ -181,7 +184,9 @@ def user():
                         'is_admin': user.is_admin,
                         'is_godmin': user.is_godmin,
                         'navColor':  user.navColor,
-                        'proj_hw_usage': proj_hw_usage_obj
+                        'proj_hw_usage': proj_hw_usage_obj,
+                        'payment_set': user.payment_set,
+                        'payment_rep': payment_rep
                     }
                 }), 200)
             return (jsonify({
@@ -582,10 +587,10 @@ def checkInHardware():
             return (hw_response_404(), 404)
         usage = "personal" if hardware_json.get('usage') == "personal" else "shared"
         ret_val = 0
+        project_id = None
         if usage == "personal":
             # check in from user
             ret_val = user_check_in(hardware_id, checkin_quantity, current_username)
-            create_bill(hardware_id, None, checkin_quantity, current_username)
         else:
             # check in from project
             project_id = hardware_json.get('project_id')
@@ -595,7 +600,6 @@ def checkInHardware():
                     'message': 'Project ' + project_id + ' not found.'
                 }), 404)
             ret_val = project_check_in(hardware_id, checkin_quantity, project_id)
-            create_bill(hardware_id, project_id, checkin_quantity, current_username)
         if ret_val == 400:
             return (jsonify({
                 'success': False,
@@ -605,9 +609,17 @@ def checkInHardware():
             return (hw_response_404(), 404)
         elif ret_val == 500:
             return (hw_response_500(), 500)
+        new_bill_id = create_bill(hardware_id, project_id, checkin_quantity, current_username)
+        if new_bill_id == False:
+            return (jsonify({
+                'success': False,
+                'message': "Error creating/processing bill, but check-in completed."
+            }), 500)
         return (jsonify({
             'success': True,
-            'data': { }
+            'data': {
+                "bill_id": new_bill_id
+            }
         }), 200)
     return (hw_response_500(), 500)
 
@@ -715,7 +727,7 @@ def billing():
     else:
         bills_dict = dict()
         for bill in query_user_bills:
-            bills_dict[bill.bill_id] = bill_obj_to_dict(bill)
+            bills_dict[str(bill.id)] = bill_obj_to_dict(bill)
         return (jsonify({
             'success': True,
             'data': bills_dict
@@ -734,10 +746,10 @@ def payment():
         'success': False,
         'message': 'Invalid card number.'
     })
-    bill_response_11 = lambda : jsonify({
-        'success': False,
-        'message': 'Invalid CVV.'
-    })
+    # bill_response_11 = lambda : jsonify({
+    #     'success': False,
+    #     'message': 'Invalid CVV.'
+    # })
     bill_response_12 = lambda : jsonify({
         'success': False,
         'message': 'Invalid Expiration Date.'
@@ -763,22 +775,27 @@ def payment():
     else:
         name_on_card = payment_json.get('name')
         card_num = payment_json.get('card_number')
-        cvv = payment_json.get('cvv')
-        expiration = payment.json.get('expiration')
-        zipcode = payment.json.get('zipcode')
-        return_value = verify_payment_info(name_on_card, card_num, cvv, expiration,
-                            zipcode)
+        # cvv = payment_json.get('cvv')
+        expiration = payment_json.get('expiration')
+        zipcode = payment_json.get('zipcode')
+        # return_value = verify_payment_info(name_on_card, card_num, cvv, expiration, zipcode)
+        return_value = verify_payment_info(name_on_card, card_num, expiration, zipcode)
         if return_value == 10:
             return (bill_response_10(), 406)
-        elif return_value == 11:
-            return (bill_response_11(), 406)
+        # elif return_value == 11:
+        #     return (bill_response_11(), 406)
         elif return_value == 12:
             return (bill_response_12(), 406)
         elif return_value == 13:
             return (bill_response_13(), 406)
         # payment method is verified
-        update_payment_method(current_username, name_on_card, card_num,
-                                cvv, expiration, zipcode)
+        # update_payment_method(current_username, name_on_card, card_num, cvv, expiration, zipcode)
+        update_result = update_payment_method(current_username, name_on_card, card_num, expiration, zipcode)
+        if not update_result[0]:
+            return (jsonify({
+                'success': False,
+                'message': '' + update_result[1]
+            }), 500)
         return (jsonify({
             'success': True,
             'data': { }
@@ -833,11 +850,12 @@ def payBill():
                     'success': True,
                     'data': {
                         'bill_id': bill_id,
-                        'recipient': current_username,
+                        'recipient_username': current_username,
                         'project_id': curr_bill.project_id,
                         'hw_used': curr_bill.hw_used,
-                        'subtotal': curr_bill.project_subtotal,
-                        'amount_due': curr_bill.amount_due
+                        'bill_subtotal': float(curr_bill.bill_subtotal),
+                        'amount_due': float(curr_bill.amount_due),
+                        'timestamp': curr_bill.timestamp
                     }
                 }), 200)
         else:

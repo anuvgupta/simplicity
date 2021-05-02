@@ -64,10 +64,11 @@ class Bill(me.Document):
     recipient_username = me.StringField(max_length=50, required=True, unique=False)    
     project_id = me.StringField(max_length=20, required=False, unique=False, validation=_not_empty)
     hw_used = me.DictField()    # maps hw_set_name to quantity checked in
-    project_subtotal = me.DecimalField(min_value=0, force_string=True, precision=2)    # store as a string, can also force it to round a certain way if needed
+    bill_subtotal = me.DecimalField(min_value=0, force_string=True, precision=2)    # store as a string, can also force it to round a certain way if needed
     amount_due = me.DecimalField(min_value=0, force_string=True, precision=2)
     bill_paid = me.BooleanField(default=False)
     timestamp = me.IntField(required=True)
+    paid_timestamp = me.IntField(required=False)
 
 
 # defines fields for user accounts
@@ -541,9 +542,11 @@ def create_bill(hw_set_id, p_id, checkin_quantity, curr_username):
     if not hardware:
         return False
     subtotal = int(checkin_quantity) * Decimal(hardware.price)
+    members = []
     if not p_id:
         # personal bill
         bill_cost_total = subtotal
+        members = [curr_username]
     elif p_id:
         # project bill - amount due for this user 
         if not does_project_id_exist(p_id):
@@ -554,43 +557,59 @@ def create_bill(hw_set_id, p_id, checkin_quantity, curr_username):
         num_members = len(project.members)
         user_total = round(subtotal / num_members, 2)
         bill_cost_total = user_total
+        members = project.members
     if not does_user_name_exist(curr_username):
         return False
     user_obj = get_user_obj(curr_username)
     if not user_obj:
         return False
-    timestamp = time.time()
-    new_bill = Bill(recipient_username=curr_username, project_id=p_id,
-                    hw_used={ hw_set_id : checkin_quantity },
-                    project_subtotal=str(subtotal),
-                    amount_due=str(bill_cost_total),
-                    bill_paid=False, timestamp=timestamp)
-    new_bill.save()
-    user_obj.bills_list.append(str(new_bill.id))
-    user_obj.save()
-    return 1
+    return_bill_id = ""
+    for member_username in members:
+        if not does_user_name_exist(member_username):
+            continue
+        member_user_obj = get_user_obj(member_username)
+        if not member_user_obj:
+            continue
+        timestamp = time.time()
+        new_bill = Bill(recipient_username=member_username, project_id=p_id,
+                        hw_used={ hw_set_id : checkin_quantity },
+                        bill_subtotal=str(subtotal),
+                        amount_due=str(bill_cost_total),
+                        bill_paid=False, timestamp=timestamp,
+                        paid_timestamp=-1)
+        new_bill.save()
+        member_user_obj.bills_list.append(str(new_bill.id))
+        member_user_obj.save()
+        if member_username == curr_username:
+            return_bill_id = str(new_bill.id)
+    return return_bill_id
 
 
-def verify_payment_info(name, card_number, cvv, expiration, zipcode):
+# def verify_payment_info(name, card_number, cvv, expiration, zipcode):
+def verify_payment_info(name, card_number, expiration, zipcode):
     # check card number
     card_num_regex = re.compile(r'^(\d\d\d\d( )?){4}$')
     search_card = card_num_regex.search(card_number)
     if not search_card:
         return 10
-    # check cvv
-    cvv_regex = re.compile(r'^(\d){3}$')
-    search_cvv = cvv_regex.search(cvv)
-    if not search_cvv:
-        return 11
+    # # check cvv
+    # cvv_regex = re.compile(r'^(\d){3}$')
+    # search_cvv = cvv_regex.search(cvv)
+    # if not search_cvv:
+    #     return 11
     # check expiration date
     expiration_regex = re.compile(r'^(\d\d)(/* *)(\d\d)$')
     search_expiration = expiration_regex.search(expiration)
     input_month = int(search_expiration.group(1))
+    # print(input_month)
     input_year = int(search_expiration.group(3))
+    # print(input_year)
     curr_month = int(datetime.datetime.now().strftime('%m'))
+    # print(curr_month)
     curr_year = int(datetime.datetime.now().strftime('%y'))
+    # print(curr_year)
     # credit card is expired
-    if input_month < curr_month or input_year < curr_year:
+    if input_year < curr_year or (input_year == curr_year and input_month < curr_month):
         return 12
     # check zip code
     zip_regex = re.compile(r'^(\d){5}$')
@@ -601,25 +620,25 @@ def verify_payment_info(name, card_number, cvv, expiration, zipcode):
     return 1
 
 
-def update_payment_method(curr_username, card_name, card_num, cvv, expiration, zipcode):
+# def update_payment_method(curr_username, card_name, card_num, cvv, expiration, zipcode):
+def update_payment_method(curr_username, card_name, card_num, expiration, zipcode):
+    if not does_user_name_exist(curr_username):
+        return (False, "User not found.")
     user = get_user_obj(curr_username)
     if not user:
-        return (jsonify({
-            'success': False,
-            'message': 'User is not verified.'
-        }), 400)
+        return (False, "User not found.")
     user.payment_method['name_on_card'] = card_name
     user.payment_method['card_number'] = card_num
-    user.payment_method['cvv'] = cvv
+    # user.payment_method['cvv'] = cvv
     user.payment_method['expiration'] = expiration
     user.payment_method['zipcode'] = zipcode
     user.payment_set = True
     user.save()
-    return 
+    return (True, "")
 
 
 def does_bill_exist(b_id) -> bool:
-    query_bill = Bill.objects(bill_id__exact=b_id)
+    query_bill = Bill.objects(id=str(b_id))
     if len(query_bill) != 1:
         return False
     bill = query_bill.first()
@@ -631,7 +650,7 @@ def does_bill_exist(b_id) -> bool:
     
 
 def get_bill_obj(b_id):
-    query_bill = Bill.objects(bill_id__exact=b_id)
+    query_bill = Bill.objects(id=str(b_id))
     if len(query_bill) != 1:
         return None
     bill = query_bill.first()
@@ -648,10 +667,11 @@ def bill_obj_to_dict(bill_obj):
     return {
         'recipient_username': bill_obj.recipient_username,
         'project_id': bill_obj.project_id if ('project_id' in bill_obj) else None,
-        'bill_id': bill_obj.bill_id,
+        'bill_id': str(bill_obj.id),
         'hw_used': bill_obj.hw_used,
-        'project_subtotal': bill_obj.project_subtotal,
-        'amount_due': bill_obj.amount_due,
+        'bill_subtotal': float(bill_obj.bill_subtotal),
+        'amount_due': float(bill_obj.amount_due),
         'bill_paid': bill_obj.bill_paid,
-        'timestamp': bill_obj.timestamp
+        'timestamp': bill_obj.timestamp,
+        'paid_timestamp': bill_obj.paid_timestamp
     }

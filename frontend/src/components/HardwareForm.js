@@ -30,8 +30,10 @@ class HardwareForm extends React.Component {
             hwList: {},
             projectID: '',
             pricing: 0,
-            cost: 0
+            cost: 0,
+            link_bill_id: ''
         };
+        this.billRef = React.createRef();
     }
 
     componentDidMount() {
@@ -47,6 +49,11 @@ class HardwareForm extends React.Component {
     redirectPage() {
         this.props.history.push('/home');
     }
+
+    scrollToBillRef() {
+        return window.scrollTo(0, this.billRef.current.offsetTop);
+    }
+
     getHardwareInfo(token, resolve) {
         axios.post(`${global.config.api_url}/checkHardware`, {},
             { headers: { Authorization: `Bearer ${token}` } }
@@ -75,6 +82,18 @@ class HardwareForm extends React.Component {
         var project_id = '';
         if (this.props.match.params.hasOwnProperty('id'))
             project_id = (`${this.props.match.params.id}`).trim();
+        let query = new URLSearchParams(this.props.location.search);
+        var link_bill_id = null;
+        var scrollToBill = false;
+        if (query.has('bill')) {
+            scrollToBill = true;
+            link_bill_id = query.get('bill').trim();
+            this.setState({
+                link_bill_id: link_bill_id,
+                msg: "Check in succeeded & bill processed.",
+                color: "green"
+            });
+        }
         this.setState({
             token: user.token,
             projectID: `${project_id}`
@@ -93,6 +112,9 @@ class HardwareForm extends React.Component {
                     pricing: hwSet && (hwSet.price),
                     cost: hwSet && (hwSet.price * this.state.quantity),
                 })
+                setTimeout((_ => {
+                    this.scrollToBillRef();
+                }).bind(this), 100);
             } else {
                 console.log(error);
             }
@@ -145,6 +167,9 @@ class HardwareForm extends React.Component {
         });
     }
     checkHardware(isCheckin) {
+        this.setState({
+            link_bill_id: ''
+        });
         // console.log(this.state);
         // TODO: POST request here to check out / check in data
         if (isCheckin) {
@@ -170,7 +195,8 @@ class HardwareForm extends React.Component {
                             msg: "Success!",
                             color: "green"
                         });
-                        window.location.reload();
+                        var newLocation = String(`${window.location.origin}${window.location.pathname}?bill=${resp_data.data && resp_data.data.bill_id ? resp_data.data.bill_id : ''}`);
+                        window.location = String(newLocation);
                     } else {
                         console.log(error);
                     }
@@ -216,7 +242,8 @@ class HardwareForm extends React.Component {
                             msg: "Success!",
                             color: "green"
                         });
-                        window.location.reload();
+                        var newLocation = String(`${window.location.origin}${window.location.pathname}`);
+                        window.location = String(newLocation);
                     } else {
                         console.log(error);
                     }
@@ -249,8 +276,8 @@ class HardwareForm extends React.Component {
             <div className="formCard" style={{ padding: '60px 40px 40px 40px' }}>
                 <div className="formCenter">
                     <div className="centerTitle" style={{ marginBottom: '10px' }}>
-                        <h1 style={{ fontSize: '2.2em' }}> Check In/Out Hardware </h1>
-                        <h6 style={{ color: '#444', fontStyle: 'italic', letterSpacing: '0.6px', marginTop: '-2px', fontSize: '16px' }}> {(this.props.usage == 'personal' ? 'Personal' : 'Shared')} Usage </h6>
+                        <h1 style={{ fontSize: '2.2em' }}> Request Hardware </h1>
+                        <h6 style={{ color: '#444', fontStyle: 'italic', letterSpacing: '0.6px', marginTop: '-2px', fontSize: '16px' }}> {(this.props.usage == 'personal' ? 'Personal' : 'Project/Shared')} Usage </h6>
                     </div>
                     <div className="hardwareForm" style={{ marginBottom: '33px' }}>
                         <Form.Group>
@@ -262,13 +289,13 @@ class HardwareForm extends React.Component {
                                     )) : ''}
                             </Form.Control>
                             <Form.Label style={{ marginTop: '1em', fontSize: '19px' }}> Request Capacity (GB) </Form.Label>
-                            <Form.Control type="text" placeholder="10" onChange={this.updateQuantity.bind(this)} />
+                            <Form.Control type="text" placeholder="0" onChange={this.updateQuantity.bind(this)} />
                             <Form.Label style={{ marginTop: '1em', fontSize: '19px' }}> Total Availability (GB) </Form.Label>
                             <Form.Control type="text" value={this.state.amount} disabled />
                             <Form.Label style={{ marginTop: '1em', fontSize: '19px', display: 'block' }}> Projected Pricing &amp; Cost </Form.Label>
                             <Form.Control style={{ width: 'calc(50% - 3px)', display: 'inline-block', boxSizing: 'border-box', marginRight: '3px' }} type="text" value={`$${this.state.pricing.toFixed(2)}/GB`} disabled />
                             <Form.Control style={{ width: 'calc(50% - 3px)', display: 'inline-block', boxSizing: 'border-box', marginLeft: '3px' }} type="text" value={`$${this.state.cost.toFixed(2)}`} disabled />
-                            <div style={{ marginTop: '14px', color: '#4d4d4d', fontStyle: 'italic', fontSize: '15px' }}><span> Bill will be applied upon check-in. </span></div>
+                            <div style={{ marginTop: '14px', color: '#4d4d4d', fontStyle: 'italic', fontSize: '15px' }}><span> Priced by # GB used. Bill will be applied upon check in. </span></div>
                         </Form.Group>
                     </div>
                     <Button variant="outlined" color="default" style={{ marginRight: '3px' }} className="mt9px" onClick={this.checkHardware.bind(this, false)}>
@@ -278,8 +305,11 @@ class HardwareForm extends React.Component {
                     <Button variant="outlined" color="default" style={{ marginLeft: '3px' }} className="mt9px" onClick={this.checkHardware.bind(this, true)} >
                         Check In
                     </Button>
-                    <div style={{ marginTop: '30px' }}>
-                        <span className={this.state.color}>{this.state.msg}</span>
+                    <div style={{ marginTop: '30px' }} id="bill" ref={this.billRef}>
+                        <span style={{ display: 'block', marginBottom: '7px' }} className={this.state.color}>{this.state.msg}</span>
+                        <Button variant="outlined" color="default" style={{ marginRight: '3px', display: (this.state.link_bill_id != '' ? 'inline-block' : 'none') }} className="mt9px" href={(`${window.location.origin}/billing?id=${this.state.link_bill_id}`)}>
+                            View Bill
+                        </Button>
                     </div>
                 </div>
             </div>

@@ -40,8 +40,8 @@ Created by Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
 &nbsp;
 &nbsp;
   
-### [1. Getting Started](1-getting-started)
-##### [What is Simplicity?](what-is-simplicity?)
+### 1. Getting Started
+##### What is Simplicity?
 
 ##### [Create an account](create-an-account)
 

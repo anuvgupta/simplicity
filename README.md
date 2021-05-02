@@ -8,52 +8,52 @@ Created by Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
 # **User Documentation**
 &nbsp;
 ## **Table of Contents**
-### [1.Getting Started]
-  - [What is Simplicity?]
-  - [**Create** an account]
-  - [How do I **sign in**?]
-### [2. Overview Page]
+### 1. Getting Started
+   - #### What is Simplicity?
+   - #### **Create** an account
+   - #### How do I **sign in**?
+### 2. Overview Page
 ### 3. User Functions and Features
-#### [3.1 Projects]
-   - [What is a **project**?]
-   - [**Create** a project]
-   - [**Join** a project]
-   - [**Edit** a project
-   - [**Delete** a project
+#### 3.1 Projects
+   - #### What is a **project**?
+   - #### **Create** a project
+   - #### **Join** a project
+   - #### **Edit** a project
+   - #### **Delete** a project
   #### [3.2 My Account]
-   - [**Change** my username]
-   - [**Change** my email]
-   - [**Change** my password]
-   - [**Change** user theme]
-### [4. Hardware Page]
-   - [What is hardware?]
-   - [Checking out/in hardware to a **project**]
-   - [Checking out/in hardware for **personal use**]
-   - [**Checking out** hardware]
-   - [**Checking in** hardware]
-### [5. Datasets Page]
-   - [What is a dataset?]
-   - [**Downloading** a dataset]
+   - #### **Change** my username
+   - #### **Change** my email
+   - #### **Change** my password
+   - #### **Change** user theme
+### 4. Hardware Page
+   - #### What is hardware?
+   - #### Checking out/in hardware to a **project**
+   - #### Checking out/in hardware for **personal use**
+   - #### **Checking out** hardware
+   - #### **Checking in** hardware
+### 5. Datasets Page
+   - #### What is a dataset?
+   - #### **Downloading** a dataset
 
 &nbsp;
 &nbsp;
 &nbsp;
 &nbsp;
   
-### 1. Getting Started
-##### What is Simplicity?
+### [1. Getting Started](1.-getting-started)
+##### [What is Simplicity?](what-is-simplicity?)
 
-##### Create an account
+##### [Create an account](create-an-account)
 
-##### How do I sign in?
+##### [How do I sign in?](how-do-i-sign-in?)
 
 
 ### 2. Overview Page
 
 
 ### [3. User Functions and Features](#3.-user-functions-and-features)
-#### 3.1 Projects
-##### What is a project?  
+   - #### [3.1 Projects](3.1-projects)
+      - ##### What is a project?  
   
   
   

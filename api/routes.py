@@ -171,6 +171,9 @@ def user():
                         proj_hw_usage_obj = result[0]
                     else:
                         print(result[1])
+                payment_rep = ""
+                if user.payment_set:
+                    payment_rep = ("Card *{}").format(user.payment_method['card_number'][-4:])
                 return (jsonify({
                     'success': True,
                     'data': {
@@ -181,7 +184,9 @@ def user():
                         'is_admin': user.is_admin,
                         'is_godmin': user.is_godmin,
                         'navColor':  user.navColor,
-                        'proj_hw_usage': proj_hw_usage_obj
+                        'proj_hw_usage': proj_hw_usage_obj,
+                        'payment_set': user.payment_set,
+                        'payment_rep': payment_rep
                     }
                 }), 200)
             return (jsonify({
@@ -785,8 +790,12 @@ def payment():
             return (bill_response_13(), 406)
         # payment method is verified
         # update_payment_method(current_username, name_on_card, card_num, cvv, expiration, zipcode)
-        update_payment_method(current_username, name_on_card, card_num, expiration, zipcode)
-
+        update_result = update_payment_method(current_username, name_on_card, card_num, expiration, zipcode)
+        if not update_result[0]:
+            return (jsonify({
+                'success': False,
+                'message': '' + update_result[1]
+            }), 500)
         return (jsonify({
             'success': True,
             'data': { }

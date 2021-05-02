@@ -601,11 +601,15 @@ def verify_payment_info(name, card_number, expiration, zipcode):
     expiration_regex = re.compile(r'^(\d\d)(/* *)(\d\d)$')
     search_expiration = expiration_regex.search(expiration)
     input_month = int(search_expiration.group(1))
+    # print(input_month)
     input_year = int(search_expiration.group(3))
+    # print(input_year)
     curr_month = int(datetime.datetime.now().strftime('%m'))
+    # print(curr_month)
     curr_year = int(datetime.datetime.now().strftime('%y'))
+    # print(curr_year)
     # credit card is expired
-    if input_month < curr_month or input_year < curr_year:
+    if input_year < curr_year or (input_year == curr_year and input_month < curr_month):
         return 12
     # check zip code
     zip_regex = re.compile(r'^(\d){5}$')

@@ -21,6 +21,7 @@ class PaymentForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            username: "",
             card_number: "",
             name_on_card: "",
             expiration: "",
@@ -53,7 +54,32 @@ class PaymentForm extends React.Component {
         // TODO: load user data/info
         let query = new URLSearchParams(this.props.location.search);
         this.setState({
-            token: user.token
+            token: user.token,
+            username: user.username
+        });
+        axios.get(`${global.config.api_url}/user?username=${user.username}`, {
+            headers: { Authorization: `Bearer ${user.token}` }
+        }).then(response => {
+            var resp_data = null;
+            if (response && response.data)
+                resp_data = response.data;
+            // console.log('resp_data', resp_data);
+            if (resp_data && resp_data.success && resp_data.success === true && resp_data.data && resp_data.data.username) {
+                user = resp_data.data;
+                var defaultMethod = "";
+                if (user.payment_set === true && (`${user.payment_rep}`).trim() != "")
+                    defaultMethod = (`${user.payment_rep}`);
+                this.setState({
+                    defaultMethod: defaultMethod
+                });
+            } else console.log('Invalid response: ', resp_data);
+        }).catch(error => {
+            if (error) {
+                var resp_data = null;
+                if (error.response && error.response.data)
+                    resp_data = error.response.data;
+                console.log(error);
+            }
         });
     }
 
@@ -123,6 +149,10 @@ class PaymentForm extends React.Component {
                 this.updateErrorMsg(errorMessage);
             } else {
                 this.updateErrorMsg("Updated payment info.", this.state.greenErrorMsgColor);
+                this.setupPage({
+                    username: this.state.username,
+                    token: this.state.token
+                });
             }
         };
         axios.post(`${global.config.api_url}/payment`, {
@@ -170,7 +200,7 @@ class PaymentForm extends React.Component {
                         <span style={{ fontStyle: 'italic', fontSize: '14px', marginTop: '25px', display: 'block' }}> Please DO NOT enter real/sensitive details.<br />This site is for PoC purposes only. </span>
                         <span className="errorMessage" style={{ display: (this.state.errorMsg != "" ? 'block' : 'none'), paddingTop: '15px', paddingBottom: '14px', color: (this.state.errorMsgColor) }}>{this.state.errorMsg}</span>
                         <div style={{ marginTop: (this.state.errorMsg == "" ? '32px' : '19px'), marginBottom: '0', fontSize: '15.2px' }}>
-                            <span><b>Default Payment Method:</b>&nbsp;{(this.state.defaultMethod && this.state.defaultMethod != "" && this.state.defaultMethod.trim() != "" ? this.state.defaultMethod : 'None.')}</span>
+                            <span style={{ letterSpacing: '0.4px' }}><b>Default Payment Method:</b>&nbsp;{(this.state.defaultMethod && this.state.defaultMethod != "" && this.state.defaultMethod.trim() != "" ? this.state.defaultMethod : 'None.')}</span>
                         </div>
                     </div>
                 </div>

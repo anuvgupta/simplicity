@@ -42,12 +42,18 @@ Created by Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
 # <a name="1-getting-started"></a>1. Getting Started
 * <details>
   <summary>What is Simplicity?<a name="what-is-simplicity?"></summary>
-  <p> lorem ipsum </p>
-* </details>
+  <p>Hello, and welcome to Simplicity! Simplicity is a Haas (Hardware-as-a-service) website where users can use the site's resources to work on collaborative projects with others, or even on personal projects. Creating an account is quick, easy, and FREE! Create yours today! </p>
+</details>
 
-* #### <a name="create-an-account"></a>**Create** an account
+* <details>
+  <summary><a name="create-an-account"></a><b>Create</b> an account</summary>
+  <p>Good news, creating an account is simple! Click <a href="https://simplicitycloud.ml/">this link</a> to head to the Simplicity home page. Click 'Sign Up'; you'll be redirected to the registration page. Fill out the fields listed on the screen. Once you do that, you're ready to work with Simplicity! </p>
+  </details>
 
-* #### <a name="how-do-i-sign-in?"></a>How do I **sign in**?
+* <details>
+  <summary><a name="how-do-i-sign-in?"></a>How do I <b>sign in</b>?</summary>
+  <p>If you've just created an account, you should be redirected to your user portal. Similarly, if you have signed in previously and are re-visiting the website without having signed out, you will be redirected to your user portal when you try to reach the home page. Alternatively, click <a href="https://simplicitycloud.ml/">this link</a> to head to the Simplicity home page. Click 'Sign In'; you'll be redirected to the login page. Input the same credentials you signed up with. If your information is correct, you've successly signed in and you're ready to work!</p>
+  </details>
 
 
 # <a name="2-overview-page"></a>2. Overview Page

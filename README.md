@@ -22,6 +22,7 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
 -   [How do I **sign in**?](#how-do-i-sign-in?)
 
 ### [2. Overview Page](#2-overview-page)
+-   [Overview Page summary](#overview-summary)
 
 ### [3. User Functions and Features](#3-user-functions-and-features)
 
@@ -36,19 +37,33 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
     -   [**Change** my email](#change-my-email)
     -   [**Change** my password](#change-my-password)
     -   [**Change** user theme](#change-user-theme)
+    -   [What is **Administrator Status**?](#what-is-admin-status)
 
 ### [4. Hardware Page](#4-hardware-page)
 
 -   [What is hardware?](#what-is-hardware?)
 -   [Hardware for a **project**](#hardware-for-a-project)
 -   [Hardware for **personal use**](#hardware-for-personal-use)
--   [**Checking out** hardware](#checking-out-hardware)
--   [**Checking in** hardware](#checking-in-hardware)
+-   [**Check out** hardware for a project](#check-out-project)
+-   [**Check in** hardware for a project](#check-in-project)
+-   [**Check out** hardware for personal use](#check-out-personal)
+-   [**Check in** hardware for a project](#check-in-personal)
 
 ### [5. Datasets Page](#5-datasets-page)
 
 -   [What is a dataset?](#what-is-a-dataset?)
 -   [**Downloading** a dataset](#downloading-a-dataset)
+
+### [6. Billing Page](#6-billing-page)
+-   #### [6.1 Billing](#6.1-billing)
+    -   [Billing overview](#billing-overview)
+    -   [View paid bills](#view-paid-bills)
+    -   [How are bills calculated?](#how-bills-calculated)
+    -   [Why can't I pay my bill?](#cant-pay-bill)
+-   #### [6.2 Payment Method](#6.2-payment)
+    -   [Is setting a payment method **required**?](#payment-required)
+    -   [**Update** my payment method](#update-payment)
+
 
 &nbsp;  
 <a name=""></a>
@@ -71,6 +86,10 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
     </details>
 
 ## <a name="2-overview-page"></a>2. Overview Page
+-   <details>
+    <summary><a name="overview-summary"></a>Overview Page summary</summary>
+    <p>ayayyeuh</p>
+    </details>
 
 ## <a name="3-user-functions-and-features"></a>3. User Functions and Features
 
@@ -98,10 +117,7 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
         <p>i am a bee</p>
         </details>
 
--   <details>
-    <summary><a name="3.2-my-account"></a>3.2 My Account</summary>
-    <p>my dog is broken</p>
-    </details>
+-   ### <a name="3.2-my-account"></a>3.2 My Account
 
     -   <details>
         <summary><a name="change-my-username"></a><b>Change</b> my username</summary>
@@ -135,12 +151,20 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
     <p>dehydration</p>
     </details>
 -   <details>
-    <summary><a name="checking-out-hardware"></a>Checking out hardware</summary>
+    <summary><a name="check-out-project"></a><b>Check out</b> hardware for a project</summary>
     <p>check it out check it out check it out</p>
     </details>
 -   <details>
-    <summary><a name="checking-in-hardware"></a>Checking in hardware</summary>
+    <summary><a name="check-in-project"></a><b>Check in</b> hardware for a project</summary>
     <p>if you break it you buy it if you return it you buy it if you don't return it you probably still buy it so return your hardware <3</p>
+    </details>
+-   <details>
+    <summary><a name="check-out-personal"></a><b>Check out</b> hardware for personal use</summary>
+    <p>personal check in</p>
+    </details>
+-   <details>
+    <summary><a name="check-in-personal"></a><b>Check in</b> hardware for personal use</summary>
+    <p>personal check in</p>
     </details>
 
 ## <a name="5-hardware-page"></a>5. Datasets Page
@@ -152,6 +176,36 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
 -   <details>
     <summary><a name="downloading-a-dataset"></a><b>Downloading</b> a dataset</summary>
     <p>brb gotta download this knowledge</p>
+    </details>
+    
+## <a name="6-billing-page"></a>6. Billing Page
+
+-   ### <a name="6.1-billing"></a>6.1 Billing
+-   <details>
+    <summary><a name="billing-overview"></a>Billing Overview</summary>
+    <p>personal check in</p>
+    </details>
+-   <details>
+    <summary><a name="view-paid-bills"></a>View Paid Bills</summary>
+    <p>ayayyeuh</p>
+    </details>
+-   <details>
+    <summary><a name="how-bills-calculated"></a>What is hardware?</summary>
+    <p>ayayyeuh</p>
+    </details>
+-   <details>
+    <summary><a name="cant-pay-bill"></a>Why can't I pay my bill?</summary>
+    <p>ayayyeuh</p>
+    </details>
+
+-   ### <a name="6.2-payment"></a>6.2 Payment Method
+-   <details>
+    <summary><a name="payment-required"></a>Is setting a payment method <b>required</b>?</summary>
+    <p>personal check in</p>
+    </details>
+-   <details>
+    <summary><a name="update-payment"></a><b>Update</b> my payment method</summary>
+    <p>personal check in</p>
     </details>
 
 &nbsp;  

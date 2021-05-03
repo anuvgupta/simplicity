@@ -22,6 +22,7 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
 -   [How do I **sign in**?](#how-do-i-sign-in?)
 
 ### [2. Home Page](#2-home-page)
+
 -   [Home Page summary](#home-summary)
 
 ### [3. User Functions and Features](#3-user-functions-and-features)
@@ -56,6 +57,7 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
 -   [**Downloading** a dataset](#downloading-a-dataset)
 
 ### [6. Billing Page](#6-billing-page)
+
 -   #### [6.1 Billing](#6.1-billing)
     -   [Billing overview](#billing-overview)
     -   [View paid bills](#view-paid-bills)
@@ -64,7 +66,6 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
 -   #### [6.2 Payment Method](#6.2-payment)
     -   [Is setting a payment method **required**?](#payment-required)
     -   [**Update** my payment method](#update-payment)
-
 
 &nbsp;  
 <a name=""></a>
@@ -87,6 +88,7 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
     </details>
 
 ## <a name="2-home-page"></a>2. Home Page
+
 -   <details>
     <summary><a name="home-summary"></a>Home Page summary</summary>
     <p>Welcome home! 🥳 At a glance, you'll be able to see a summary of all of the working parts of your account. In the top layer, you can see how many projects you're involved in and how many units of hardware you have checked out for personal use. In the second layer, you can view your projects in greater detail; they're shown as cards with each project's name, description, and <a name="what-is-project-id"></a><b>Project ID</b>. In the third layer, you can keep track of all things hardware! You can see your total checked-out quantities of hardware, as well as how much is being used for personal use and for projects.</p>
@@ -100,27 +102,22 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
         <summary><a name="what-is-a-project?"></a>What is a project?</summary>
         <p>A project is anything you could imagine! Use our hardware and data sets to bring any idea to life. 🤙 </p>
         </details>
-        
     -   <details>
         <summary><a name="what-is-project-id"></a>What is a <b>Project ID</b>?</summary>
         <p>A Project ID is a string of characters (max 20 characters) that is unique to each project (yes, we make sure that no two projects have the same ID!). This ID is used to identify your project and also used by collaborators to join you on this project. Keep your project ID's a secret from non-collaborators to prevent uninvited guests from showing up to your project party! 🤫</p>
         </details>
-        
     -   <details>
         <summary><a name="create-a-project"></a><b>Create</b> a project</summary>
         <p>To create a new project, refer to the navigation menu on the left side; click on 'Projects'. Then, click on 'NEW PROJECT'; you will then be presented with the project-creation form. Give your project a unique <a name="what-is-project-id"></a><b>Project ID</b>, a name, a maybe a fun description! Click 'CREATE PROJECT' when you're satisfied with your input. Congratulations, you've just created a project! 😄</p>
         </details>
-        
     -   <details>
         <summary><a name="join-a-project"></a><b>Join</b> a project</summary>
         <p>First, make sure that you know the specific <a name="what-is-project-id"></a><b>Project ID</b> of the project (this is your key to getting in!). To join a project, refer to the navigation menu on the left side of the screen; click on 'Projects'. Then, click on 'JOIN PROJECT'. You will be presented with a form that asks for a Project ID. Input the ID of the project you are trying to join and click 'JOIN PROJECT'. If successful, a green 'Success!' message will flash under the text box. Happy collaborating! 🙌</p>
         </details>
-        
     -   <details>
         <summary><a name="edit-a-project"></a><b>Edit</b> a project</summary>
         <p>Head over to the 'Projects' page and locate the project you are attempting to edit among the project cards shown on the screen. Once you've done that, click the three vertical dots in the top right-hand corner of the card. Click 'Edit'. You'll be presented with a form where you can edit the name and/or the description of the project. <i>Side note: You <b>cannot</b> change a project's ID. 🚫</i> </p>
         </details>
-        
     -   <details>
         <summary><a name="delete-a-project"></a><b>Delete</b> a project</summary>
         <p>If you've completed a project or simply would like to get rid of one, no problem! Head over to the 'Projects' page and locate the project you would like to delete. Once you've done so, click the three vertical dots in the top right-hand corner of the project card. Click 'Delete'. A pop will appear and ask you to confirm or cancel your decision. <i>Side note: Once a project is deleted, its ID is free to be used by a newly-created project. 🔄</i></p>
@@ -132,22 +129,19 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
         <summary><a name="change-my-username"></a><b>Change</b> my username</summary>
         <p>Go to your 'Settings' page via the navigation bar on the left side of the page. In the text box to the right of 'Username', delete your old username and input a new one. Make sure to click 'UPDATE INFO' to save your changes. Welcome to the new you! ✨/p>
         </details>
-        
     -   <details>
         <summary><a name="change-my-email"></a><b>Change</b> my email</summary>
         <p>Go to your 'Settings' page via the navigation bar on the left side of the page. In the text box to the right of 'Email', delete your old email address and input an updated one. Click 'UPDATE INFO' to save your changes. <i>We promise we won't fill your inbox with random emails! 🙂</i></p>
         </details>
-        
     -   <details>
         <summary><a name="change-my-password"></a><b>Change</b> my password</summary>
         <p>Go to your 'Settings' page via the navigation bar on the left side of the page. In the text box to the right of 'Password', input a new password (and make it good!). Below this field, you'll be asked to input your current/old password for verification. Click 'UPDATE INFO' to save your changes.</p>
         </details>
-        
     -   <details>
         <summary><a name="change-user-theme"></a><b>Change</b> user theme</summary>
         <p>If you ever get tired of the look of your website, here's a neat way to switch it up! Head over to your 'Settings' page via the navigation bar on the left side of the page. Click the long colorful rectangle to the right of 'Theme' and a color chart will appear. Use your cursor to click and drag around the color selection. Change the hue and saturation to your liking! 🌈 If you know the hex code to the color you'd like, feel free to input the code in the text box above 'Hex'. Or, if you can't decide on a color right away, we've got you covered with some presets at the bottom of the color chart pop-up. 😊</p>
         </details>
-    
+
     -   <details>
         <summary><a name="what-is-admin-status"></a>What is <b>Administrator Status</b>?</summary>
         <p>This is a different account type that is used by system administrators for monitoring site usage and maintenance. Special permissions must be acquired in order for an account to possess Administrator Status. </p>
@@ -159,32 +153,26 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
     <summary><a name="what-is-hardware?"></a>What is hardware?</summary>
     <p>Hardware sets are resources/tools that you can use to help you construct your projects. Our hardware is very versatile and can be made to do anything you imagine! ⚙️</p>
     </details>
-    
 -   <details>
     <summary><a name="hardware-for-a-project"></a>Hardware for a project</summary>
     <p>With Simplicity, users have the option to use hardware specifically for projects, or for personal use. Hardware that is checked out to a project can be accessed and used by all members of that project. Learn how to <a name="check-out-project"></a><b>Check out</b> and <a name="check-in-project"></a><b>Check in</b> hardware for a project.</p>
     </details>
-    
 -   <details>
     <summary><a name="hardware-for-personal-use"></a>Hardware for personal use</summary>
     <p>With Simplicity, users have the option to use hardware specifically for projects, or for personal use. Hardware that is checked out for personal can solely be accessed and used by the user. Learn how to <a name="check-out-personal"></a><b>Check out</b> and <a name="check-in-personal"></a><b>Check in</b> hardware for personal use. </p>
     </details>
-    
 -   <details>
     <summary><a name="check-out-project"></a><b>Check out</b> hardware for a project</summary>
     <p>To check out hardware for a project, head to the 'Projects' page. Locate the project you would like to check out hardware for, and click 'MANAGE' on that project's card. You'll be able to see what hardware, if any, has been checked out for that project already. Below this is the check out form. Select the hardware set you'd like to check out and input the check out quantity under 'Requested Quantity'. The total quantity available for checkout can be seen under 'Total Availability'. The price per unit of a hardware set is shown as well under 'Projected Pricing and Cost' in the left text box. The right text box will automatically be updated with the calculated cost according to the requested quantity. Click 'CHECK OUT' to officially check out your hardware.</p>
     </details>
-    
 -   <details>
     <summary><a name="check-in-project"></a><b>Check in</b> hardware for a project</summary>
     <p>To check in hardware for a project, head to the 'Projects' page. Locate the project you would like to check out hardware for, and click 'MANAGE' on that project's card. You'll be able to see what hardware, if any, has been checked out for that project already. Below this is the check in form. Select the hardware set you'd like to check in and input the check in quantity under 'Requested Quantity'. Click 'CHECK IN' to officially check in hardware. After doing so, a bill for each project member will automatically be calculated and can be viewed on the <a name="6-billing-page"></a>6. Billing Page.</p>
     </details>
-    
 -   <details>
     <summary><a name="check-out-personal"></a><b>Check out</b> hardware for personal use</summary>
     <p>To check out hardware for personal use, head to the 'Hardware' page. According to the cards shown at the top of the page, you'll be able to see how many units of each hardware set you have currently checked out. Below these cards is the check out form. Select the hardware set you'd like to check out and input the check out quantity under 'Requested Quantity'. The total quantity available for checkout can be seen under 'Total Availability'. The price per unit of a hardware set is shown as well under 'Projected Pricing and Cost' in the left text box. The right text box will automatically be updated with the calculated cost according to the requested quantity. Click 'CHECK OUT' to officially check out your hardware.</p>
     </details>
-    
 -   <details>
     <summary><a name="check-in-personal"></a><b>Check in</b> hardware for personal use</summary>
     <p>To check in hardware for personal use, head to the 'Hardware' page. According to the cards shown at the top of the page, you'll be able to see how many units of each hardware set you have currently checked out. Below these cards is the check in form. Select the hardware set you'd like to check in and input the check in quantity under 'Requested Quantity'. Click 'CHECK IN' to officially check in your hardware. After doing so, a bill for your used hardware will automatically be calculated and can be viewed on the <a name="6-billing-page"></a>6. Billing Page.</p>
@@ -196,12 +184,11 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
     <summary><a name="what-is-a-dataset?"></a>What is a dataset?</summary>
     <p>Datasets are useful documents of information that may be helpful to projects and hardware use.</p>
     </details>
-    
 -   <details>
     <summary><a name="downloading-a-dataset"></a><b>Downloading</b> a dataset</summary>
     <p>To download a dataset, go to the 'Datasets' page via the navigation bar on the left side of the screen. On the right of each dataset, click 'DOWNLOAD ZIP'. This file is then directly downloaded to your device and can be found in your computer files.</p>
     </details>
-    
+
 ## <a name="6-billing-page"></a>6. Billing Page
 
 -   ### <a name="6.1-billing"></a>6.1 Billing
@@ -209,17 +196,14 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
     <summary><a name="billing-overview"></a>Billing Overview</summary>
     <p>Here, you are able to view all of your bills and able to change/set your payment method! At the top of the page are your bills. These are calculated when you <a name="check-in-project"></a><b>Check in</b> hardware for a project or <a name="check-in-personal"></a><b>Check in</b> hardware for personal use. You will be able to pay your bills directly from this page, given that you have <a name="payment-required"></a>set your payment method.</p>
     </details>
-    
 -   <details>
     <summary><a name="view-paid-bills"></a>View Paid Bills</summary>
     <p>ayayyeuh</p>
     </details>
-    
 -   <details>
     <summary><a name="how-bills-calculated"></a>What is hardware?</summary>
     <p>ayayyeuh</p>
     </details>
-    
 -   <details>
     <summary><a name="cant-pay-bill"></a>Why can't I pay my bill?</summary>
     <p>ayayyeuh</p>
@@ -230,7 +214,6 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
     <summary><a name="payment-required"></a>Is setting a payment method <b>required</b>?</summary>
     <p>personal check in</p>
     </details>
-    
 -   <details>
     <summary><a name="update-payment"></a><b>Update</b> my payment method</summary>
     <p>personal check in</p>
@@ -245,7 +228,9 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
 
 _Follow the steps in each of the following sections (in correct order) to set up the application for development or production service._
 
-**Database:**
+<details>
+
+<summary> <b>Database</b> </summary>
 
 -   Install Mongo
     -   ie. `brew install mongodb` (macOS)
@@ -270,7 +255,11 @@ _Follow the steps in each of the following sections (in correct order) to set up
     -   Run in Mongo shell: `use simplicity-cloud`
         -   Leave this terminal window open with the shell running to observe, query, and manage the database as an administrator.
 
-**Backend:**
+</details>
+
+<details>
+
+<summary> <b>Backend</b> </summary>
 
 -   Install [python3](https://realpython.com/installing-python/)
 -   Navigate to repository in terminal: `{path/to/repo}/`
@@ -285,7 +274,7 @@ _Follow the steps in each of the following sections (in correct order) to set up
 
     -   _To test the backend API, use the development environment steps. To serve the backend API in the cloud, use the production environment steps._
     -   Production Environment:
-        -   ...
+        -   Run in terminal: `./serve.sh`
     -   Development Environment:
 
         -   Run in terminal: `export FLASK_APP=app.py`
@@ -305,7 +294,11 @@ _Follow the steps in each of the following sections (in correct order) to set up
 
         -   Leave this terminal window open with the Flask server running to keep the backend alive and to observe API requests and errors.
 
-**Frontend:**
+</details>
+
+<details>
+
+<summary> <b>Frontend</b> </summary>
 
 -   Install Node.js and NPM
     -   A good way to do this is to use [`n`](https://www.npmjs.com/package/n):
@@ -328,7 +321,8 @@ _Follow the steps in each of the following sections (in correct order) to set up
 
     -   _To test the frontend UI, use the development environment steps. To serve the frontend UI in the cloud, use the production environment steps._
     -   Production Environment:
-        -   ...
+        -   Install [serve](https://www.npmjs.com/package/serve) to `/usr/local/bin/serve` (with NPM)
+        -   Run in terminal: `./serve.sh`
     -   Development Environment:
 
         -   Run in terminal: `yarn start`
@@ -347,6 +341,10 @@ _Follow the steps in each of the following sections (in correct order) to set up
         -   Leave this terminal window open with the React development server running to keep the frontend alive and to access & test the UI in a browser.
 
 _Access the application for development environments at [http://localhost:3000/](http://localhost:3000/). For production environments, reverse proxy & DNS setup is required._
+
+</details>
+
+&nbsp;
 
 ## <a name="dev-sources"></a>Sources
 

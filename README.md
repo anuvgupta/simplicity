@@ -108,12 +108,12 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
         
     -   <details>
         <summary><a name="create-a-project"></a><b>Create</b> a project</summary>
-        <p>To create a new project, refer to the navigation menu on the left side; click on 'Projects'. Then, click on 'NEW PROJECT'; you will then be presented with the project-creation form. Give your project a unique <a href="what-is-project-id"><b>Project ID</b></a>, a name, a maybe a fun description! Click 'CREATE PROJECT' when you're satisfied with your input. Congratulations, you've just created a project! 😄</p>
+        <p>To create a new project, refer to the navigation menu on the left side; click on 'Projects'. Then, click on 'NEW PROJECT'; you will then be presented with the project-creation form. Give your project a unique <a href="#what-is-project-id"><b>Project ID</b></a>, a name, a maybe a fun description! Click 'CREATE PROJECT' when you're satisfied with your input. Congratulations, you've just created a project! 😄</p>
         </details>
         
     -   <details>
         <summary><a name="join-a-project"></a><b>Join</b> a project</summary>
-        <p>First, make sure that you know the specific <a href="what-is-project-id"><b>Project ID</b></a> of the project (this is your key to getting in!). To join a project, refer to the navigation menu on the left side of the screen; click on 'Projects'. Then, click on 'JOIN PROJECT'. You will be presented with a form that asks for a Project ID. Input the ID of the project you are trying to join and click 'JOIN PROJECT'. If successful, a green 'Success!' message will flash under the text box. Happy collaborating! 🙌</p>
+        <p>First, make sure that you know the specific <a href="#what-is-project-id"><b>Project ID</b></a> of the project (this is your key to getting in!). To join a project, refer to the navigation menu on the left side of the screen; click on 'Projects'. Then, click on 'JOIN PROJECT'. You will be presented with a form that asks for a Project ID. Input the ID of the project you are trying to join and click 'JOIN PROJECT'. If successful, a green 'Success!' message will flash under the text box. Happy collaborating! 🙌</p>
         </details>
         
     -   <details>
@@ -162,12 +162,12 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
     
 -   <details>
     <summary><a name="hardware-for-a-project"></a>Hardware for a project</summary>
-    <p>With Simplicity, users have the option to use hardware specifically for projects, or for personal use. Hardware that is checked out to a project can be accessed and used by all members of that project. Learn how to <a href="check-out-project"><b>Check out</b></a> and <a href="check-in-project"><b>Check in</b></a> hardware for a project.</p>
+    <p>With Simplicity, users have the option to use hardware specifically for projects, or for personal use. Hardware that is checked out to a project can be accessed and used by all members of that project. Learn how to <a href="#check-out-project"><b>Check out</b></a> and <a href="#check-in-project"><b>Check in</b></a> hardware for a project.</p>
     </details>
     
 -   <details>
     <summary><a name="hardware-for-personal-use"></a>Hardware for personal use</summary>
-    <p>With Simplicity, users have the option to use hardware specifically for projects, or for personal use. Hardware that is checked out for personal can solely be accessed and used by the user. Learn how to <a href="check-out-personal"><b>Check out</b></a> and <a href="check-in-personal"><b>Check in</b></a> hardware for personal use. </p>
+    <p>With Simplicity, users have the option to use hardware specifically for projects, or for personal use. Hardware that is checked out for personal can solely be accessed and used by the user. Learn how to <a href="#check-out-personal"><b>Check out</b></a> and <a href="#check-in-personal"><b>Check in</b></a> hardware for personal use. </p>
     </details>
     
 -   <details>
@@ -177,7 +177,7 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
     
 -   <details>
     <summary><a name="check-in-project"></a><b>Check in</b> hardware for a project</summary>
-    <p>To check in hardware for a project, head to the 'Projects' page. Locate the project you would like to check out hardware for, and click 'MANAGE' on that project's card. You'll be able to see what hardware, if any, has been checked out for that project already. Below this is the check in form. Select the hardware set you'd like to check in and input the check in quantity under 'Requested Quantity'. Click 'CHECK IN' to officially check in hardware. After doing so, a bill for each project member will automatically be calculated and can be viewed on the <a href="6-billing-page">6. Billing Page.</a></p>
+    <p>To check in hardware for a project, head to the 'Projects' page. Locate the project you would like to check out hardware for, and click 'MANAGE' on that project's card. You'll be able to see what hardware, if any, has been checked out for that project already. Below this is the check in form. Select the hardware set you'd like to check in and input the check in quantity under 'Requested Quantity'. Click 'CHECK IN' to officially check in hardware. After doing so, a bill for each project member will automatically be calculated and can be viewed on the <a href="#6-billing-page">6. Billing Page.</a></p>
     </details>
     
 -   <details>
@@ -187,7 +187,7 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
     
 -   <details>
     <summary><a name="check-in-personal"></a><b>Check in</b> hardware for personal use</summary>
-    <p>To check in hardware for personal use, head to the 'Hardware' page. According to the cards shown at the top of the page, you'll be able to see how many units of each hardware set you have currently checked out. Below these cards is the check in form. Select the hardware set you'd like to check in and input the check in quantity under 'Requested Quantity'. Click 'CHECK IN' to officially check in your hardware. After doing so, a bill for your used hardware will automatically be calculated and can be viewed on the <a href="6-billing-page">6. Billing Page.</a></p>
+    <p>To check in hardware for personal use, head to the 'Hardware' page. According to the cards shown at the top of the page, you'll be able to see how many units of each hardware set you have currently checked out. Below these cards is the check in form. Select the hardware set you'd like to check in and input the check in quantity under 'Requested Quantity'. Click 'CHECK IN' to officially check in your hardware. After doing so, a bill for your used hardware will automatically be calculated and can be viewed on the <a href="#6-billing-page">6. Billing Page.</a></p>
     </details>
 
 ## <a name="5-hardware-page"></a>5. Datasets Page
@@ -207,7 +207,7 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
 -   ### <a name="6.1-billing"></a>6.1 Billing
 -   <details>
     <summary><a name="billing-overview"></a>Billing Overview</summary>
-    <p>Here, you are able to view all of your bills and able to change/set your payment method! At the top of the page are your bills. These are calculated when you <a href="check-in-project"><b>Check in</b></a> hardware for a project or <a href="check-in-personal"><b>Check in</b></a> hardware for personal use. You will be able to pay your bills directly from this page, given that you have <a href="payment-required">set your payment method.</a></p>
+    <p>Here, you are able to view all of your bills and able to change/set your payment method! At the top of the page are your bills. These are calculated when you <a href="#check-in-project"><b>Check in</b></a> hardware for a project or <a href="#check-in-personal"><b>Check in</b></a> hardware for personal use. You will be able to pay your bills directly from this page, given that you have <a href="#payment-required">set your payment method.</a></p>
     </details>
     
 -   <details>
@@ -222,7 +222,7 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
     
 -   <details>
     <summary><a name="cant-pay-bill"></a>Why can't I pay my bill?</summary>
-    <p>Users are unable to pay bills if they have not set their payment on the 'Billing Page'. Click <a href="update-payment">here</a> to find out how to do this.</p>
+    <p>Users are unable to pay bills if they have not set their payment on the 'Billing Page'. Click <a href="#update-payment">here</a> to find out how to do this.</p>
     </details>
 
 -   ### <a name="6.2-payment"></a>6.2 Payment Method

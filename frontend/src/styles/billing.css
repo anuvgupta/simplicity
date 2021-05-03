@@ -20,3 +20,7 @@ div.billingMain .billSubmitButton {
     background-color: black;
     color: white;
 }
+
+div.billingMain .MuiCircularProgress-colorPrimary {
+    color: white !important;
+}

@@ -644,7 +644,7 @@ def does_bill_exist(b_id) -> bool:
     bill = query_bill.first()
     if not bill:
         return False
-    if bill.bill_id != b_id:
+    if str(bill.id) != b_id:
         return False
     return True
     
@@ -659,9 +659,17 @@ def get_bill_obj(b_id):
     return bill
     
     
-def set_bill_paid(bill_obj):
+def set_bill_paid(bill_obj, paid_timestamp):
     bill_obj.bill_paid = True
+    bill_obj.paid_timestamp = paid_timestamp
     bill_obj.save()
+
+def pay_bill(bill_id, bill_obj):
+    if not does_bill_exist(bill_id):
+        return (False, "Bill not found.")
+    # TODO: actually process payment
+    time.sleep(1.5)  # dummy code to account for payment processing delay
+    return (True, time.time())
     
 def bill_obj_to_dict(bill_obj):
     return {

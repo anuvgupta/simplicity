@@ -186,7 +186,7 @@ class PaymentForm extends React.Component {
                             <h1 style={{ fontSize: '2.2em' }}> Payment Method </h1>
                         </div>
                         {/* An area where users can create new project, by providing project name, description, and projectID. */}
-                        <Form.Group controlId="paymentInfo">
+                        <Form.Group>
                             <Form.Label style={{ opacity: '1', marginTop: '0.5em', fontSize: '19px' }}>Card Number</Form.Label>
                             <Form.Control type="text" placeholder="****-****-****-****" onChange={this.update_card_number.bind(this)} style={{ opacity: '1', marginBottom: '10px' }} />
                             <Form.Label style={{ marginTop: '0.5em', fontSize: '19px' }}>Name on Card</Form.Label>

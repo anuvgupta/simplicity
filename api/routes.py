@@ -806,7 +806,7 @@ def payment():
     }), 500)
 
 
-# when user tries to click on a particular bill to pay for it --> sends over detailed bill information
+# when user tries to click on a particular bill to pay for it --> confirms bill payment
 @app.route('/api/payBill', methods=['POST'])
 @jwt_required()
 def payBill():
@@ -817,11 +817,11 @@ def payBill():
             'message': 'Invalid token.'
         }), 401)
     user = get_user_obj(current_username)
-    if not user.payment_set:
-        return(jsonify({
+    if not user:
+        return (jsonify({
             'success': False,
-            'message': 'User has not set payment method.'
-        }), 403)
+            'message': 'User not found.'
+        }), 404)
     try:
         bill_json = request.get_json()
     except BadRequest:
@@ -831,77 +831,48 @@ def payBill():
         }), 400)
     else:
         bill_id = bill_json.get('bill_id')
+        if not does_bill_exist(bill_id):
+            return (jsonify({
+                'success': False,
+                'message': 'Bill {} not found.'.format(str(bill_id))
+            }), 404)
         curr_bill = get_bill_obj(bill_id)
         if curr_bill:
             # don't allow user to pay for bill if they have already paid for it
+            if curr_bill.recipient_username != current_username:
+                return (jsonify({
+                    'success': False,
+                    'message': 'Bill does not belong to user.'
+                }), 406)
             if curr_bill.bill_paid:
                 return (jsonify({
                     'success': False,
-                    'message': 'User has already paid this bill.'
+                    'message': 'Bill has already been paid by user.'
                 }), 406)
             # don't allow user to pay for bill if they have not set their payment method
-            elif not current_username.payment_set:
+            if not user.payment_set:
                 return (jsonify({
                     'success': False,
-                    'message': 'User needs to set payment method.'
+                    'message': 'Please set a payment method.'
                 }), 406)
-            else:
+            pay_result = pay_bill(bill_id, curr_bill)
+            if not pay_result[0]:
                 return (jsonify({
-                    'success': True,
-                    'data': {
-                        'bill_id': bill_id,
-                        'recipient_username': current_username,
-                        'project_id': curr_bill.project_id,
-                        'hw_used': curr_bill.hw_used,
-                        'bill_subtotal': float(curr_bill.bill_subtotal),
-                        'amount_due': float(curr_bill.amount_due),
-                        'timestamp': curr_bill.timestamp
-                    }
-                }), 200)
-        else:
+                    'success': False,
+                    'message': 'Error processing payment. {}'.format(str(pay_result[1]))
+                }), 500) 
+            paid_timestamp = pay_result[1]
+            set_bill_paid(curr_bill, paid_timestamp)
             return (jsonify({
-                'success': False,
-                'message': 'Bill not found.'
-            }), 404)
+                'success': True,
+                'data': bill_obj_to_dict(curr_bill)
+            }), 200)
+        return (jsonify({
+            'success': False,
+            'message': 'Bill {} not found.'.format(str(bill_id))
+        }), 404)
     return (jsonify({
         'success': False,
         'message': 'Invalid request input data.'
-    }), 400)
-
-
-# after user confirms and submits bill payment
-@app.route('/api/authBillPayment', methods=['POST'])
-@jwt_required()
-def authBillPayment():
-    current_username = get_jwt_identity()
-    if not current_username:
-        return (jsonify({
-            'success': False,
-            'message': 'Invalid token.'
-        }), 401)
-    try:
-        bill_json = request.get_json()
-    except BadRequest:
-        return (jsonify({
-            'success': False,
-            'message': 'Invalid request input data.'
-        }), 400)
-    else:
-        bill_id = bill_json.get('bill_id')
-        if does_bill_exist(bill_id):
-            curr_bill = get_bill_obj(bill_id)
-            set_bill_paid(curr_bill)
-            return (jsonify({
-                'success': True,
-                'data': {}
-            }), 200)
-        else:
-            return (jsonify({
-                'success': False,
-                'message': 'Bill not found.'
-            }), 404)
-    return (jsonify({
-        'success': False,
-        'message': 'Unknown error.'
     }), 400)
         

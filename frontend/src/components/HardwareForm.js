@@ -112,9 +112,11 @@ class HardwareForm extends React.Component {
                     pricing: hwSet && (hwSet.price),
                     cost: hwSet && (hwSet.price * this.state.quantity),
                 })
-                setTimeout((_ => {
-                    this.scrollToBillRef();
-                }).bind(this), 100);
+                if (link_bill_id) {
+                    setTimeout((_ => {
+                        this.scrollToBillRef();
+                    }).bind(this), 100);
+                }
             } else {
                 console.log(error);
             }

@@ -72,11 +72,11 @@ class Hardware extends React.Component {
         this.setState({
             token: user.token
         });
-        var _next = _ => {
+        var _next = (_ => {
             global.util.resizeQuery();
             axios.get(`${global.config.api_url}/user?username=${user.username}&projectHWusage=true`, {
                 headers: { Authorization: `Bearer ${user.token}` }
-            }).then(response => {
+            }).then((response => {
                 var resp_data = null;
                 if (response && response.data)
                     resp_data = response.data;
@@ -88,7 +88,7 @@ class Hardware extends React.Component {
                         projectHWUsageList: resp_data.data.proj_hw_usage ? resp_data.data.proj_hw_usage : {}
                     });
                 } else console.log('Invalid response: ', resp_data);
-            }).catch(error => {
+            }).bind(this)).catch(error => {
                 if (error) {
                     var resp_data = null;
                     if (error.response && error.response.data)
@@ -96,8 +96,8 @@ class Hardware extends React.Component {
                     console.log(error);
                 }
             });
-        };
-        this.getHardwareInfo(user.token, (resp, error = null) => {
+        }).bind(this);
+        this.getHardwareInfo(user.token, ((resp, error = null) => {
             if (resp) {
                 // console.log(resp.data);
                 this.setState({
@@ -107,7 +107,7 @@ class Hardware extends React.Component {
             } else {
                 console.log(error);
             }
-        });
+        }).bind(this));
     }
 
     getHardwareInfo(token, resolve) {
@@ -151,7 +151,7 @@ class Hardware extends React.Component {
 
                     {
                         Object.keys(this.state.hwList).length > 0 ?
-                            Object.values(this.state.hwList).map((hw_set, i) => {
+                            Object.values(this.state.hwList).map(((hw_set, i) => {
                                 let hw_usage = this.getHardwareUsage(hw_set.hardware_id);
                                 return (
                                     <div key={i} className={((i + 1) % this.state.cardsPerColumn == 0 ? (this.state.cardsPerColumn % 2 == 0 ? 'hwRightOverview' : 'hwLeftOverview') : 'hwLeftOverview')}>
@@ -165,7 +165,7 @@ class Hardware extends React.Component {
                                         </div>
                                     </div>
                                 );
-                            }) : 'No hardware sets found.'
+                            }).bind(this)) : 'No hardware sets found.'
                     }
 
                 </div>

@@ -158,7 +158,7 @@ class Admin extends React.Component {
                 console.log(error);
             }
         });
-        this.getUserInfo(user.token, (resp, error = null) => {
+        this.getUserInfo(user.token, ((resp, error = null) => {
             if (resp) {
                 // console.log(resp.data);
                 this.setState({
@@ -167,8 +167,8 @@ class Admin extends React.Component {
             } else {
                 console.log(error);
             }
-        });
-        this.getHardwareInfo(user.token, (resp, error = null) => {
+        }).bind(this));
+        this.getHardwareInfo(user.token, ((resp, error = null) => {
             if (resp) {
                 // console.log(resp.data);
                 var checkoutAmount = 0;
@@ -184,7 +184,7 @@ class Admin extends React.Component {
             } else {
                 console.log(error);
             }
-        });
+        }).bind(this));
     }
     validateForm(sendRequest = false) {
         var username = this.state.username;
@@ -210,7 +210,7 @@ class Admin extends React.Component {
     }
     // create_user(username, email, pwd, project_list, is_admin = False, is_godmin = False):
     createNewUser(username, email, password, is_admin, is_godmin, resolve = null) {
-        var handleResponse = response => {
+        var handleResponse = (response => {
             var rMsg = "";
             var color = "";
             if (response && response.hasOwnProperty('success')) {
@@ -238,7 +238,7 @@ class Admin extends React.Component {
                 console.log("hit this");
             }
             if (resolve) resolve();
-        };
+        }).bind(this);
         axios.post(`${global.config.api_url}/new_user`, {
             username: `${username}`,
             email: `${email}`,
@@ -285,7 +285,7 @@ class Admin extends React.Component {
 
     createNewHwSet(hw_id, hw_name, hw_capacity, hw_price, resolve = null) {
         // console.log(hw_id, hw_name, hw_capacity);
-        var handleResponse = response => {
+        var handleResponse = (response => {
             var rMsg = "";
             var color = "";
             if (response && response.hasOwnProperty('success')) {
@@ -311,7 +311,7 @@ class Admin extends React.Component {
                 });
             }
             if (resolve) resolve();
-        };
+        }).bind(this);
         axios.post(`${global.config.api_url}/createHW`, {
             id: `${hw_id}`,
             name: `${hw_name}`,

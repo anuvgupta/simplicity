@@ -8,6 +8,7 @@ import Accordion from '@material-ui/core/Accordion';
 import Typography from '@material-ui/core/Typography';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { Form, Container, CardDeck, Card, Table } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/billing.css';
@@ -34,8 +35,11 @@ class Billing extends React.Component {
             billListUnpaid: [],
             viewingPaid: false,
             display_bill_id: null,
-            token: ""
+            defaultMethod: "",
+            bill_processing: false,
+            token: "",
         };
+        this.billRefs = {};
     }
 
 
@@ -67,29 +71,73 @@ class Billing extends React.Component {
                 display_bill_id: display_bill_id
             });
         }
-        this.getBills(user.token, ((resp, error = null) => {
-            if (resp && resp.data) {
-                var bill_list = [];
-                for (var bill_id in resp.data) {
-                    bill_list.push(resp.data[bill_id]);
+        var _next = ((token) => {
+            this.getBills(token, ((resp2, error = null) => {
+                if (resp2 && resp2.data) {
+                    var viewingPaid = false;
+                    var bill_list = [];
+                    var bill_refs = {};
+                    for (var bill_id in resp2.data) {
+                        resp2.data[bill_id].expanded = false;
+                        if (bill_id == display_bill_id) {
+                            viewingPaid = resp2.data[bill_id].bill_paid === true;
+                            resp2.data[bill_id].expanded = true;
+                        }
+                        bill_list.push(resp2.data[bill_id]);
+                        bill_refs[bill_id] = React.createRef();
+                    }
+                    this.state.billRefs = bill_refs;
+                    bill_list = this.sortBillList(bill_list);
+                    var bill_list_paid = [];
+                    var bill_list_unpaid = [];
+                    for (var b in bill_list) {
+                        // console.log(bill_list[b].bill_paid === true);
+                        if (bill_list[b].bill_paid === true)
+                            bill_list_paid.push(bill_list[b]);
+                        else bill_list_unpaid.push(bill_list[b]);
+                    }
+                    bill_list_paid = this.sortBillList(bill_list_paid);
+                    bill_list_unpaid = this.sortBillList(bill_list_unpaid);
+                    this.setState({
+                        billList: bill_list,
+                        billListPaid: bill_list_paid,
+                        billListUnpaid: bill_list_unpaid,
+                        viewingPaid: viewingPaid
+                    });
+                    if (display_bill_id) {
+                        setTimeout((id => {
+                            this.scrollToBillRef(id);
+                            // console.log(id);
+                        }).bind(this, display_bill_id), 200);
+                    }
+                } else {
+                    console.log(error);
                 }
-                bill_list = this.sortBillList(bill_list);
-                var bill_list_paid = [];
-                var bill_list_unpaid = [];
-                for (var b in bill_list) {
-                    // console.log(bill_list[b].bill_paid === true);
-                    if (bill_list[b].bill_paid === true)
-                        bill_list_paid.push(bill_list[b]);
-                    else bill_list_unpaid.push(bill_list[b]);
-                }
-                bill_list_paid = this.sortBillList(bill_list_paid);
-                bill_list_unpaid = this.sortBillList(bill_list_unpaid);
+            }).bind(this));
+        }).bind(this, user.token);
+
+        axios.get(`${global.config.api_url}/user?username=${user.username}`, {
+            headers: { Authorization: `Bearer ${user.token}` }
+        }).then((response => {
+            var resp_data = null;
+            if (response && response.data)
+                resp_data = response.data;
+            // console.log('resp_data', resp_data);
+            if (resp_data && resp_data.success && resp_data.success === true && resp_data.data && resp_data.data.username) {
+                user = resp_data.data;
+                var defaultMethod = "";
+                if (user.payment_set === true && (`${user.payment_rep}`).trim() != "")
+                    defaultMethod = (`${user.payment_rep}`);
                 this.setState({
-                    billList: bill_list,
-                    billListPaid: bill_list_paid,
-                    billListUnpaid: bill_list_unpaid
-                })
-            } else {
+                    defaultMethod: defaultMethod
+                });
+                _next();
+            } else console.log('Invalid response: ', resp_data);
+        }).bind(this)).catch((error => {
+            if (error) {
+                var resp_data = null;
+                if (error.response && error.response.data)
+                    resp_data = error.response.data;
                 console.log(error);
             }
         }).bind(this));
@@ -130,8 +178,85 @@ class Billing extends React.Component {
         });
     }
 
+    scrollToBillRef(bill_id) {
+        if (this.billRefs.hasOwnProperty(bill_id)) {
+            return window.scrollTo(0, this.billRefs[bill_id].current.offsetTop);
+        }
+        return null;
+    }
+
     submitBill(bill_obj) {
-        console.log('submitting bill', bill_obj);
+        this.setState({ bill_processing: true });
+        var bill_confirmation = window.confirm(`Pay bill ${bill_obj.bill_id} with ${this.state.defaultMethod}?`);
+        if (bill_confirmation === false) {
+            this.setState({ bill_processing: false });
+            return false;
+        }
+        console.log('Billing: submitting bill', bill_obj.bill_id, bill_obj);
+        var handleResponse = (response => {
+            var errorMessage = 'Unknown error.';
+            if (response && response.hasOwnProperty('success')) {
+                if (response.success === true) {
+                    errorMessage = null;
+                } else {
+                    if (response.hasOwnProperty('message') && typeof response.message === 'string') {
+                        errorMessage = response.message;
+                    }
+                }
+            }
+            if (errorMessage) {
+                this.updateErrorMsg(errorMessage);
+            } else {
+                this.updateErrorMsg("Payment processed successfully.");
+                window.location = String(`${window.location.origin}/billing?id=${bill_obj.bill_id}`);
+            }
+            this.setState({ bill_processing: false });
+        }).bind(this);
+        axios.post(`${global.config.api_url}/payBill`, {
+            bill_id: `${bill_obj.bill_id}`
+        }, {
+            headers: { Authorization: `Bearer ${this.state.token}` }
+        }).then(response => {
+            var resp_data = null;
+            if (response && response.data)
+                resp_data = response.data;
+            handleResponse(resp_data);
+        }).catch(error => {
+            if (error) {
+                var resp_data = null;
+                if (error.response && error.response.data)
+                    resp_data = error.response.data;
+                handleResponse(resp_data);
+            }
+        });
+    }
+
+    updateErrorMsg(message) {
+        alert(message);
+    }
+
+    getBillByID(bill_id) {
+        var billList = this.state.billList;
+        for (var b in billList) {
+            if (billList[b].bill_id == bill_id)
+                return billList[b];
+        }
+        return null;
+    }
+
+    setBillByID(bill_id, bill_obj, update_state = true) {
+        var found_bill = false;
+        var billList = this.state.billList;
+        for (var b in billList) {
+            if (billList[b].bill_id == bill_id) {
+                billList[b] = bill_obj;
+                found_bill = true;
+            }
+        }
+        if (!found_bill) billList.push(bill_obj);
+        if (update_state) {
+            this.setState({ billList: billList });
+        }
     }
 
     render() {
@@ -153,7 +278,7 @@ class Billing extends React.Component {
                                     <div className="block_content"><span style={{ marginTop: '4px' }}> View Paid </span></div>
                                 </div>
                                 <div style={{ display: 'inline-block', float: 'left' }}>
-                                    <Switch color="default" defaultChecked={false} onChange={this.toggleViewPaid.bind(this)} />
+                                    <Switch color="default" onChange={this.toggleViewPaid.bind(this)} checked={this.state.viewingPaid} />
                                 </div>
                             </div>
                         </div>
@@ -161,7 +286,7 @@ class Billing extends React.Component {
                     <div style={{ height: '7px' }}></div>
                     {
                         Object.keys(activeBillList).length > 0 ?
-                            Object.values(activeBillList).map((bill, i) => {
+                            Object.values(activeBillList).map(((bill, i) => {
                                 var timestamp = bill.timestamp * 1000;
                                 var timestamp_desc = global.util.date_desc(timestamp, false);
                                 var timestamp_desc_full = global.util.date_desc(timestamp, true, true, true);
@@ -176,9 +301,18 @@ class Billing extends React.Component {
                                 var amount_due_text = String(parseFloat(`0${bill.amount_due}`).toFixed(2));
                                 var paid_timestamp = bill.paid_timestamp * 1000;
                                 var paid_timestamp_desc_full = global.util.date_desc(paid_timestamp, true, true, true);
+
+                                var original_bill = this.getBillByID(bill.bill_id);
+                                var expanded = original_bill.hasOwnProperty('expanded') && original_bill.expanded;
+                                var expand_handler = ((event) => {
+                                    var original_bill_obj = this.getBillByID(bill.bill_id);
+                                    original_bill_obj.expanded = !(original_bill.hasOwnProperty('expanded') && original_bill.expanded);
+                                    this.setBillByID(bill.bill_id, original_bill_obj);
+                                }).bind(this);
+
                                 return (
-                                    <Accordion key={i} style={{ borderTop: 'none' }} defaultExpanded={this.state.display_bill_id === bill.bill_id}>
-                                        <AccordionSummary expandIcon={<ExpandMoreIcon />} >
+                                    <Accordion key={i} style={{ borderTop: 'none', position: 'relative' }} expanded={expanded}>
+                                        <AccordionSummary expandIcon={<ExpandMoreIcon />} onClick={expand_handler}>
                                             {/* <DescriptionIcon style={{ marginLeft: '0', marginRight: '15px', opacity: '0.75' }} /> */}
                                             <CashStack style={{ marginLeft: '5px', marginRight: '15px', opacity: '0.75', marginTop: '1.8px', height: '20px', width: '20px' }} />
                                             <Typography style={{ paddingTop: '2px', fontSize: '15px', letterSpacing: '0.35px' }}>
@@ -201,14 +335,17 @@ class Billing extends React.Component {
                                                 <div style={{ width: '100%', height: '100%' }} className="block_wrap">
                                                     <div className="block_content">
                                                         <span style={{ fontSize: '29px', opacity: '1', letterSpacing: '1.5px', display: 'block', marginTop: '13px', marginRight: '3px' }}>${amount_due_text}</span>
-                                                        <Button disabled={bill.bill_paid} color="secondary" className="billSubmitButton" variant="contained" style={{ marginBottom: '20px' }} onClick={this.submitBill.bind(this, bill)}> {(!bill.bill_paid ? 'Pay Bill' : 'Paid Bill')} </Button>
+                                                        <Button disabled={bill.bill_paid} color="secondary" className="billSubmitButton" variant="contained" style={{ marginBottom: '20px', opacity: (bill.bill_paid ? '0.7' : '1') }} onClick={this.submitBill.bind(this, bill)}>
+                                                            {(!bill.bill_paid ? (this.state.bill_processing ? /*'Processing'*/ <CircularProgress color="primary" style={{ height: '21px', width: '21px', margin: '4px 16px' }} /> : 'Pay Bill') : 'Paid Bill')}
+                                                        </Button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </AccordionDetails>
+                                        <div ref={this.billRefs.hasOwnProperty(bill.bill_id) ? this.billRefs[bill.bill_id] : null} style={{ position: 'absolute', top: '0', left: '0', width: '10px', height: '10px', backgroundColor: 'rgba(0,0,0,0)' }}></div>
                                     </Accordion>
                                 );
-                            }) : (<div style={{ marginTop: '27px' }}><span>No {(activeModeText)} bills found.</span></div>)
+                            }).bind(this)) : (<div style={{ marginTop: '27px' }}><span>No {(activeModeText)} bills found.</span></div>)
                     }
                 </div>
             </div>

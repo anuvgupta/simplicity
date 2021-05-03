@@ -92,7 +92,7 @@ class Docs extends React.Component {
 
     render() {
         return (
-            <div className="center projectMain" style={{ marginTop: '100px' }}>
+            <div className="center projectMain" style={{ marginTop: '100px', marginBottom: '70px' }}>
                 <div className="rightSideAlt">
                     <div className="centerTitle" style={{ marginBottom: '0', textAlign: 'center' }}>
                         <h1> Documentation </h1>

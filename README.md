@@ -205,36 +205,36 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
 ## <a name="6-billing-page"></a>6. Billing Page
 
 -   ### <a name="6.1-billing"></a>6.1 Billing
--   <details>
-    <summary><a name="billing-overview"></a>Billing Overview</summary>
-    <p>Here, you are able to view all of your bills and able to change/set your payment method! At the top of the page are your bills. These are calculated when you <a href="#check-in-project"><b>Check in</b></a> hardware for a project or <a href="#check-in-personal"><b>Check in</b></a> hardware for personal use. You will be able to pay your bills directly from this page, given that you have <a href="#payment-required">set your payment method.</a></p>
-    </details>
+    -   <details>
+        <summary><a name="billing-overview"></a>Billing Overview</summary>
+        <p>Here, you are able to view all of your bills and able to change/set your payment method! At the top of the page are your bills. These are calculated when you <a href="#check-in-project"><b>Check in</b></a> hardware for a project or <a href="#check-in-personal"><b>Check in</b></a> hardware for personal use. You will be able to pay your bills directly from this page, given that you have <a href="#payment-required">set your payment method.</a></p>
+        </details>
     
--   <details>
-    <summary><a name="view-paid-bills"></a>View Paid Bills</summary>
-    <p>To view your history of paid bills, go to the 'Billing' page. In the middle of the page under 'Billing', on the right of the gray box, toggle the switch to the right of 'View Paid'. Your paid bills should then be listed.</p>
-    </details>
+    -   <details>
+        <summary><a name="view-paid-bills"></a>View Paid Bills</summary>
+        <p>To view your history of paid bills, go to the 'Billing' page. In the middle of the page under 'Billing', on the right of the gray box, toggle the switch to the right of 'View Paid'. Your paid bills should then be listed.</p>
+        </details>
     
--   <details>
-    <summary><a name="how-bills-calculated"></a>What is hardware?</summary>
-    <p>Bills are automatically created when any 'Check In' operation is performed. For hardware checked in for shared projects, the subtotal for the entireity of the hardware = price_per_unit_of_hardware * quantity_checked_in. This subtotal is then divided evenly amongst all of the project memebers. For hardware checked in for personal use, the subtotal is calculated the same way as it would be for a project. However, the user is responsible for the entire bill.</p>
-    </details>
+    -   <details>
+        <summary><a name="how-bills-calculated"></a>What is hardware?</summary>
+        <p>Bills are automatically created when any 'Check In' operation is performed. For hardware checked in for shared projects, the subtotal for the entireity of the hardware = price_per_unit_of_hardware * quantity_checked_in. This subtotal is then divided evenly amongst all of the project memebers. For hardware checked in for personal use, the subtotal is calculated the same way as it would be for a project. However, the user is responsible for the entire bill.</p>
+        </details>
     
--   <details>
-    <summary><a name="cant-pay-bill"></a>Why can't I pay my bill?</summary>
-    <p>Users are unable to pay bills if they have not set their payment on the 'Billing Page'. Click <a href="#update-payment">here</a> to find out how to do this.</p>
-    </details>
+    -   <details>
+        <summary><a name="cant-pay-bill"></a>Why can't I pay my bill?</summary>
+        <p>Users are unable to pay bills if they have not set their payment on the 'Billing Page'. Click <a href="#update-payment">here</a> to find out how to do this.</p>
+        </details>
 
 -   ### <a name="6.2-payment"></a>6.2 Payment Method
--   <details>
-    <summary><a name="payment-required"></a>Is setting a payment method <b>required</b>?</summary>
-    <p>Yes, and no. Setting a payment is not required to create/access an account, to make projects, or to check out hardware. However, it is required to pay for bills associated with checking in hardware. Users who have not set their payment method will be prevented from paying their bills.</p>
-    </details>
+    -   <details>
+        <summary><a name="payment-required"></a>Is setting a payment method <b>required</b>?</summary>
+        <p>Yes, and no. Setting a payment is not required to create/access an account, to make projects, or to check out hardware. However, it is required to pay for bills associated with checking in hardware. Users who have not set their payment method will be prevented from paying their bills.</p>
+        </details>
     
--   <details>
-    <summary><a name="update-payment"></a><b>Update</b> my payment method</summary>
-    <p>To set/update your payment method, go to the 'Billing' Page via the navigation bar on the left side of the screen. In the middle of the screen below any bill cards, is the payment method form. Input the presented fields and click 'UPDATE INFO' to save your information. <i> PLEASE DO NOT ENTER REAL CREDIT CARD INFORMATION. SIMPLICITY IS NOT LIABLE FOR ANY SENSITIVE INFORMATION.</i></p>
-    </details>
+    -   <details>
+        <summary><a name="update-payment"></a><b>Update</b> my payment method</summary>
+        <p>To set/update your payment method, go to the 'Billing' Page via the navigation bar on the left side of the screen. In the middle of the screen below any bill cards, is the payment method form. Input the presented fields and click 'UPDATE INFO' to save your information. <i> PLEASE DO NOT ENTER REAL CREDIT CARD INFORMATION. SIMPLICITY IS NOT LIABLE FOR ANY SENSITIVE INFORMATION.</i></p>
+        </details>
 
 &nbsp;  
 &nbsp;

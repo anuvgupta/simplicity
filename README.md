@@ -89,7 +89,7 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
 ## <a name="2-home-page"></a>2. Home Page
 -   <details>
     <summary><a name="home-summary"></a>Home Page summary</summary>
-    <p>Welcome home! 🥳 At a glance, you'll be able to see a summary of all of the working parts of your account. In the top layer, you can see how many projects you're involved in and how many units of hardware you have checked out for personal use. In the second layer, you can view your projects in greater detail; they're shown as cards with each project's name, description, and <a name="what-is-project-id"></a><b>Project ID</b>. In the third layer, you can keep track of all things hardware! You can see your total checked-out quantities of hardware, as well as how much is being used for personal use and for projects.</p>
+    <p>Welcome home! 🥳 At a glance, you'll be able to see a summary of all of the working parts of your account. In the top layer, you can see how many projects you're involved in and how many units of hardware you have checked out for personal use. In the second layer, you can view your projects in greater detail; they're shown as cards with each project's name, description, and <a href="#what-is-project-id"><b>Project ID</b></a>. In the third layer, you can keep track of all things hardware! You can see your total checked-out quantities of hardware, as well as how much is being used for personal use and for projects.</p>
     </details>
 
 ## <a name="3-user-functions-and-features"></a>3. User Functions and Features

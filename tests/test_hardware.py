@@ -1,5 +1,5 @@
 """
-Tests for projects model
+Tests for hardware model
 """
 from api import app as myApp
 from tests import simplicity_test

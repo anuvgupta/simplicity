@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import '../global.js';
+import '../global';
 import '../styles/loginpage.css';
 
 class Login extends React.Component {

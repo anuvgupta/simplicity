@@ -910,3 +910,24 @@ def payBill():
         'success': False,
         'message': 'Invalid request input data.'
     }), 400)
+
+@app.route('/api/docs', methods=['GET'])
+@jwt_required()
+def documentation():
+    docs_content = ""
+    try:
+        with open("./README.md", "r") as docs_file:
+            docs_content = docs_file.read()
+    except:
+        return (jsonify({
+            'success': False,
+            'message': 'Error reading documentation file.'
+        }), 500)
+    return (jsonify({
+        'success': True,
+        'message': 'Documentation file read successfully.',
+        'data': {
+            'docs_content': str(docs_content)
+        }
+    }), 200)
+    

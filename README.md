@@ -1,7 +1,7 @@
 # Simplicity Cloud
 
 Semester project for EE461L.  
-Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
+_**Team:** Sylvia Vu, Pulkit Mahajan, and Anuv Gupta._
 &nbsp;
 &nbsp;
 &nbsp;
@@ -163,7 +163,9 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
 
 _Follow the steps in each of the following sections (in correct order) to set up the application for development or production service._
 
-**Database:**
+<details>
+
+<summary> <b>Database</b> </summary>
 
 -   Install Mongo
     -   ie. `brew install mongodb` (macOS)
@@ -188,7 +190,11 @@ _Follow the steps in each of the following sections (in correct order) to set up
     -   Run in Mongo shell: `use simplicity-cloud`
         -   Leave this terminal window open with the shell running to observe, query, and manage the database as an administrator.
 
-**Backend:**
+</details>
+
+<details>
+
+<summary> <b>Backend</b> </summary>
 
 -   Install [python3](https://realpython.com/installing-python/)
 -   Navigate to repository in terminal: `{path/to/repo}/`
@@ -203,7 +209,7 @@ _Follow the steps in each of the following sections (in correct order) to set up
 
     -   _To test the backend API, use the development environment steps. To serve the backend API in the cloud, use the production environment steps._
     -   Production Environment:
-        -   ...
+        -   Run in terminal: `./serve.sh`
     -   Development Environment:
 
         -   Run in terminal: `export FLASK_APP=app.py`
@@ -223,7 +229,11 @@ _Follow the steps in each of the following sections (in correct order) to set up
 
         -   Leave this terminal window open with the Flask server running to keep the backend alive and to observe API requests and errors.
 
-**Frontend:**
+</details>
+
+<details>
+
+<summary> <b>Frontend</b> </summary>
 
 -   Install Node.js and NPM
     -   A good way to do this is to use [`n`](https://www.npmjs.com/package/n):
@@ -246,7 +256,8 @@ _Follow the steps in each of the following sections (in correct order) to set up
 
     -   _To test the frontend UI, use the development environment steps. To serve the frontend UI in the cloud, use the production environment steps._
     -   Production Environment:
-        -   ...
+        -   Install [serve](https://www.npmjs.com/package/serve) to `/usr/local/bin/serve` (with NPM)
+        -   Run in terminal: `./serve.sh`
     -   Development Environment:
 
         -   Run in terminal: `yarn start`
@@ -265,6 +276,10 @@ _Follow the steps in each of the following sections (in correct order) to set up
         -   Leave this terminal window open with the React development server running to keep the frontend alive and to access & test the UI in a browser.
 
 _Access the application for development environments at [http://localhost:3000/](http://localhost:3000/). For production environments, reverse proxy & DNS setup is required._
+
+</details>
+
+&nbsp;
 
 ## <a name="dev-sources"></a>Sources
 

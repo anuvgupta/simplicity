@@ -68,6 +68,7 @@ export default class SideBar extends React.Component {
                     <NavLink to="/hardware" style={{ backgroundColor: (active == 'hardware' ? this.state.activeBG : this.state.inactiveBG) }}> Hardware </NavLink>
                     <NavLink to="/datasets" style={{ backgroundColor: (active == 'datasets' ? this.state.activeBG : this.state.inactiveBG) }}> Datasets </NavLink>
                     <NavLink to="/billing" style={{ backgroundColor: (active == 'billing' ? this.state.activeBG : this.state.inactiveBG) }}> Billing </NavLink>
+                    <NavLink to="/docs" style={{ backgroundColor: (active == 'docs' ? this.state.activeBG : this.state.inactiveBG) }}> Docs </NavLink>
                     <NavLink to="/settings" style={{ backgroundColor: (active == 'settings' ? this.state.activeBG : this.state.inactiveBG) }}> Settings </NavLink>
                 </div>
                 <div className="main">

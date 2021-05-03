@@ -1,19 +1,16 @@
 // app
 
+import './global';
 import axios from 'axios';
-import { Button, Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
-  NavLink
 } from "react-router-dom";
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-import './global.js';
 import './App.css';
+
 import SideBar from "./components/SideBar";
 import Login from "./components/Login";
 import Register from "./components/Register";
@@ -28,9 +25,10 @@ import Datasets from "./components/Datasets";
 import Billing from "./components/Billing";
 import Overview from "./components/Overview";
 import NavigationBar from "./components/NavBar";
-import JoinProject from './components/JoinProject.js';
-import Settings from './components/Settings.js';
-import Admin from './components/Admin.js';
+import JoinProject from './components/JoinProject';
+import Settings from './components/Settings';
+import Admin from './components/Admin';
+import Docs from './components/Docs';
 
 function App() {
   return (
@@ -108,6 +106,11 @@ function App() {
             <NavigationBar></NavigationBar>
             <SideBar active="settings"></SideBar>
             <Settings></Settings>
+          </Route>
+          <Route path="/docs">
+            <NavigationBar></NavigationBar>
+            <SideBar active="docs"></SideBar>
+            <Docs></Docs>
           </Route>
           <Route path="/">
             <Home></Home>

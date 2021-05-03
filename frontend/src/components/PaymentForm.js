@@ -1,5 +1,5 @@
 
-import '../global.js';
+import '../global';
 import React from 'react';
 import axios from 'axios';
 import PropTypes from "prop-types";

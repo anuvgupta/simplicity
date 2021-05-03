@@ -1,6 +1,6 @@
 /*  Project.js  */
 
-import '../global.js';
+import '../global';
 import axios from 'axios';
 import React from 'react';
 import { Form, Table } from 'react-bootstrap';

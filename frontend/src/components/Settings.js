@@ -11,7 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import reactCSS from 'reactcss';
 import { SketchPicker } from 'react-color';
 
-import '../global.js';
+import '../global';
 import '../styles/settingspage.css';
 
 

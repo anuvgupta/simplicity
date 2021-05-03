@@ -22,7 +22,6 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
 -   [How do I **sign in**?](#how-do-i-sign-in?)
 
 ### [2. Home Page](#2-home-page)
-
 -   [Home Page summary](#home-summary)
 
 ### [3. User Functions and Features](#3-user-functions-and-features)
@@ -57,7 +56,6 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
 -   [**Downloading** a dataset](#downloading-a-dataset)
 
 ### [6. Billing Page](#6-billing-page)
-
 -   #### [6.1 Billing](#6.1-billing)
     -   [Billing overview](#billing-overview)
     -   [View paid bills](#view-paid-bills)
@@ -66,6 +64,7 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
 -   #### [6.2 Payment Method](#6.2-payment)
     -   [Is setting a payment method **required**?](#payment-required)
     -   [**Update** my payment method](#update-payment)
+
 
 &nbsp;  
 <a name=""></a>
@@ -88,10 +87,9 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
     </details>
 
 ## <a name="2-home-page"></a>2. Home Page
-
 -   <details>
     <summary><a name="home-summary"></a>Home Page summary</summary>
-    <p>Welcome home! 🥳 At a glance, you'll be able to see a summary of all of the working parts of your account. In the top layer, you can see how many projects you're involved in and how many units of hardware you have checked out for personal use. In the second layer, you can view your projects in greater detail; they're shown as cards with each project's name, description, and <a name="what-is-project-id"></a><b>Project ID</b>. In the third layer, you can keep track of all things hardware! You can see your total checked-out quantities of hardware, as well as how much is being used for personal use and for projects.</p>
+    <p>Welcome home! 🥳 At a glance, you'll be able to see a summary of all of the working parts of your account. In the top layer, you can see how many projects you're involved in and how many units of hardware you have checked out for personal use. In the second layer, you can view your projects in greater detail; they're shown as cards with each project's name, description, and <a href="what-is-project-id"><b>Project ID</b></a>. In the third layer, you can keep track of all things hardware! You can see your total checked-out quantities of hardware, as well as how much is being used for personal use and for projects.</p>
     </details>
 
 ## <a name="3-user-functions-and-features"></a>3. User Functions and Features
@@ -102,22 +100,27 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
         <summary><a name="what-is-a-project?"></a>What is a project?</summary>
         <p>A project is anything you could imagine! Use our hardware and data sets to bring any idea to life. 🤙 </p>
         </details>
+        
     -   <details>
         <summary><a name="what-is-project-id"></a>What is a <b>Project ID</b>?</summary>
         <p>A Project ID is a string of characters (max 20 characters) that is unique to each project (yes, we make sure that no two projects have the same ID!). This ID is used to identify your project and also used by collaborators to join you on this project. Keep your project ID's a secret from non-collaborators to prevent uninvited guests from showing up to your project party! 🤫</p>
         </details>
+        
     -   <details>
         <summary><a name="create-a-project"></a><b>Create</b> a project</summary>
-        <p>To create a new project, refer to the navigation menu on the left side; click on 'Projects'. Then, click on 'NEW PROJECT'; you will then be presented with the project-creation form. Give your project a unique <a name="what-is-project-id"></a><b>Project ID</b>, a name, a maybe a fun description! Click 'CREATE PROJECT' when you're satisfied with your input. Congratulations, you've just created a project! 😄</p>
+        <p>To create a new project, refer to the navigation menu on the left side; click on 'Projects'. Then, click on 'NEW PROJECT'; you will then be presented with the project-creation form. Give your project a unique <a href="what-is-project-id"><b>Project ID</b></a>, a name, a maybe a fun description! Click 'CREATE PROJECT' when you're satisfied with your input. Congratulations, you've just created a project! 😄</p>
         </details>
+        
     -   <details>
         <summary><a name="join-a-project"></a><b>Join</b> a project</summary>
-        <p>First, make sure that you know the specific <a name="what-is-project-id"></a><b>Project ID</b> of the project (this is your key to getting in!). To join a project, refer to the navigation menu on the left side of the screen; click on 'Projects'. Then, click on 'JOIN PROJECT'. You will be presented with a form that asks for a Project ID. Input the ID of the project you are trying to join and click 'JOIN PROJECT'. If successful, a green 'Success!' message will flash under the text box. Happy collaborating! 🙌</p>
+        <p>First, make sure that you know the specific <a href="what-is-project-id"><b>Project ID</b></a> of the project (this is your key to getting in!). To join a project, refer to the navigation menu on the left side of the screen; click on 'Projects'. Then, click on 'JOIN PROJECT'. You will be presented with a form that asks for a Project ID. Input the ID of the project you are trying to join and click 'JOIN PROJECT'. If successful, a green 'Success!' message will flash under the text box. Happy collaborating! 🙌</p>
         </details>
+        
     -   <details>
         <summary><a name="edit-a-project"></a><b>Edit</b> a project</summary>
         <p>Head over to the 'Projects' page and locate the project you are attempting to edit among the project cards shown on the screen. Once you've done that, click the three vertical dots in the top right-hand corner of the card. Click 'Edit'. You'll be presented with a form where you can edit the name and/or the description of the project. <i>Side note: You <b>cannot</b> change a project's ID. 🚫</i> </p>
         </details>
+        
     -   <details>
         <summary><a name="delete-a-project"></a><b>Delete</b> a project</summary>
         <p>If you've completed a project or simply would like to get rid of one, no problem! Head over to the 'Projects' page and locate the project you would like to delete. Once you've done so, click the three vertical dots in the top right-hand corner of the project card. Click 'Delete'. A pop will appear and ask you to confirm or cancel your decision. <i>Side note: Once a project is deleted, its ID is free to be used by a newly-created project. 🔄</i></p>
@@ -129,19 +132,22 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
         <summary><a name="change-my-username"></a><b>Change</b> my username</summary>
         <p>Go to your 'Settings' page via the navigation bar on the left side of the page. In the text box to the right of 'Username', delete your old username and input a new one. Make sure to click 'UPDATE INFO' to save your changes. Welcome to the new you! ✨/p>
         </details>
+        
     -   <details>
         <summary><a name="change-my-email"></a><b>Change</b> my email</summary>
         <p>Go to your 'Settings' page via the navigation bar on the left side of the page. In the text box to the right of 'Email', delete your old email address and input an updated one. Click 'UPDATE INFO' to save your changes. <i>We promise we won't fill your inbox with random emails! 🙂</i></p>
         </details>
+        
     -   <details>
         <summary><a name="change-my-password"></a><b>Change</b> my password</summary>
         <p>Go to your 'Settings' page via the navigation bar on the left side of the page. In the text box to the right of 'Password', input a new password (and make it good!). Below this field, you'll be asked to input your current/old password for verification. Click 'UPDATE INFO' to save your changes.</p>
         </details>
+        
     -   <details>
         <summary><a name="change-user-theme"></a><b>Change</b> user theme</summary>
         <p>If you ever get tired of the look of your website, here's a neat way to switch it up! Head over to your 'Settings' page via the navigation bar on the left side of the page. Click the long colorful rectangle to the right of 'Theme' and a color chart will appear. Use your cursor to click and drag around the color selection. Change the hue and saturation to your liking! 🌈 If you know the hex code to the color you'd like, feel free to input the code in the text box above 'Hex'. Or, if you can't decide on a color right away, we've got you covered with some presets at the bottom of the color chart pop-up. 😊</p>
         </details>
-
+    
     -   <details>
         <summary><a name="what-is-admin-status"></a>What is <b>Administrator Status</b>?</summary>
         <p>This is a different account type that is used by system administrators for monitoring site usage and maintenance. Special permissions must be acquired in order for an account to possess Administrator Status. </p>
@@ -153,29 +159,35 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
     <summary><a name="what-is-hardware?"></a>What is hardware?</summary>
     <p>Hardware sets are resources/tools that you can use to help you construct your projects. Our hardware is very versatile and can be made to do anything you imagine! ⚙️</p>
     </details>
+    
 -   <details>
     <summary><a name="hardware-for-a-project"></a>Hardware for a project</summary>
-    <p>With Simplicity, users have the option to use hardware specifically for projects, or for personal use. Hardware that is checked out to a project can be accessed and used by all members of that project. Learn how to <a name="check-out-project"></a><b>Check out</b> and <a name="check-in-project"></a><b>Check in</b> hardware for a project.</p>
+    <p>With Simplicity, users have the option to use hardware specifically for projects, or for personal use. Hardware that is checked out to a project can be accessed and used by all members of that project. Learn how to <a href="check-out-project"><b>Check out</b></a> and <a href="check-in-project"><b>Check in</b></a> hardware for a project.</p>
     </details>
+    
 -   <details>
     <summary><a name="hardware-for-personal-use"></a>Hardware for personal use</summary>
-    <p>With Simplicity, users have the option to use hardware specifically for projects, or for personal use. Hardware that is checked out for personal can solely be accessed and used by the user. Learn how to <a name="check-out-personal"></a><b>Check out</b> and <a name="check-in-personal"></a><b>Check in</b> hardware for personal use. </p>
+    <p>With Simplicity, users have the option to use hardware specifically for projects, or for personal use. Hardware that is checked out for personal can solely be accessed and used by the user. Learn how to <a href="check-out-personal"><b>Check out</b></a> and <a href="check-in-personal"><b>Check in</b></a> hardware for personal use. </p>
     </details>
+    
 -   <details>
     <summary><a name="check-out-project"></a><b>Check out</b> hardware for a project</summary>
     <p>To check out hardware for a project, head to the 'Projects' page. Locate the project you would like to check out hardware for, and click 'MANAGE' on that project's card. You'll be able to see what hardware, if any, has been checked out for that project already. Below this is the check out form. Select the hardware set you'd like to check out and input the check out quantity under 'Requested Quantity'. The total quantity available for checkout can be seen under 'Total Availability'. The price per unit of a hardware set is shown as well under 'Projected Pricing and Cost' in the left text box. The right text box will automatically be updated with the calculated cost according to the requested quantity. Click 'CHECK OUT' to officially check out your hardware.</p>
     </details>
+    
 -   <details>
     <summary><a name="check-in-project"></a><b>Check in</b> hardware for a project</summary>
-    <p>To check in hardware for a project, head to the 'Projects' page. Locate the project you would like to check out hardware for, and click 'MANAGE' on that project's card. You'll be able to see what hardware, if any, has been checked out for that project already. Below this is the check in form. Select the hardware set you'd like to check in and input the check in quantity under 'Requested Quantity'. Click 'CHECK IN' to officially check in hardware. After doing so, a bill for each project member will automatically be calculated and can be viewed on the <a name="6-billing-page"></a>6. Billing Page.</p>
+    <p>To check in hardware for a project, head to the 'Projects' page. Locate the project you would like to check out hardware for, and click 'MANAGE' on that project's card. You'll be able to see what hardware, if any, has been checked out for that project already. Below this is the check in form. Select the hardware set you'd like to check in and input the check in quantity under 'Requested Quantity'. Click 'CHECK IN' to officially check in hardware. After doing so, a bill for each project member will automatically be calculated and can be viewed on the <a href="6-billing-page">6. Billing Page.</a></p>
     </details>
+    
 -   <details>
     <summary><a name="check-out-personal"></a><b>Check out</b> hardware for personal use</summary>
     <p>To check out hardware for personal use, head to the 'Hardware' page. According to the cards shown at the top of the page, you'll be able to see how many units of each hardware set you have currently checked out. Below these cards is the check out form. Select the hardware set you'd like to check out and input the check out quantity under 'Requested Quantity'. The total quantity available for checkout can be seen under 'Total Availability'. The price per unit of a hardware set is shown as well under 'Projected Pricing and Cost' in the left text box. The right text box will automatically be updated with the calculated cost according to the requested quantity. Click 'CHECK OUT' to officially check out your hardware.</p>
     </details>
+    
 -   <details>
     <summary><a name="check-in-personal"></a><b>Check in</b> hardware for personal use</summary>
-    <p>To check in hardware for personal use, head to the 'Hardware' page. According to the cards shown at the top of the page, you'll be able to see how many units of each hardware set you have currently checked out. Below these cards is the check in form. Select the hardware set you'd like to check in and input the check in quantity under 'Requested Quantity'. Click 'CHECK IN' to officially check in your hardware. After doing so, a bill for your used hardware will automatically be calculated and can be viewed on the <a name="6-billing-page"></a>6. Billing Page.</p>
+    <p>To check in hardware for personal use, head to the 'Hardware' page. According to the cards shown at the top of the page, you'll be able to see how many units of each hardware set you have currently checked out. Below these cards is the check in form. Select the hardware set you'd like to check in and input the check in quantity under 'Requested Quantity'. Click 'CHECK IN' to officially check in your hardware. After doing so, a bill for your used hardware will automatically be calculated and can be viewed on the <a href="6-billing-page">6. Billing Page.</a></p>
     </details>
 
 ## <a name="5-hardware-page"></a>5. Datasets Page
@@ -184,39 +196,44 @@ Team: Sylvia Vu, Pulkit Mahajan, and Anuv Gupta.
     <summary><a name="what-is-a-dataset?"></a>What is a dataset?</summary>
     <p>Datasets are useful documents of information that may be helpful to projects and hardware use.</p>
     </details>
+    
 -   <details>
     <summary><a name="downloading-a-dataset"></a><b>Downloading</b> a dataset</summary>
     <p>To download a dataset, go to the 'Datasets' page via the navigation bar on the left side of the screen. On the right of each dataset, click 'DOWNLOAD ZIP'. This file is then directly downloaded to your device and can be found in your computer files.</p>
     </details>
-
+    
 ## <a name="6-billing-page"></a>6. Billing Page
 
 -   ### <a name="6.1-billing"></a>6.1 Billing
 -   <details>
     <summary><a name="billing-overview"></a>Billing Overview</summary>
-    <p>Here, you are able to view all of your bills and able to change/set your payment method! At the top of the page are your bills. These are calculated when you <a name="check-in-project"></a><b>Check in</b> hardware for a project or <a name="check-in-personal"></a><b>Check in</b> hardware for personal use. You will be able to pay your bills directly from this page, given that you have <a name="payment-required"></a>set your payment method.</p>
+    <p>Here, you are able to view all of your bills and able to change/set your payment method! At the top of the page are your bills. These are calculated when you <a href="check-in-project"><b>Check in</b></a> hardware for a project or <a href="check-in-personal"><b>Check in</b></a> hardware for personal use. You will be able to pay your bills directly from this page, given that you have <a href="payment-required">set your payment method.</a></p>
     </details>
+    
 -   <details>
     <summary><a name="view-paid-bills"></a>View Paid Bills</summary>
-    <p>ayayyeuh</p>
+    <p>To view your history of paid bills, go to the 'Billing' page. In the middle of the page under 'Billing', on the right of the gray box, toggle the switch to the right of 'View Paid'. Your paid bills should then be listed.</p>
     </details>
+    
 -   <details>
     <summary><a name="how-bills-calculated"></a>What is hardware?</summary>
-    <p>ayayyeuh</p>
+    <p>Bills are automatically created when any 'Check In' operation is performed. For hardware checked in for shared projects, the subtotal for the entireity of the hardware = price_per_unit_of_hardware * quantity_checked_in. This subtotal is then divided evenly amongst all of the project memebers. For hardware checked in for personal use, the subtotal is calculated the same way as it would be for a project. However, the user is responsible for the entire bill.</p>
     </details>
+    
 -   <details>
     <summary><a name="cant-pay-bill"></a>Why can't I pay my bill?</summary>
-    <p>ayayyeuh</p>
+    <p>Users are unable to pay bills if they have not set their payment on the 'Billing Page'. Click <a href="update-payment">here</a> to find out how to do this.</p>
     </details>
 
 -   ### <a name="6.2-payment"></a>6.2 Payment Method
 -   <details>
     <summary><a name="payment-required"></a>Is setting a payment method <b>required</b>?</summary>
-    <p>personal check in</p>
+    <p>Yes, and no. Setting a payment is not required to create/access an account, to make projects, or to check out hardware. However, it is required to pay for bills associated with checking in hardware. Users who have not set their payment method will be prevented from paying their bills.</p>
     </details>
+    
 -   <details>
     <summary><a name="update-payment"></a><b>Update</b> my payment method</summary>
-    <p>personal check in</p>
+    <p>To set/update your payment method, go to the 'Billing' Page via the navigation bar on the left side of the screen. In the middle of the screen below any bill cards, is the payment method form. Input the presented fields and click 'UPDATE INFO' to save your information. <i> PLEASE DO NOT ENTER REAL CREDIT CARD INFORMATION. SIMPLICITY IS NOT LIABLE FOR ANY SENSITIVE INFORMATION.</i></p>
     </details>
 
 &nbsp;  

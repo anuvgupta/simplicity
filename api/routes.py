@@ -11,7 +11,6 @@ from werkzeug.exceptions import BadRequest
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, verify_jwt_in_request
 
 
-
 @app.route('/')
 def slash():
     return redirect(url_for('api'))
@@ -56,8 +55,9 @@ def register():
             access_token = create_access_token(identity=new_username)
             return (jsonify({
                 'success': True,
-                'data': {'token': access_token, 'username': new_username, 'first': True }
+                'data': {'token': access_token, 'username': new_username, 'first': True}
             }), 200)
+
 
 @app.route('/api/new_user', methods=['POST'])
 @jwt_required()
@@ -92,11 +92,12 @@ def new_user():
                 if not user.is_godmin:
                     print("User wasn't god user")
                     new_is_admin = False
-                create_user(new_username, new_email, new_password, [], new_is_admin, False)
+                create_user(new_username, new_email,
+                            new_password, [], new_is_admin, False)
                 # access_token = create_access_token(identity=new_username)
                 return (jsonify({
                     'success': True,
-                    'data': {'username': new_username, 'first': True , 'is_admin': new_is_admin}
+                    'data': {'username': new_username, 'first': True, 'is_admin': new_is_admin}
                 }), 200)
 
 
@@ -117,7 +118,7 @@ def login():
             access_token = create_access_token(identity=username)
             return (jsonify({
                 'success': True,
-                'data': {'token': access_token, 'username': username, 'first': False }
+                'data': {'token': access_token, 'username': username, 'first': False}
             }), 200)  # after the access token has been sent out, front end should redirect to '/account' or '/home'
         elif verify_code == 404:
             return (jsonify({
@@ -173,7 +174,8 @@ def user():
                         print(result[1])
                 payment_rep = ""
                 if user.payment_set:
-                    payment_rep = ("Card *{}").format(user.payment_method['card_number'][-4:])
+                    payment_rep = (
+                        "Card *{}").format(user.payment_method['card_number'][-4:])
                 return (jsonify({
                     'success': True,
                     'data': {
@@ -202,6 +204,7 @@ def user():
         'message': 'Invalid request input data.'
     }), 400)
 
+
 @app.route('/api/getNumUsers', methods=['POST'])
 @jwt_required()
 def getNumUsers():
@@ -219,7 +222,7 @@ def getNumUsers():
             'success': False,
             'message': 'Users not found.'
         }), 404)
-    else: 
+    else:
         print(query.count())
         return (jsonify({
             'success': True,
@@ -229,6 +232,7 @@ def getNumUsers():
         'success': False,
         'message': 'Unknown error.'
     }), 500)
+
 
 @app.route('/api/setUserTheme', methods=['POST'])
 @jwt_required()
@@ -252,7 +256,7 @@ def setUserTheme():
             'success': False,
             'message': 'Invalid request input data.'
         }), 400)
-    else: 
+    else:
         print(color_json.get("color"))
         set_user_theme(current_username, color_json.get("color"))
         return (jsonify({
@@ -263,6 +267,7 @@ def setUserTheme():
         'success': False,
         'message': 'Unknown error.'
     }), 500)
+
 
 @app.route('/api/update_user', methods=['POST'])
 @jwt_required()
@@ -280,13 +285,14 @@ def updateUser():
             'success': False,
             'message': 'Invalid request input data.'
         }), 400)
-    else: 
+    else:
         new_username = new_user_json.get("username")
         new_email = new_user_json.get("email")
         new_password = new_user_json.get("password")
         current_password = new_user_json.get("curPassword")
         isAdmin = new_user_json.get("is_admin")
-        result = update_user(current_username, current_password, new_username, new_email, new_password, isAdmin)
+        result = update_user(current_username, current_password,
+                             new_username, new_email, new_password, isAdmin)
         if result[0] == True:
             return (jsonify({
                 'success': True,
@@ -300,6 +306,7 @@ def updateUser():
         'success': False,
         'message': 'Unknown error.'
     }), 500)
+
 
 @ app.route('/api/projects', methods=['GET'])
 @jwt_required()
@@ -319,7 +326,13 @@ def project():
             # return (True, 200)
         else:
             # print(projectId)
+            
             project = get_project_json(projectId)
+            if project == None:
+                return (jsonify({
+                    'success': False,
+                    'message': 'projectId not found'
+                }), 404)
             # user.projectList
             # print(user['username'])
             # print(project)
@@ -356,7 +369,8 @@ def createProject():
                 'message': 'Project ID already exists.'
             }), 409)
         else:
-            create_project(project_name, project_id, project_description, current_username)
+            create_project(project_name, project_id,
+                           project_description, current_username)
             return (jsonify({
                 'success': True,
                 'data': {
@@ -392,6 +406,7 @@ def joinProject():
         if does_project_id_exist(project_id):
             project_obj = get_project_obj(project_id)
             user = get_user_obj(current_username)
+            print(user)
             if user:
                 # check if user has already joined this project
                 if user_already_joined(project_obj, user.username):
@@ -412,7 +427,7 @@ def joinProject():
             else:
                 return (jsonify({
                     'success': False,
-                    'message': "Unknown error."
+                    'message': "User not found."
                 }), 500)
         else:
             # create_project(project_name, project_id, project_description)
@@ -486,7 +501,7 @@ def checkHardware():
             'success': False,
             'message': 'Hardware not found.'
         }), 404)
-    else: 
+    else:
         for hw in query_hardware:
             hardware_dict[hw.hardware_id] = {
                 'hardware_id': hw.hardware_id,
@@ -504,6 +519,7 @@ def checkHardware():
         'success': False,
         'message': 'Unknown error.'
     }), 500)
+
 
 @app.route('/api/createHW', methods=['POST'])
 @jwt_required()
@@ -532,7 +548,8 @@ def createHW():
                 'message': 'Hardware Set already exists.'
             }), 409)
         else:
-            create_hw_set(hw_set_id, hw_set_name, hw_set_capacity, hw_set_price)
+            create_hw_set(hw_set_id, hw_set_name,
+                          hw_set_capacity, hw_set_price)
             return (jsonify({
                 'success': True,
                 'data': {
@@ -545,22 +562,26 @@ def createHW():
         'message': 'Unknown error.'
     }), 500)
 
+
 @app.route('/api/checkInHardware', methods=['POST'])
 @jwt_required()
 def checkInHardware():
-    hw_response_400 = lambda : jsonify({
+    def hw_response_400(): return jsonify({
         'success': False,
         'message': 'Bad request.'
     })
-    hw_response_400_alt = lambda : jsonify({
+
+    def hw_response_400_alt(): return jsonify({
         'success': False,
         'message': 'Invalid check-in quantity.'
     })
-    hw_response_404 = lambda : jsonify({
+
+    def hw_response_404(): return jsonify({
         'success': False,
         'message': 'Hardware set not found.'
     })
-    hw_response_500 = lambda : jsonify({
+
+    def hw_response_500(): return jsonify({
         'success': False,
         'message': 'Unknown error.'
     })
@@ -585,12 +606,14 @@ def checkInHardware():
             return (hw_response_400_alt(), 400)
         if not does_hw_set_exist(hardware_id):
             return (hw_response_404(), 404)
-        usage = "personal" if hardware_json.get('usage') == "personal" else "shared"
+        usage = "personal" if hardware_json.get(
+            'usage') == "personal" else "shared"
         ret_val = 0
         project_id = None
         if usage == "personal":
             # check in from user
-            ret_val = user_check_in(hardware_id, checkin_quantity, current_username)
+            ret_val = user_check_in(
+                hardware_id, checkin_quantity, current_username)
         else:
             # check in from project
             project_id = hardware_json.get('project_id')
@@ -599,7 +622,8 @@ def checkInHardware():
                     'success': False,
                     'message': 'Project ' + project_id + ' not found.'
                 }), 404)
-            ret_val = project_check_in(hardware_id, checkin_quantity, project_id)
+            ret_val = project_check_in(
+                hardware_id, checkin_quantity, project_id)
         if ret_val == 400:
             return (jsonify({
                 'success': False,
@@ -609,7 +633,8 @@ def checkInHardware():
             return (hw_response_404(), 404)
         elif ret_val == 500:
             return (hw_response_500(), 500)
-        new_bill_id = create_bill(hardware_id, project_id, checkin_quantity, current_username)
+        new_bill_id = create_bill(
+            hardware_id, project_id, checkin_quantity, current_username)
         if new_bill_id == False:
             return (jsonify({
                 'success': False,
@@ -627,19 +652,22 @@ def checkInHardware():
 @app.route('/api/checkOutHardware', methods=['POST'])
 @jwt_required()
 def checkOutHardware():
-    hw_response_400 = lambda : jsonify({
+    def hw_response_400(): return jsonify({
         'success': False,
         'message': 'Bad request.'
     })
-    hw_response_400_alt = lambda : jsonify({
+
+    def hw_response_400_alt(): return jsonify({
         'success': False,
         'message': 'Invalid check-out quantity.'
     })
-    hw_response_404 = lambda : jsonify({
+
+    def hw_response_404(): return jsonify({
         'success': False,
         'message': 'Hardware set not found.'
     })
-    hw_response_500 = lambda : jsonify({
+
+    def hw_response_500(): return jsonify({
         'success': False,
         'message': 'Unknown error.'
     })
@@ -664,12 +692,14 @@ def checkOutHardware():
             return (hw_response_400_alt(), 400)
         if not does_hw_set_exist(hardware_id):
             return (hw_response_404(), 404)
-        usage = "personal" if hardware_json.get('usage') == "personal" else "shared"
+        usage = "personal" if hardware_json.get(
+            'usage') == "personal" else "shared"
         ret_val = 0
         if usage == "personal":
             # checkout to user
-            ret_val = user_check_out(hardware_id, checkout_quantity, current_username)
-        else:        
+            ret_val = user_check_out(
+                hardware_id, checkout_quantity, current_username)
+        else:
             # checkout to project
             project_id = hardware_json.get('project_id')
             if not does_project_id_exist(project_id):
@@ -677,7 +707,8 @@ def checkOutHardware():
                     'success': False,
                     'message': 'Project not found.'
                 }), 404)
-            ret_val = project_check_out(hardware_id, checkout_quantity, project_id)
+            ret_val = project_check_out(
+                hardware_id, checkout_quantity, project_id)
         if ret_val == 400:
             return (jsonify({
                 'success': False,
@@ -689,7 +720,7 @@ def checkOutHardware():
             return (hw_response_500(), 500)
         return (jsonify({
             'success': True,
-            'data': { }
+            'data': {}
         }), 200)
     return (hw_response_500(), 500)
 
@@ -737,12 +768,12 @@ def billing():
         'message': 'Unknown error.'
     }), 400)
 
-    
+
 # after user clicks button to update payment
 @app.route('/api/payment', methods=['POST'])
 @jwt_required()
 def payment():
-    bill_response_10 = lambda : jsonify({
+    def bill_response_10(): return jsonify({
         'success': False,
         'message': 'Invalid card number.'
     })
@@ -750,11 +781,13 @@ def payment():
     #     'success': False,
     #     'message': 'Invalid CVV.'
     # })
-    bill_response_12 = lambda : jsonify({
+
+    def bill_response_12(): return jsonify({
         'success': False,
         'message': 'Invalid Expiration Date.'
     })
-    bill_response_13 = lambda : jsonify({
+
+    def bill_response_13(): return jsonify({
         'success': False,
         'message': 'Invalid Zip Code.'
     })
@@ -779,7 +812,8 @@ def payment():
         expiration = payment_json.get('expiration')
         zipcode = payment_json.get('zipcode')
         # return_value = verify_payment_info(name_on_card, card_num, cvv, expiration, zipcode)
-        return_value = verify_payment_info(name_on_card, card_num, expiration, zipcode)
+        return_value = verify_payment_info(
+            name_on_card, card_num, expiration, zipcode)
         if return_value == 10:
             return (bill_response_10(), 406)
         # elif return_value == 11:
@@ -790,7 +824,8 @@ def payment():
             return (bill_response_13(), 406)
         # payment method is verified
         # update_payment_method(current_username, name_on_card, card_num, cvv, expiration, zipcode)
-        update_result = update_payment_method(current_username, name_on_card, card_num, expiration, zipcode)
+        update_result = update_payment_method(
+            current_username, name_on_card, card_num, expiration, zipcode)
         if not update_result[0]:
             return (jsonify({
                 'success': False,
@@ -798,7 +833,7 @@ def payment():
             }), 500)
         return (jsonify({
             'success': True,
-            'data': { }
+            'data': {}
         }), 200)
     return (jsonify({
         'success': False,
@@ -875,4 +910,3 @@ def payBill():
         'success': False,
         'message': 'Invalid request input data.'
     }), 400)
-        

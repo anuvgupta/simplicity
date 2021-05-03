@@ -191,6 +191,7 @@ def get_user_json(username):
 
 # get current user and return as mongoengine document
 def get_user_obj(username):
+    print(username)
     query = User.objects(username__exact=username)
     if len(query) != 1:
         return None

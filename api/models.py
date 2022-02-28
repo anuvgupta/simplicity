@@ -10,7 +10,7 @@ import datetime
 from decimal import Decimal
 from flask import jsonify
 import mongoengine as me
-import numpy as np
+#import numpy as np
 import random
 import time
 import re
